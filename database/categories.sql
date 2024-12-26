@@ -1,4 +1,0 @@
-CREATE TABLE categories (
-  id PRIMARY KEY AUTOINCREMENT,
-  name VARCHAR(255) NOT NULL
-);
