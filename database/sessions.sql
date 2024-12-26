@@ -1,8 +1,0 @@
-CREATE TABLE IF NOT EXISTS sessions (
-    id PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER NOT NULL,
-    token VARCHAR(255) NOT NULL,
-    expired_at TIMESTAMP NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id)
-    );
