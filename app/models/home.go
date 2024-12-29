@@ -16,14 +16,20 @@ type Post struct {
 	ID        int       `json:"id"`
 	Title     string    `json:"title"`
 	Content   string    `json:"content"`
-	Category  string    `json:"category"`
+	Categories []string  `json:"categories"`
 	Likes     int       `json:"likes"`
 	Dislikes  int       `json:"dislikes"`
-	CreatedAt string    `json:"created_at"`
+	CreatedAt time.Time    `json:"created_at"`
 	Comments  []Comment `json:"comments"`
 	Username  string    `json:"username"`
 }
 type Category struct {
 	ID   int    `json:"id"`
 	Name string `json:"name"`
+}
+
+type User struct {
+	ID   int    `json:"id"`
+	UserName string `json:"username"`
+	Email string `json:"email"`
 }

@@ -3,18 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>home</title>
+    <title>Home</title>
     <link rel="stylesheet" href="/css/index.css"> 
 </head>
 <body>
 
 <div class="posts-container">
+
     <!-- Loop through each post -->
     {{range .Posts}}
         <div class="post" id="post_{{.ID}}">
             <h2 class="post-title">{{.Title}}</h2>
             <p class="post-content">{{.Content}}</p>
-            <p class="post-category">Category: {{.Category}}</p>
+            <p class="post-content">{{.CreatedAt.Format "02 Jan 2006"}}</p>
+
+            
+            <!-- Display categories -->
+            <p class="post-category">Categories: 
+                {{range .Categories}}
+                    {{.}} 
+                {{end}}
+            </p>
+
             <p class="post-likes">Likes: {{.Likes}}</p>
             <p class="post-dislikes">Dislikes: {{.Dislikes}}</p>
 
@@ -38,7 +48,6 @@
                     <p>No comments yet.</p>
                 {{end}}
             </div>
-            
 
             <!-- Form to add a new comment -->
             <div class="add-comment-form">
