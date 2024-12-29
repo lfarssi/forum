@@ -3,9 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Error</title>
+    <title>Error: {{.Code}}</title>
 </head>
 <body>
-    <h1>Error </h1>
+    <main class="main-content-err" id="main-content">
+        
+        <h1>{{.Code}} | {{.Message}}</h1>
+        <div>
+          <a class="link" href="/"> back to home</a>
+        </div>
+    </main>
 </body>
 </html>

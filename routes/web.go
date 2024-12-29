@@ -1,14 +1,17 @@
 package routes
 
 import (
+	"database/sql"
 	"fmt"
 	"forum/app/http/controllers"
 	"forum/app/http/controllers/auth"
 	"net/http"
 )
 
-func Router() {
-	http.HandleFunc("/", controllers.HomeController)
+func Router(db *sql.DB) {
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		controllers.HomeController(w, r, db) // Pass the db connection here
+	})
 	http.HandleFunc("/posts", controllers.PostController)
 	http.HandleFunc("/categories", controllers.CategoryController)
 	http.HandleFunc("/comments", controllers.CommentController)
@@ -16,17 +19,13 @@ func Router() {
 	http.HandleFunc("/login", auth.LoginController)
 	http.HandleFunc("/register", auth.RegisterController)
 	http.HandleFunc("/logout", auth.LogoutController)
-
-
-
-
-
+	http.HandleFunc("/css/", controllers.CssController)
 
 	fmt.Println("Server is running on http://localhost:8080")
 	err := http.ListenAndServe(":8080", nil)
-	if err!= nil {
-        fmt.Println("err starting the server : ", err)
+	if err != nil {
+		fmt.Println("err starting the server : ", err)
 		return
-    }
+	}
 
 }

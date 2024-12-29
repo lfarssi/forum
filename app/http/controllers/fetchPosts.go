@@ -64,7 +64,7 @@ func fetchPosts(w http.ResponseWriter, r *http.Request, db *sql.DB) ([]models.Po
         for commentRow.Next() {
             var comment models.Comment
             if err := commentRow.Scan(&comment.ID, &comment.Content,
-                &comment.CreatedAt, &comment.UserID); err != nil {
+                &comment.CreatedAt, &comment.UserID,&comment.Username); err != nil {
                 fmt.Println("error scanning comments: ", err)
                 ErrorController(w, r, http.StatusInternalServerError)
                 return nil, err
