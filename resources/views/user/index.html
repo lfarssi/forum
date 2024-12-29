@@ -29,16 +29,8 @@
                                 <div class="comment-content">
                                     <p>{{.Content}}</p>
                                     <small>Posted by: {{.Username}} on {{.CreatedAt.Format "02 Jan 2006"}}</small>
-                                </div>
-
-                                <!-- Display reactions for each comment -->
-                                <div class="comment-reactions">
-                                    <h4>Reactions:</h4>
-                                    <ul>
-                                        {{range .Reactions}}
-                                            <li>{{.}}</li> <!-- Assuming . is the reaction type (like/dislike) -->
-                                        {{end}}
-                                    </ul>
+                                    <p class="comment-likes">Likes: {{.Likes}}</p>
+                                    <p class="comment-dislikes">Dislikes: {{.Dislikes}}</p>
                                 </div>
                             </li>
                         {{end}}
@@ -47,6 +39,7 @@
                     <p>No comments yet.</p>
                 {{end}}
             </div>
+            
 
             <!-- Form to add a new comment -->
             <div class="add-comment-form">

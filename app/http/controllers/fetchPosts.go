@@ -42,17 +42,20 @@ func fetchPosts(w http.ResponseWriter, r *http.Request, db *sql.DB) ([]models.Po
 		}
         comments := []models.Comment{}
         commentQuery := `
-        SELECT 
-            id,
-            content,
-            created_at,
-            user_id,
-            (SELECT username FROM users WHERE id=user_id) AS username
-        FROM comments 
-        WHERE post_id = ?
-        ORDER BY created_at ASC
-        `
-        
+			SELECT 
+			    c.id,
+			    c.content,
+			    c.created_at,
+			    c.user_id,
+			    (SELECT username FROM users WHERE id=c.user_id) AS username,
+			    COALESCE(SUM(CASE WHEN rc.react_type='like' THEN 1 ELSE 0 END), 0) AS likes,
+			    COALESCE(SUM(CASE WHEN rc.react_type='dislike' THEN 1 ELSE 0 END), 0) AS dislikes
+			FROM comments c
+			LEFT JOIN reactComment rc ON c.id = rc.comment_id
+			WHERE c.post_id = ?
+			GROUP BY c.id
+			ORDER BY c.created_at ASC
+		`
         commentRow, err := db.Query(commentQuery, post.ID)
         if err != nil {
             fmt.Println("error querying comments: ", err)
@@ -61,10 +64,10 @@ func fetchPosts(w http.ResponseWriter, r *http.Request, db *sql.DB) ([]models.Po
         }
         defer commentRow.Close()
 
-        for commentRow.Next() {
+		for commentRow.Next() {
             var comment models.Comment
             if err := commentRow.Scan(&comment.ID, &comment.Content,
-                &comment.CreatedAt, &comment.UserID,&comment.Username); err != nil {
+                &comment.CreatedAt, &comment.UserID, &comment.Username, &comment.Likes, &comment.Dislikes); err != nil {
                 fmt.Println("error scanning comments: ", err)
                 ErrorController(w, r, http.StatusInternalServerError)
                 return nil, err
@@ -72,19 +75,9 @@ func fetchPosts(w http.ResponseWriter, r *http.Request, db *sql.DB) ([]models.Po
             comments = append(comments, comment)
         }
 
-        reactionsMap, err := fetchCommentReactions(db, post.ID)
-        if err != nil {
-            return nil, err 
-        }
-
-        for i := range comments {
-            if reactionList, exists := reactionsMap[comments[i].ID]; exists {
-            
-                comments[i].Reactions = reactionList 
-            }
-        }
         post.Comments = comments
         posts = append(posts, post)
+    
     }
 
 	return posts, nil

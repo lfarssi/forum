@@ -9,7 +9,8 @@ type Comment struct {
 	Content   string    `json:"content"`
 	CreatedAt time.Time `json:"created_at"`
 	Username  string    `json:"username"`
-	Reactions []string  `json:"reactions"`
+	Likes     int       `json:"likes"`     
+	Dislikes  int       `json:"dislikes"` 
 }
 type Post struct {
 	ID        int       `json:"id"`
