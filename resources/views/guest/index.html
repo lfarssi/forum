@@ -5,16 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
     <link rel="stylesheet" href="/css/index.css"> 
+    <script>
+        function filterByCategory(category) {
+    window.location.href = '/filter-posts?category=' + encodeURIComponent(category);
+}
+
+    </script>
 </head>
 <body>
 
-<div class="posts-container">
 
-    <!-- Loop through each post -->
+
+    <div class="right-menu">
+        <ul>
+            <!-- <li><a href="#" onclick="filterByCategory('All')">Home</a></li> -->
+            <li class="dropdown">
+                <p>Categories: </p>
+                <div class="dropdown-content">
+                    {{range .Categories}}
+                    <br>
+                    <a href="#" onclick="filterByCategory('{{.Name}}')">{{.Name}}</a>
+                    {{end}}
+                </div>
+            </li>
+        </ul>
+    </div>
+    
+<div class="posts-container">
     {{range .Posts}}
         <div class="post" id="post_{{.ID}}">
             <h2 class="post-title">{{.Title}}</h2>
             <p class="post-content">{{.Content}}</p>
+            <p class="post-content">{{.Username}}</p>
             <p class="post-content">{{.CreatedAt.Format "02 Jan 2006"}}</p>
 
             

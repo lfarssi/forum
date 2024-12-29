@@ -18,14 +18,17 @@ SELECT
     GROUP_CONCAT(c.name) AS categories, -- Use GROUP_CONCAT to get multiple categories
     COALESCE(SUM(CASE WHEN pr.react_type='like' THEN 1 ELSE 0 END), 0) AS likes,
     COALESCE(SUM(CASE WHEN pr.react_type='dislike' THEN 1 ELSE 0 END), 0) AS dislikes,
-    p.created_at
+    p.created_at,
+    u.username -- Add this line to select the username
 FROM posts p
 LEFT JOIN post_categories pc ON p.id = pc.post_id
 LEFT JOIN categories c ON pc.category_id = c.id
 LEFT JOIN reactPost pr ON p.id = pr.post_id
+LEFT JOIN users u ON p.user_id = u.id -- Join with users table to get username
 GROUP BY p.id
 ORDER BY p.created_at DESC
 `
+
 	rows, err := db.Query(query)
 	if err != nil {
 		fmt.Println("error querying posts: ", err)
@@ -39,7 +42,7 @@ ORDER BY p.created_at DESC
 		var categoriesString string // Temporary variable for categories
 
 		if err := rows.Scan(&post.ID, &post.Title, &post.Content, &categoriesString,
-			&post.Likes, &post.Dislikes, &post.CreatedAt); err != nil {
+			&post.Likes, &post.Dislikes, &post.CreatedAt,&post.Username); err != nil {
 			fmt.Println("error scanning posts: ", err)
 			ErrorController(w, r, http.StatusInternalServerError)
 			return nil, err

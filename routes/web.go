@@ -26,6 +26,10 @@ func Router(db *sql.DB) {
 	http.HandleFunc("/register", auth.RegisterController)
 	http.HandleFunc("/logout", auth.LogoutController)
 	http.HandleFunc("/css/", controllers.CssController)
+	http.HandleFunc("/filter-posts", func(w http.ResponseWriter, r *http.Request) {
+        category := r.URL.Query().Get("category") // Get the category from query parameters
+        controllers.FilterPostsController(w, r, db, category)
+    })
 
 
 

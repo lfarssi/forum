@@ -8,17 +8,32 @@
 </head>
 <body>
 
+    <a href="/add-post">Add Post</a>
+    <div class="right-menu">
+        <ul>
+            <li><a href="#" onclick="filterByCategory('All')">Home</a></li>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">Categories</a>
+                <div class="dropdown-content">
+                    {{range .Categories}}
+                    <a href="#" onclick="filterByCategory('{{.Name}}')">{{.Name}}</a>
+                    {{end}}
+                </div>
+            </li>
+        </ul>
+    </div>
+
 <div class="posts-container">
 
-    <a href="/add-post">Add Post</a>
+
     <!-- Loop through each post -->
     {{range .Posts}}
         <div class="post" id="post_{{.ID}}">
             <h2 class="post-title">{{.Title}}</h2>
-            <p class="post-content">{{.Content}}</p>
-            <p class="post-content">{{.CreatedAt.Format "02 Jan 2006"}}</p>
-
             
+            <p class="post-content">{{.Content}}</p>
+            <p class="post-content">{{.Username}}</p>
+            <p class="post-content">{{.CreatedAt.Format "02 Jan 2006"}}</p>
             <!-- Display categories -->
             <p class="post-category">Categories: 
                 {{range .Categories}}
@@ -59,8 +74,7 @@
                     <button type="submit">Submit</button>
                 </form>
             </div>
-
-        </div> <!-- End of post -->
+        </div> 
     {{end}}
 </div>
 
