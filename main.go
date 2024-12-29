@@ -1,7 +1,12 @@
-package main 
+package main
 
-import "forum/routes"
+import (
+	"forum/config"
+	"forum/routes"
+)
 
 func main() {
+	config.DatabaseExecution()
 	routes.Router()
+
 }
