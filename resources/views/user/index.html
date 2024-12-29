@@ -5,23 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
     <link rel="stylesheet" href="/css/index.css"> 
+    <script>
+        function filterByCategory(category) {
+    window.location.href = '/filter-posts?category=' + encodeURIComponent(category);
+}
+
+    </script>
 </head>
 <body>
 
     <a href="/add-post">Add Post</a>
     <div class="right-menu">
         <ul>
-            <li><a href="#" onclick="filterByCategory('All')">Home</a></li>
+            <!-- <li><a href="#" onclick="filterByCategory('All')">Home</a></li> -->
             <li class="dropdown">
-                <a href="#" class="dropbtn">Categories</a>
+                <p>Categories: </p>
                 <div class="dropdown-content">
                     {{range .Categories}}
+                    <br>
                     <a href="#" onclick="filterByCategory('{{.Name}}')">{{.Name}}</a>
                     {{end}}
                 </div>
             </li>
         </ul>
     </div>
+    
 
 <div class="posts-container">
 
