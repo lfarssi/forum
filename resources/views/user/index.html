@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>home</title>
+    <link rel="stylesheet" href="/css/index.css"> 
+
+</head>
+<body>
+
+<div class="posts-container">
+    <!-- Loop through each post -->
+    {{range .Posts}}
+        <div class="post" id="post_{{.ID}}">
+            <h2 class="post-title">{{.Title}}</h2>
+            <p class="post-content">{{.Content}}</p>
+            <p class="post-category">Category: {{.Category}}</p>
+            <p class="post-likes">Likes: {{.Likes}}</p>
+            <p class="post-dislikes">Dislikes: {{.Dislikes}}</p>
+
+            <div class="comments-section">
+                <h3>Comments:</h3>
+                {{if .Comments}}
+                    <ol class="comments-list">
+                        <!-- Loop through each comment -->
+                        {{range .Comments}}
+                            <li class="comment" id="comment_{{.ID}}">
+                                <div class="comment-content">
+                                    <p>{{.Content}}</p>
+                                    <small>Posted by: {{.Username}} on {{.CreatedAt.Format "02 Jan 2006"}}</small>
+                                    <p class="comment-likes">Likes: {{.Likes}}</p>
+                                    <p class="comment-dislikes">Dislikes: {{.Dislikes}}</p>
+                                </div>
+                            </li>
+                        {{end}}
+                    </ol>
+                {{else}}
+                    <p>No comments yet.</p>
+                {{end}}
+            </div>
+            
+
+            <!-- Form to add a new comment -->
+            <div class="add-comment-form">
+                <h4>Add a Comment:</h4>
+                <form action="/add_comment" method="POST">
+                    <input type="hidden" name="post_id" value="{{.ID}}">
+                    <textarea name="content" required placeholder="Write your comment here..."></textarea>
+                    <button type="submit">Submit</button>
+                </form>
+            </div>
+
+        </div> <!-- End of post -->
+    {{end}}
+</div>
+
+</body>
+</html>
