@@ -10,9 +10,15 @@ import (
 
 func Router(db *sql.DB) {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		controllers.HomeController(w, r, db) // Pass the db connection here
+		controllers.HomeController(w, r, db) 
 	})
-	http.HandleFunc("/posts", controllers.PostController)
+	http.HandleFunc("/add-post", func(w http.ResponseWriter, r *http.Request) {
+		controllers.PostController(w, r, db) 
+	})
+	http.HandleFunc("/submit-add-post", func(w http.ResponseWriter, r *http.Request) {
+		controllers.PostController(w, r, db) 
+	})
+	// http.HandleFunc("/submit-add-post", controllers.PostController)
 	http.HandleFunc("/categories", controllers.CategoryController)
 	http.HandleFunc("/comments", controllers.CommentController)
 	http.HandleFunc("/reacts", controllers.ReactController)
@@ -20,6 +26,12 @@ func Router(db *sql.DB) {
 	http.HandleFunc("/register", auth.RegisterController)
 	http.HandleFunc("/logout", auth.LogoutController)
 	http.HandleFunc("/css/", controllers.CssController)
+	http.HandleFunc("/filter-posts", func(w http.ResponseWriter, r *http.Request) {
+        category := r.URL.Query().Get("category") // Get the category from query parameters
+        controllers.FilterPostsController(w, r, db, category)
+    })
+
+
 
 	fmt.Println("Server is running on http://localhost:8080")
 	err := http.ListenAndServe(":8080", nil)

@@ -9,10 +9,10 @@ import (
 
 func HomeController(w http.ResponseWriter, r *http.Request,db *sql.DB) {
 
-	if err := CheckSession(w, r, db); err != nil {
-		fmt.Println("error checking session: ", err)
-		return 
-	}
+	// if err := CheckSession(w, r, db); err != nil {
+	// 	fmt.Println("error checking session: ", err)
+	// 	return 
+	// }
 
 	categories, err := fetchCategories(w, r,db )
 	if err != nil {

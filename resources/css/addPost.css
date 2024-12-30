@@ -1,0 +1,74 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+
+.form-container {
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    text-align: center;
+    color: #333;
+}
+
+.form-group {
+    margin-bottom: 15px; /* Space between form groups */
+}
+
+label {
+    display: block; /* Make labels block level */
+    margin-bottom: 5px; /* Space below label */
+    font-weight: bold; /* Bold labels */
+}
+
+input[type="text"],
+textarea,
+select {
+    width: 100%; /* Full width */
+    padding: 10px; /* Padding inside inputs */
+    border-radius: 5px; /* Rounded corners */
+    border: 1px solid #ddd; /* Light gray border */
+    box-sizing: border-box; /* Include padding in width */
+}
+
+textarea {
+    height: 100px; /* Fixed height for textarea */
+}
+
+button {
+    width: 100%; /* Full width button */
+    padding: 10px; /* Padding inside button */
+    background-color: #007bff; /* Bootstrap primary color */
+    color: white; /* White text color */
+    border-radius: 5px; /* Rounded corners */
+    border: none; /* No border */
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 16px; /* Font size for button */
+}
+
+button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+
+.checkbox-group {
+    display: flex;
+    flex-direction: column; /* Stack checkboxes vertically */
+}
+
+.checkbox-item {
+    display: flex;
+    align-items: center; /* Align items vertically centered */
+}
+
+.checkbox-item input[type="checkbox"] {
+    margin-right: 5px; /* Space between checkbox and label */
+}
