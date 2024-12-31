@@ -10,7 +10,7 @@
 
 <div class="form-container">
     <h2>Add a New Post</h2>
-    <form action="/submit-add-post" method="POST">
+    <form action="/submit-add-post" method="POST"  id="Form">
         <div class="form-group">
             <label for="title">Title:</label>
             <input type="text" id="title" name="title" required placeholder="Enter post title">
@@ -25,16 +25,19 @@
             <label>Categories:</label>
             {{range .Categories}} <!-- Assuming you pass categories to this template -->
                 <div>
-                    <input type="checkbox" id="category_{{.ID}}" name="categories" value="{{.ID}}">
+                    <input type="checkbox" id="categories" name="categories" value="{{.ID}}">
                     <label for="category_{{.ID}}">{{.Name}}</label>
                 </div>
             {{end}}
         </div>
 
-        <button type="submit" onclick="HandleSubmit()">Submit Post</button>
+        <button type="submit">Submit Post</button>
     </form>
-    <div id="error"></div>
+        <div id="error" class="error"></div>
+    {{if .Error}}
+         <div class="error">{{.Error}}</div>
+    {{end}}
 </div>
-<script src="/resources/js/addPost.js"></script>
+<script src="/js/addPost.js"></script>
 </body>
 </html>
