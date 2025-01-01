@@ -9,6 +9,7 @@ import (
 )
 
 func Router(db *sql.DB) {
+	controllers.SessionController(db)
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		controllers.HomeController(w, r, db) 
 	})
@@ -25,12 +26,17 @@ func Router(db *sql.DB) {
 	http.HandleFunc("/login", auth.LoginController)
 	http.HandleFunc("/register", auth.RegisterController)
 	http.HandleFunc("/logout", auth.LogoutController)
-	http.HandleFunc("/css/", controllers.CssController)
+	
+
 	http.HandleFunc("/filter-posts", func(w http.ResponseWriter, r *http.Request) {
-        category := r.URL.Query().Get("category") // Get the category from query parameters
+        category := r.URL.Query().Get("category") 
         controllers.FilterPostsController(w, r, db, category)
     })
 
+
+//serve js and css 
+	http.HandleFunc("/css/", controllers.CssController)
+	http.HandleFunc("/js/", controllers.JsController)
 
 
 	fmt.Println("Server is running on http://localhost:8080")
