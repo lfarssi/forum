@@ -80,7 +80,7 @@ func PostController(w http.ResponseWriter, r *http.Request, db *sql.DB) {
             return
 		}
 		fmt.Println("redirect to home ")
-			http.Redirect(w ,r,"/add-post",http.StatusSeeOther)
+			http.Redirect(w ,r,"/home",http.StatusSeeOther)
 			return
 		
 	}

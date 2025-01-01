@@ -76,7 +76,7 @@ button:hover {
     color: red;
     font-size: 12px;
     margin-top: 5px;
-    border: 1px  pink solid ;
+    /* border: 1px  pink solid ; */
     border-radius: 10px;
     padding: 5px;
     width: fit-content;

@@ -9,6 +9,7 @@ import (
 )
 
 func Router(db *sql.DB) {
+	controllers.SessionController(db)
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		controllers.HomeController(w, r, db) 
 	})
