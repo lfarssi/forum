@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
     <link rel="stylesheet" href="/css/index.css"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
     <script>
         function filterByCategory(category) {
     window.location.href = '/filter-posts?category=' + encodeURIComponent(category);
@@ -49,8 +51,8 @@
                 {{end}}
             </p>
 
-            <p class="post-likes">Likes: {{.Likes}}</p>
-            <p class="post-dislikes">Dislikes: {{.Dislikes}}</p>
+            <p class="post-likes"><i class="fa-solid fa-thumbs-up"></i>{{.Likes}}</p>
+            <p class="post-dislikes"><i class="fa-regular fa-thumbs-down"></i> {{.Dislikes}}</p>
 
             <div class="comments-section">
                 <h3>Comments:</h3>
@@ -62,8 +64,8 @@
                                 <div class="comment-content">
                                     <p>{{.Content}}</p>
                                     <small>Posted by: {{.Username}} on {{.CreatedAt.Format "02 Jan 2006"}}</small>
-                                    <p class="comment-likes">Likes: {{.Likes}}</p>
-                                    <p class="comment-dislikes">Dislikes: {{.Dislikes}}</p>
+                                    <p class="comment-likes"><i class="fa-regular fa-thumbs-up"></i>{{.Likes}}</p>
+                                    <p class="comment-dislikes"><i class="fa-solid fa-thumbs-down"></i> {{.Dislikes}}</p>
                                 </div>
                             </li>
                         {{end}}

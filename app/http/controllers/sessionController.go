@@ -17,5 +17,4 @@ func SessionController(db *sql.DB) {
 		rowsAffected, _ := res.RowsAffected()
         fmt.Printf("Deleted %d expired sessions\n", rowsAffected)
 	}
-
 }
