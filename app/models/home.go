@@ -1,7 +1,0 @@
-package models
-
-
-
-func Home()  {
-	
-}
