@@ -53,4 +53,4 @@ CREATE TABLE IF NOT EXISTS sessionss (
 );
 
 
-
+INSERT INTO categories (name) VALUES ('Sport', 'TV-Show', 'History', 'Science');
