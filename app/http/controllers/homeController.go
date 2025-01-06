@@ -13,6 +13,5 @@ func HomeController(w http.ResponseWriter, r *http.Request) {
 		
 	} else {
 		ErrorController(w, r, http.StatusNotFound)
-		return
 	}
 }

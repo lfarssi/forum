@@ -7,7 +7,7 @@ import (
 )
 
 func ErrorController(w http.ResponseWriter, r *http.Request , StatusCode int) {
-	errPage := "resources/views/errors/error.html"
+	errPage := "resources/views/error.html"
 	tmp, err := template.ParseFiles(errPage)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

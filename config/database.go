@@ -8,7 +8,7 @@ import (
 )
 
 func DatabaseExecution() {
-	db, err := sql.Open("sqlite3", "./database/database.db")
+	db, err := sql.	Open("sqlite3", "./database/database.db")
 	if err != nil {
 		fmt.Println(" failed to open database: ", err)
 		return
@@ -28,5 +28,4 @@ func DatabaseExecution() {
 		fmt.Println(" failed to execute schema:", err)
 		return
 	}
-	print("exce succes ")
 }
