@@ -8,8 +8,8 @@ import (
 
 func ApiRouter() {
 
-	// http.HandleFunc("/login", auth.LoginController)
-	// http.HandleFunc("/register", auth.RegisterController)
+	 http.HandleFunc("/singIn", auth.LoginController)
+	 http.HandleFunc("/singUp", auth.RegisterController)
 	http.HandleFunc("/logout", auth.LogoutController)
 	http.HandleFunc("/resources/", static.CssJsController)
 

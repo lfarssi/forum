@@ -6,12 +6,12 @@ import (
 	"net/http"
 )
 
-func AuthorizationMiddleware(auth http.HandlerFunc) http.HandlerFunc {
+func AuthMiddleware(auth http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
 		defer func() {
 			if err := recover(); err != nil {
-				controllers.ErrorController(w, r, http.StatusInternalServerError)
+				controllers.ErrorController(w, r, http.StatusInternalServerError, "")
 				return
 			}
 		}()

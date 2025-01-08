@@ -1,19 +1,24 @@
-package config
+package models
 
 import (
 	"database/sql"
 	"fmt"
 	"io/ioutil"
-	_"github.com/mattn/go-sqlite3"
+
+	_ "github.com/mattn/go-sqlite3"
+
 )
 
+var Database *sql.DB
+
 func DatabaseExecution() {
-	db, err := sql.	Open("sqlite3", "./database/database.db")
+	err := error(nil)
+	Database, err = sql.Open("sqlite3", "./database/database.db")
 	if err != nil {
 		fmt.Println(" failed to open database: ", err)
 		return
 	}
-	defer db.Close()
+	//defer Database.Close()
 
 	// Read the schema SQL file
 	schema, err := ioutil.ReadFile("./database/schema/schema.sql")
@@ -23,7 +28,7 @@ func DatabaseExecution() {
 	}
 
 	// Execute the SQL commands in the schema file
-	_, err = db.Exec(string(schema))
+	_, err = Database.Exec(string(schema))
 	if err != nil {
 		fmt.Println(" failed to execute schema:", err)
 		return
