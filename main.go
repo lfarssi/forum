@@ -2,14 +2,15 @@ package main
 
 import (
 	"fmt"
+
+	"forum/app/models"
 	"forum/routes"
 	"net/http"
 )
-func init() {
-	
-}
+
 
 func main() {
+	models.DatabaseExecution()
 	routes.WebRouter()
 	routes.ApiRouter()
 	fmt.Println("Server is running on http://localhost:8080")

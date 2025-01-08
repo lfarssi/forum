@@ -6,7 +6,7 @@ import (
 	"text/template"
 )
 
-func ErrorController(w http.ResponseWriter, r *http.Request , StatusCode int) {
+func ErrorController(w http.ResponseWriter, r *http.Request , StatusCode int, message string) {
 	errPage := "resources/views/error.html"
 	tmp, err := template.ParseFiles(errPage)
 	if err != nil {
@@ -18,6 +18,9 @@ func ErrorController(w http.ResponseWriter, r *http.Request , StatusCode int) {
 	errType := models.ErrorType{
 	   Code : StatusCode,
 	   Message : http.StatusText(StatusCode),
+	}
+	if message != "" {
+		errType.Message = message
 	}
 	if err := tmp.Execute(w, errType); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

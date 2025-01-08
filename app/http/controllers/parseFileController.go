@@ -12,13 +12,13 @@ func ParseFileController(w http.ResponseWriter, r *http.Request, filename string
 	temp, err := template.ParseFiles(filepath)
 	if err != nil {
 		fmt.Println("error parsing; ", err)
-		ErrorController(w, r, http.StatusInternalServerError)
+		ErrorController(w, r, http.StatusInternalServerError,"")
 		return
 	}
 	err1 := temp.Execute(w, data)
 	if err1 != nil {
 		fmt.Println("error executing; ", err1)
-		ErrorController(w, r, http.StatusInternalServerError)
+		ErrorController(w, r, http.StatusInternalServerError, "")
 		return
 	}
 }

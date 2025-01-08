@@ -12,6 +12,6 @@ func HomeController(w http.ResponseWriter, r *http.Request) {
 		ParseFileController(w, r, "users/index" , "")
 		
 	} else {
-		ErrorController(w, r, http.StatusNotFound)
+		ErrorController(w, r, http.StatusNotFound, "")
 	}
 }

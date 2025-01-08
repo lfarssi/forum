@@ -52,5 +52,3 @@ CREATE TABLE IF NOT EXISTS sessionss (
   FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
-
-INSERT INTO categories (name) VALUES ('Sport', 'TV-Show', 'History', 'Science');
