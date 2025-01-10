@@ -7,14 +7,13 @@ import (
 )
 
 func ErrorController(w http.ResponseWriter, r *http.Request , StatusCode int, message string) {
+	w.WriteHeader(StatusCode)
 	errPage := "resources/views/error.html"
 	tmp, err := template.ParseFiles(errPage)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
-
 		return
 	}
-	w.WriteHeader(StatusCode)
 	errType := models.ErrorType{
 	   Code : StatusCode,
 	   Message : http.StatusText(StatusCode),

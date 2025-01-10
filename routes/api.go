@@ -1,16 +1,16 @@
 package routes
 
 import (
-	"forum/app/http/controllers/auth"
+	"forum/app/http/controllers"
 	"forum/app/http/controllers/static"
 	"net/http"
 )
 
 func ApiRouter() {
 
-	 http.HandleFunc("/singIn", auth.LoginController)
-	 http.HandleFunc("/singUp", auth.RegisterController)
-	http.HandleFunc("/logout", auth.LogoutController)
+	http.HandleFunc("/singIn", controllers.LoginController)
+	http.HandleFunc("/singUp", controllers.RegisterController)
+	http.HandleFunc("/logout", controllers.LogoutController)
 	http.HandleFunc("/resources/", static.CssJsController)
 
 }

@@ -2,10 +2,13 @@
 <header>
     <h1>Forum</h1>
     <nav>
+      {{if .IsLoggedIn}}
         <a href="/register">Register</a>
         <a href="/login">Login</a>
+        {{else}}
         <!-- if user login -->
         <a href="/logout">Logout</a>
+        {{end}}
     </nav>
 </header>
 {{end}}

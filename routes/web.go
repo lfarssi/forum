@@ -11,6 +11,6 @@ func WebRouter() {
 	http.HandleFunc("/categories", controllers.CategoryController)
 	http.HandleFunc("/comments", controllers.CommentController)
 	http.HandleFunc("/reacts", controllers.ReactController)
-	http.HandleFunc("/login", controllers.LoginController)
-	http.HandleFunc("/register", controllers.RegisterController)
+	http.HandleFunc("/login", controllers.ParseLogin)
+	http.HandleFunc("/register", controllers.ParseRegister)
 }

@@ -1,5 +1,5 @@
 footer {
-    background-color: #f8f9fa;
+    background-color: black;
     padding: 25px 0;
     text-align: center;
     width: 100%;
@@ -8,5 +8,6 @@ footer {
     left: 0;
     right: 0;
     z-index: 1000;
-    border-top: 1px solid #e9ecef;
+    /* border-top: 1px solid #e9ecef; */
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.15);
 }
