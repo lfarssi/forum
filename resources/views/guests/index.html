@@ -3,38 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/resources/css/components/footer.css">
+    <link rel="stylesheet" href="/resources/css/components/nav.css">
+    <link rel="stylesheet" href="/resources/css/components/menu.css">
+    <link rel="stylesheet" href="/resources/css/index.css">
     <title>Document</title>
 </head>
 <body>
-    <header>
-        <h1>Forum</h1>
-        <nav>
-            <a href="/register">Register</a>
-            <a href="/login">Login</a>
-        </nav>
-    </header>
+    {{template "navbar" .}}
     <main>
-        <section>
-            <h2>Categories</h2>
-            
-        </section>
-        <section>
-            <h2>Threads</h2>
-            <ul>
-                <li>
-                    <a href="/thread/1">Thread 1</a>
-                </li>
-                <li>
-                    <a href="/thread/2">Thread 2</a>
-                </li>
-                <li>
-                    <a href="/thread/3">Thread 3</a>
-                </li>
-            </ul>
-        </section>
+
     </main>
-    <footer>
-        <p>Forum &copy; 2020</p>
-    </footer>
+    {{template "footer" .}}
+    <script src="/resources/js/index.js"></script>
 </body>
 </html>

@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"net/http"
 	"regexp"
 
 	"golang.org/x/crypto/bcrypt"
@@ -32,4 +33,12 @@ func IsValidPassword(password string) bool {
 func HashPassword(password string) string {
 	HashPassword, _ := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	return string(HashPassword)
+}
+
+func IsLoggedIn(r *http.Request) bool {
+	cookie, err := r.Cookie("token")
+	if err != nil || cookie.Value == "" {
+		return false
+	}
+	return true
 }

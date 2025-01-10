@@ -1,4 +1,4 @@
-package auth
+package controllers
 
 import (
 	"forum/app/models"
@@ -23,6 +23,6 @@ func delete(token  string) {
 	query := "DELETE FROM sessions WHERE token = ?"
 	_, err :=  models.Database.Exec(query, token)
 	if err != nil {
-        return
+        return 
     }
 }

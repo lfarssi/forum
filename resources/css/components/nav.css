@@ -1,9 +1,13 @@
-nav{
+header{
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 1rem 2rem;
-    background-color: #333;
-    color: #fff;
+    color: white;
     
+}
+nav a {
+    text-decoration: none;
+    color: white;
+    padding: 0 1rem;
 }
