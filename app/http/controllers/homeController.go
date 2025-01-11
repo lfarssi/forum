@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"forum/app/models"
 	"forum/utils"
 	"net/http"
@@ -21,6 +22,7 @@ func HomeController(w http.ResponseWriter, r *http.Request) {
 	}{
 		IsLoggedIn: logedIn,
 	}
+	fmt.Println(r.URL.Path)
 	if r.Method != "GET" {
 		ErrorController(w, r, http.StatusMethodNotAllowed, "")
 		return
