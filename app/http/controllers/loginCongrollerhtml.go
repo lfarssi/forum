@@ -25,7 +25,7 @@ func ParseLogin(w http.ResponseWriter, r *http.Request) {
 func LoginController(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
 		ErrorController(w, r, http.StatusMethodNotAllowed, "")
-		return 
+		return
 	}
 	user := models.User{}
 	err := json.NewDecoder(r.Body).Decode(&user)
@@ -85,9 +85,7 @@ func LoginController(w http.ResponseWriter, r *http.Request) {
 		Path:     "/home",
 		HttpOnly: true,
 	})
-	println(time.Hour)
-	http.Redirect(w, r, "/home", http.StatusSeeOther)
-
+	http.Redirect(w,r,"/home",http.StatusSeeOther)
 }
 func checkAuth(userName, password string) (int, map[string]string) {
 	query := "SELECT id, password FROM users WHERE username = ?"

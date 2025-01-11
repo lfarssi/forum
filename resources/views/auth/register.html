@@ -71,10 +71,10 @@
             "confirmationPasswordErr"
           );
         
-          usernameErr.innerHTML = "";
-          emailErr.innerHTML = "";
-          passwordErr.innerHTML = "";
-          confirmationPasswordErr.innerHTML = "";
+          usernameErr.innerHTML = '';
+          emailErr.innerHTML = '';
+          passwordErr.innerHTML = '';
+          confirmationPasswordErr.innerHTML = '';
           const response = await fetch("/singUp", {
             method: "POST",
             headers: {
@@ -107,7 +107,7 @@
           if (data.confirmPassword) {
             confirmationPasswordErr.innerHTML = data.confirmPassword;
           }
-          if (data.success) {
+          if (data.response == "ok") {
             alert("Registration successful");
             window.location.href = "/home";
           }
