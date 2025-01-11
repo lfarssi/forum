@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"encoding/json"
 	"forum/app/models"
 	"forum/utils"
 	"net/http"
@@ -33,19 +34,29 @@ func RegisterController(w http.ResponseWriter, r *http.Request) {
 	user.Password = r.FormValue("password")
 	user.ConfirmationPassword = r.FormValue("confirmationPassword")
 	if user.UserName == "" || user.Email == "" || user.Password == "" {
-		ErrorController(w, r, http.StatusBadRequest, "")
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{"empty": "All fields are required"})
 		return
 	} else if !utils.IsValidUsername(user.UserName) {
-		ErrorController(w, r, http.StatusBadRequest, "Invalid username")
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{"name": "Invalid username"})
 		return
 	} else if !utils.IsValidEmail(user.Email) {
-		ErrorController(w, r, http.StatusBadRequest, "Invalid email")
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{"email": "Invalid email"})
 		return
 	} else if user.Password != user.ConfirmationPassword {
-		ErrorController(w, r, http.StatusBadRequest, "Password and confirmation password do not match")
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{"password": "password unmatched"})
 		return
 	} else if utils.IsValidPassword(user.Password) {
-		ErrorController(w, r, http.StatusBadRequest, "Password is weak")
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{"password": "Weak password"})
 		return
 	}
 
