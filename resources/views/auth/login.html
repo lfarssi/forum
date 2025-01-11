@@ -8,15 +8,16 @@
   </head>
   <body>
     <div class="login-container">
-      <form action="/singIn" method="POST" class="login-form">
+      <form action="/singIn" method="POST" id="form" class="login-form">
         <input
-          type="username"
+          type="text"
           name="username"
           id="username"
           placeholder="username"
           required
         /><br />
-        <div class="userameErr"></div>
+        <div class="usernameErr"></div>
+
         <input
           type="password"
           name="password"
@@ -31,16 +32,16 @@
       </form>
     </div>
     <script>
-      document.getElementById("btn")
-        .addEventListener("click", async function (event) {
+      document.getElementById("form")
+        .addEventListener("submit", async function (event) {
           event.preventDefault();
           const username = document.getElementById("username").value;
           const password = document.getElementById("password").value;
-          const usernameErr = document.querySelector(".userameErr");
+          const usernameErr = document.querySelector(".usernameErr");
         const passwordErr = document.querySelector(".passwordErr");
 
-            // usernameErr.innerHTML = '';
-            // passwordErr.innerHTML = '';
+          usernameErr.innerHTML = '';
+          passwordErr.innerHTML = '';
           console.log(username, password);
           const response = await fetch("/singIn", {
             method: "POST",
@@ -51,9 +52,21 @@
           });
             const data = await response.json();
             console.log(data);
-            usernameErr.innerHTML = data.error;
+        
+          if (data.error) {
+              usernameErr.innerHTML = data.error;
+              passwordErr.innerHTML = data.error;
+            }
+            if (data.username) {
+              usernameErr.innerHTML = data.username;
+            } 
+            if (data.password) {
+              passwordErr.innerHTML = data.password;
+            }
+            if (data.success) {
+              window.location.href = "/home";
+            }
             
-            passwordErr.innerHTML = data.error;
         });
     </script>
   </body>

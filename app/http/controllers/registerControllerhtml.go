@@ -29,41 +29,58 @@ func RegisterController(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	user := models.User{}
-	user.UserName = r.FormValue("username")
-	user.Email = r.FormValue("email")
-	user.Password = r.FormValue("password")
-	user.ConfirmationPassword = r.FormValue("confirmationPassword")
-	if user.UserName == "" || user.Email == "" || user.Password == "" {
+	err := json.NewDecoder(r.Body).Decode(&user)
+	if err != nil {
+		ErrorController(w, r, http.StatusInternalServerError, "")
+		return
+	}
+	//fmt.Println("user", user)
+	if user.UserName == "" || user.Email == "" || user.Password == "" || user.ConfirmationPassword == "" {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(map[string]string{"empty": "All fields are required"})
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"username":        "Username field are required",
+			"email":           "Email field are required",
+			"password":        "Password field are required",
+			"confirmPassword": "Confirmation Password field are required",
+		})
 		return
 	} else if !utils.IsValidUsername(user.UserName) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(map[string]string{"name": "Invalid username"})
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"username": "Invalid username",
+		})
 		return
 	} else if !utils.IsValidEmail(user.Email) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(map[string]string{"email": "Invalid email"})
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"email": "Invalid email",
+		})
 		return
 	} else if user.Password != user.ConfirmationPassword {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(map[string]string{"password": "password unmatched"})
+		json.NewEncoder(w).Encode(map[string]interface{}{"confirmPassword": "password unmatched"})
 		return
 	} else if utils.IsValidPassword(user.Password) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(map[string]string{"password": "Weak password"})
+		json.NewEncoder(w).Encode(map[string]interface{}{"password": "Weak password"})
 		return
 	}
 
 	user.Password = utils.HashPassword(user.Password)
 	id, errInsertion := insert(user)
-	if errInsertion != "" {
-		ErrorController(w, r, http.StatusInternalServerError, errInsertion)
+	if len(errInsertion) > 0 {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"error":    errInsertion["error"],
+			"username": errInsertion["username"],
+			"email":    errInsertion["email"],
+		})
 		return
 	}
 
@@ -72,7 +89,7 @@ func RegisterController(w http.ResponseWriter, r *http.Request) {
 		ErrorController(w, r, http.StatusInternalServerError, "")
 		return
 	}
-	err = CreateSession(id, token.String(), int(time.Hour)*24)
+	err = CreateSession(id, token.String(), int(time.Now().Hour())*24)
 
 	if err != nil {
 		ErrorController(w, r, http.StatusInternalServerError, "")
@@ -83,32 +100,32 @@ func RegisterController(w http.ResponseWriter, r *http.Request) {
 		Value:    token.String(),
 		Path:     "/home",
 		HttpOnly: true,
-		MaxAge:   int(time.Hour) * 24,
+		MaxAge:   int(time.Now().Hour()) * 24,
 	})
 	http.Redirect(w, r, "/home", http.StatusSeeOther)
 
 }
 
-func insert(user models.User) (int, string) {
+func insert(user models.User) (int, map[string]string) {
 	query := "INSERT INTO users (username, email, password) VALUES (?, ?, ?)"
 	stm, err := models.Database.Prepare(query)
 	if err != nil {
-		return 0, "error preparing statement"
+		return 0, map[string]string{"error": "error preparing query"}
 	}
 	defer stm.Close()
 	res, err := stm.Exec(user.UserName, user.Email, user.Password)
 	if err != nil {
 		if strings.Contains(err.Error(), "username") {
-			return 0, "username already taken"
+			return 0, map[string]string{"username": "username already exists"}
 		} else if strings.Contains(err.Error(), "email") {
-			return 0, "email already exists"
+			return 0, map[string]string{"email": "email already exists"}
 		}
 	}
 	id, err := res.LastInsertId()
 	if err != nil {
-		return 0, "error getting last insert id"
+		return 0, map[string]string{"error": "error getting last id"}
 	}
-	return int(id), ""
+	return int(id), map[string]string{}
 }
 
 func CreateSession(id int, token string, expired int) error {

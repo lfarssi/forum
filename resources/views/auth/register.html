@@ -1,22 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/resources/css/auth/register.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/resources/css/auth/register.css" />
     <title>Document</title>
-</head>
-<body>
+  </head>
+  <body>
     <div class="register-container">
+      <form action="/singUp" method="POST" id="form" class="register-form">
+        <input
+          type="text"
+          id="username"
+          name="username"
+          placeholder="Username"
+          required
+        />
+        <br />
+        <div id="usernameErr"></div>
+       
+        <input
+          type="email"
+          id="email"
+          name="email"
+          placeholder="email"
+          required
+        />
+        <br />
+        <div id="emailErr"></div>
 
-        <form action="/singUp" method="POST" class="register-form">
-            <input type="text" name="username" placeholder="Username" required><br>
-            <input type="email" name="email" placeholder="email" required><br>
-            <input type="password" name="password" placeholder="Password" required><br>
-            <input type="password" name="confirmationPassword" placeholder="confirmationPassword" required><br>
-            <button type="submit">Register</button><br>
-            <a href="/login">You already have an account? login</a>
-        </form>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          placeholder="Password"
+          required
+        />
+        <br />
+        <div id="passwordErr"></div>
+
+        <input
+          type="password"
+          id="confirmationPassword"
+          name="confirmationPassword"
+          placeholder="confirmationPassword"
+          required
+        />
+        <br />
+        <div id="confirmationPasswordErr"></div>
+
+        <button type="submit">Register</button><br />
+        <a href="/login">You already have an account? login</a>
+      </form>
     </div>
-</body>
+    <script>
+      document
+        .getElementById("form")
+        .addEventListener("submit", async function (event) {
+          event.preventDefault();
+          const username = document.getElementById("username").value;
+          const email = document.getElementById("email").value;
+          const password = document.getElementById("password").value;
+          const confirmationPassword = document.getElementById(
+            "confirmationPassword"
+          ).value;
+          const usernameErr = document.getElementById("usernameErr");
+          const emailErr = document.getElementById("emailErr");
+          const passwordErr = document.getElementById("passwordErr");
+          const confirmationPasswordErr = document.getElementById(
+            "confirmationPasswordErr"
+          );
+        
+          usernameErr.innerHTML = "";
+          emailErr.innerHTML = "";
+          passwordErr.innerHTML = "";
+          confirmationPasswordErr.innerHTML = "";
+          const response = await fetch("/singUp", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              username,
+              email,
+              password,
+              confirmationPassword,
+            }),
+          });
+          const data = await response.json();
+          console.log(data);
+          if (data.error) {
+            usernameErr.innerHTML = data.username;
+            emailErr.innerHTML = data.email;
+            passwordErr.innerHTML = data.password;
+            confirmationPasswordErr.innerHTML = data.confirmPassword;
+          }
+          if (data.username) {
+            usernameErr.innerHTML = data.username;
+          }
+          if (data.email) {
+            emailErr.innerHTML = data.email;
+          }
+          if (data.password) {
+            passwordErr.innerHTML = data.password;
+          }
+          if (data.confirmPassword) {
+            confirmationPasswordErr.innerHTML = data.confirmPassword;
+          }
+          if (data.success) {
+            alert("Registration successful");
+            window.location.href = "/home";
+          }
+        });
+    </script>
+  </body>
 </html>

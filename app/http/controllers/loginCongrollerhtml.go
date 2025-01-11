@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	"forum/app/models"
 	"forum/utils"
 	"net/http"
@@ -24,33 +25,47 @@ func ParseLogin(w http.ResponseWriter, r *http.Request) {
 func LoginController(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
 		ErrorController(w, r, http.StatusMethodNotAllowed, "")
-		return
+		return 
 	}
 	user := models.User{}
-	user.UserName = r.FormValue("username")
-	user.Password = r.FormValue("password")
+	err := json.NewDecoder(r.Body).Decode(&user)
+	if err != nil {
+		ErrorController(w, r, http.StatusInternalServerError, "")
+		return
+	}
 	if user.UserName == "" || user.Password == "" {
+		fmt.Println("&", r.FormValue("username"), "=>", user.Password)
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(map[string]string{"error": "All fields are required"})
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"username": "Username field are required",
+			"password": "Password field are required",
+		})
+
 		return
 	} else if !utils.IsValidUsername(user.UserName) {
 		w.Header().Set("Content-Type", "application/json")
+		fmt.Println("ùù", user.UserName, "=>", user.Password)
 		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(map[string]string{"error": "Invalid username"})
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"username": "Invalid username",
+		})
 		return
 	}
 	// else if !utils.IsValidPassword(user.Password) {
 	// 	w.Header().Set("Content-Type", "application/json")
 	//	w.WriteHeader(http.StatusBadRequest)
-	//	json.NewEncoder(w).Encode(map[string]string{"password": "Weak password"})
+	//	json.NewEncoder(w).Encode(map[string]interface{}{"password": "Weak password",})
 	// 	return
 	// }
 	id, authErr := checkAuth(user.UserName, user.Password)
-	if authErr != "" {
+	if len(authErr) > 0 {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(map[string]string{"error": authErr})
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"username": authErr["username"],
+			"password": authErr["password"],
+		})
 		return
 	}
 	token, err := uuid.NewV4()
@@ -58,7 +73,7 @@ func LoginController(w http.ResponseWriter, r *http.Request) {
 		ErrorController(w, r, http.StatusInternalServerError, "")
 		return
 	}
-	err = CreateSession(id, token.String(), int(time.Hour)*24)
+	err = CreateSession(id, token.String(), int(time.Now().Hour())*24)
 	if err != nil {
 		ErrorController(w, r, http.StatusInternalServerError, "")
 		return
@@ -66,7 +81,7 @@ func LoginController(w http.ResponseWriter, r *http.Request) {
 	http.SetCookie(w, &http.Cookie{
 		Name:     "token",
 		Value:    token.String(),
-		MaxAge:   int(time.Hour) * 24,
+		MaxAge:   int(time.Now().Hour()) * 24,
 		Path:     "/home",
 		HttpOnly: true,
 	})
@@ -74,21 +89,21 @@ func LoginController(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/home", http.StatusSeeOther)
 
 }
-func checkAuth(userName, password string) (int, string) {
+func checkAuth(userName, password string) (int, map[string]string) {
 	query := "SELECT id, password FROM users WHERE username = ?"
 	statement, err := models.Database.Prepare(query)
 	if err != nil {
-		return 0, "Error in the database"
+		return 0, map[string]string{"error": "database error"}
 	}
 	defer statement.Close()
 	var id int
 	var hashedPassword string
 	err = statement.QueryRow(userName).Scan(&id, &hashedPassword)
 	if err != nil {
-		return 0, "User not found"
+		return 0, map[string]string{"username": "Username not found"}
 	}
 	if bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password)) != nil {
-		return 0, "Password Incorrect"
+		return 0, map[string]string{"password": "Password Incorrect"}
 	}
-	return id, ""
+	return id, map[string]string{}
 }
