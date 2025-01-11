@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"encoding/json"
 	"forum/app/models"
 	"forum/utils"
 	"net/http"
@@ -28,20 +29,28 @@ func LoginController(w http.ResponseWriter, r *http.Request) {
 	user := models.User{}
 	user.UserName = r.FormValue("username")
 	user.Password = r.FormValue("password")
-	if user.UserName == "" || user.Password == "" { 
-		ErrorController(w, r, http.StatusBadRequest, "")
-        return
-	} else if !utils.IsValidUsername(user.UserName) {
-		ErrorController(w, r, http.StatusBadRequest, "Invalid username")
+	if user.UserName == "" || user.Password == "" {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{"error": "All fields are required"})
 		return
-	} 
+	} else if !utils.IsValidUsername(user.UserName) {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{"error": "Invalid username"})
+		return
+	}
 	// else if !utils.IsValidPassword(user.Password) {
-	// 	ErrorController(w, r, http.StatusBadRequest, "Password is weak")
+	// 	w.Header().Set("Content-Type", "application/json")
+	//	w.WriteHeader(http.StatusBadRequest)
+	//	json.NewEncoder(w).Encode(map[string]string{"password": "Weak password"})
 	// 	return
 	// }
-	id, authErr:= checkAuth(user.UserName, user.Password)
+	id, authErr := checkAuth(user.UserName, user.Password)
 	if authErr != "" {
-		ErrorController(w, r, http.StatusInternalServerError, authErr)
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{"error": authErr})
 		return
 	}
 	token, err := uuid.NewV4()
@@ -56,11 +65,11 @@ func LoginController(w http.ResponseWriter, r *http.Request) {
 	}
 	http.SetCookie(w, &http.Cookie{
 		Name:     "token",
-        Value:    token.String(),
-        MaxAge:   int(time.Hour) * 24,
+		Value:    token.String(),
+		MaxAge:   int(time.Hour) * 24,
 		Path:     "/home",
 		HttpOnly: true,
-    })
+	})
 	println(time.Hour)
 	http.Redirect(w, r, "/home", http.StatusSeeOther)
 
@@ -68,17 +77,17 @@ func LoginController(w http.ResponseWriter, r *http.Request) {
 func checkAuth(userName, password string) (int, string) {
 	query := "SELECT id, password FROM users WHERE username = ?"
 	statement, err := models.Database.Prepare(query)
-	if err!= nil {
-        return 0, "Error in the database"
-    }
+	if err != nil {
+		return 0, "Error in the database"
+	}
 	defer statement.Close()
 	var id int
 	var hashedPassword string
 	err = statement.QueryRow(userName).Scan(&id, &hashedPassword)
-	if err!= nil {
-        return 0, "User not found"
-    }
-	if bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))!= nil {
+	if err != nil {
+		return 0, "User not found"
+	}
+	if bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password)) != nil {
 		return 0, "Password Incorrect"
 	}
 	return id, ""
