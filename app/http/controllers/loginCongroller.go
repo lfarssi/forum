@@ -13,6 +13,10 @@ import (
 )
 
 func ParseLogin(w http.ResponseWriter, r *http.Request) {
+	if utils.IsLoggedIn(r) {
+		http.Redirect(w, r, "/home", http.StatusSeeOther)
+		return
+	}
 	if r.URL.Path != "/login" {
 		http.Error(w, "Not Found", http.StatusNotFound)
 		return
@@ -86,6 +90,7 @@ func LoginController(w http.ResponseWriter, r *http.Request) {
 		HttpOnly: true,
 	})
 	http.Redirect(w,r,"/home",http.StatusSeeOther)
+	
 }
 func checkAuth(userName, password string) (int, map[string]string) {
 	query := "SELECT id, password FROM users WHERE username = ?"

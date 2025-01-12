@@ -87,8 +87,10 @@
               confirmationPassword,
             }),
           });
-          const data = await response.json();
-          console.log(data);
+          if (response.ok) {
+            window.location.href = "/home";
+          } else {
+            const data = await response.json();
           if (data.error) {
             usernameErr.innerHTML = data.username;
             emailErr.innerHTML = data.email;
@@ -107,10 +109,9 @@
           if (data.confirmPassword) {
             confirmationPasswordErr.innerHTML = data.confirmPassword;
           }
-          if (data.response == "ok") {
-            alert("Registration successful");
-            window.location.href = "/home";
           }
+         
+         
         });
     </script>
   </body>
