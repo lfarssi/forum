@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/resources/css/components/menu.css">
     <link rel="stylesheet" href="/resources/css/index.css">
     <title>Document</title>
+    
 </head>
 <body>
    {{template "navbar" .}}
@@ -16,5 +17,9 @@
     </main>
     {{template "footer" .}}
     <script src="/resources/js/index.js"></script>
+<script>
+    var t = document.cookie;
+    console.log(t["token"]);
+</script> 
 </body>
 </html>

@@ -2,6 +2,7 @@ package routes
 
 import (
 	"forum/app/http/controllers"
+	"forum/app/http/middleware"
 	"net/http"
 )
 
@@ -11,6 +12,6 @@ func WebRouter() {
 	http.HandleFunc("/categories", controllers.CategoryController)
 	http.HandleFunc("/comments", controllers.CommentController)
 	http.HandleFunc("/reacts", controllers.ReactController)
-	http.HandleFunc("/login", controllers.ParseLogin)
-	http.HandleFunc("/register", controllers.ParseRegister)
+	http.HandleFunc("/login", middleware.AlreadyLoggedIn(controllers.ParseLogin))
+	http.HandleFunc("/register", middleware.AlreadyLoggedIn(controllers.ParseRegister))
 }

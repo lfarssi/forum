@@ -13,15 +13,13 @@ import (
 )
 
 func ParseLogin(w http.ResponseWriter, r *http.Request) {
-	if utils.IsLoggedIn(r) {
-		http.Redirect(w, r, "/home", http.StatusSeeOther)
+	if r.Method != "GET" {
+		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
 		return
 	}
-	if r.URL.Path != "/login" {
-		http.Error(w, "Not Found", http.StatusNotFound)
-		return
-	} else if r.Method != "GET" {
-		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
+	if utils.IsLoggedIn(r) {
+
+		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
 	ParseFileController(w, r, "auth/login", "")
@@ -31,14 +29,13 @@ func LoginController(w http.ResponseWriter, r *http.Request) {
 		ErrorController(w, r, http.StatusMethodNotAllowed, "")
 		return
 	}
-	user := models.User{}
+	user := &models.User{}
 	err := json.NewDecoder(r.Body).Decode(&user)
 	if err != nil {
 		ErrorController(w, r, http.StatusInternalServerError, "")
 		return
 	}
 	if user.UserName == "" || user.Password == "" {
-		fmt.Println("&", r.FormValue("username"), "=>", user.Password)
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(map[string]interface{}{
@@ -56,12 +53,6 @@ func LoginController(w http.ResponseWriter, r *http.Request) {
 		})
 		return
 	}
-	// else if !utils.IsValidPassword(user.Password) {
-	// 	w.Header().Set("Content-Type", "application/json")
-	//	w.WriteHeader(http.StatusBadRequest)
-	//	json.NewEncoder(w).Encode(map[string]interface{}{"password": "Weak password",})
-	// 	return
-	// }
 	id, authErr := checkAuth(user.UserName, user.Password)
 	if len(authErr) > 0 {
 		w.Header().Set("Content-Type", "application/json")
@@ -86,11 +77,10 @@ func LoginController(w http.ResponseWriter, r *http.Request) {
 		Name:     "token",
 		Value:    token.String(),
 		MaxAge:   int(time.Now().Hour()) * 24,
-		Path:     "/home",
 		HttpOnly: true,
 	})
-	http.Redirect(w,r,"/home",http.StatusSeeOther)
-	
+	http.Redirect(w, r, "/", http.StatusSeeOther)
+
 }
 func checkAuth(userName, password string) (int, map[string]string) {
 	query := "SELECT id, password FROM users WHERE username = ?"
