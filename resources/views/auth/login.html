@@ -32,6 +32,9 @@
       </form>
     </div>
     <script>
+      if (window.localStorage.getItem("token")) {
+        window.location.href = "/home";
+      }
       document.getElementById("form")
         .addEventListener("submit", async function (event) {
           event.preventDefault();
@@ -50,11 +53,12 @@
             },
             body: JSON.stringify({ username, password }),
           });
-          const data = await response.json();
-          console.log(data);
-          console.log(response)
         
-          if (data.error) {
+          if (response.ok) {
+            window.location.href = "/home";
+          } else{
+            const data = await response.json();
+            if (data.error) {
               usernameErr.innerHTML = data.error;
               passwordErr.innerHTML = data.error;
             }
@@ -64,9 +68,9 @@
             if (data.password) {
               passwordErr.innerHTML = data.password;
             }
-             if (data.response == "ok") {
-               window.location.href = "/home";
-             }
+          }
+          
+            
             
         });
     </script>

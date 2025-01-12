@@ -12,6 +12,10 @@ import (
 )
 
 func ParseRegister(w http.ResponseWriter, r *http.Request) {
+	if utils.IsLoggedIn(r) {
+		http.Redirect(w, r, "/home", http.StatusSeeOther)
+		return
+	}
 	if r.URL.Path != "/register" {
 		ErrorController(w, r, http.StatusNotFound, "")
 		return
