@@ -40,5 +40,6 @@ func IsLoggedIn(r *http.Request) bool {
 	if err != nil || cookie.Value == "" {
 		return false
 	}
+
 	return true
 }

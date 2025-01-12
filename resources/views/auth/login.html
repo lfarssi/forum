@@ -32,9 +32,8 @@
       </form>
     </div>
     <script>
-      if (window.localStorage.getItem("token")) {
-        window.location.href = "/home";
-      }
+   
+    
       document.getElementById("form")
         .addEventListener("submit", async function (event) {
           event.preventDefault();
@@ -55,7 +54,7 @@
           });
         
           if (response.ok) {
-            window.location.href = "/home";
+            window.location.href = "/";
           } else{
             const data = await response.json();
             if (data.error) {

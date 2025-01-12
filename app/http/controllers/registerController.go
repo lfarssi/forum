@@ -13,13 +13,10 @@ import (
 
 func ParseRegister(w http.ResponseWriter, r *http.Request) {
 	if utils.IsLoggedIn(r) {
-		http.Redirect(w, r, "/home", http.StatusSeeOther)
+		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
-	if r.URL.Path != "/register" {
-		ErrorController(w, r, http.StatusNotFound, "")
-		return
-	} else if r.Method != "GET" {
+	 if r.Method != "GET" {
 		ErrorController(w, r, http.StatusMethodNotAllowed, "")
 		return
 	}
@@ -102,11 +99,10 @@ func RegisterController(w http.ResponseWriter, r *http.Request) {
 	http.SetCookie(w, &http.Cookie{
 		Name:     "token",
 		Value:    token.String(),
-		Path:     "/home",
 		HttpOnly: true,
 		MaxAge:   int(time.Now().Hour()) * 24,
 	})
-	http.Redirect(w, r, "/home", http.StatusSeeOther)
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 
 }
 

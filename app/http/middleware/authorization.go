@@ -3,6 +3,7 @@ package middleware
 import (
 	"fmt"
 	"forum/app/http/controllers"
+	"forum/utils"
 	"net/http"
 )
 
@@ -22,5 +23,15 @@ func AuthMiddleware(auth http.HandlerFunc) http.HandlerFunc {
 		}
 		fmt.Println(token)
 		auth(w, r)
+	}
+}
+func AlreadyLoggedIn(next http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if utils.IsLoggedIn(r) {
+			http.Redirect(w, r, "/", http.StatusSeeOther)
+
+			return
+		}
+		next(w, r)
 	}
 }
