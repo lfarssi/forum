@@ -12,8 +12,12 @@
 </head>
 <body>
    {{template "navbar" .}}
-    <main>  
-  
+    <main> 
+        {{ if .IsLoggedIn}}
+            <a href="/posts">
+                <button>create post</button>
+            </a>
+        {{ end }}
     </main>
     {{template "footer" .}}
     <script src="/resources/js/index.js"></script>
