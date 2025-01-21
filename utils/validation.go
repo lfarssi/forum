@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"fmt"
 	"net/http"
 	"regexp"
 
@@ -37,6 +38,7 @@ func HashPassword(password string) string {
 
 func IsLoggedIn(r *http.Request) bool {
 	cookie, err := r.Cookie("token")
+	fmt.Println(cookie)
 	if err != nil || cookie.Value == "" {
 		return false
 	}
