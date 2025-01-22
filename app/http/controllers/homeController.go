@@ -4,7 +4,6 @@ import (
 	"forum/app/models"
 	"forum/utils"
 	"net/http"
-	"time"
 )
 
 func HomeController(w http.ResponseWriter, r *http.Request) {
@@ -28,22 +27,6 @@ func HomeController(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		ParseFileController(w, r, "users/index", data)
-	} else if r.Method == "POST" {
-		title := r.PostFormValue("title")
-		category := r.PostForm["category"]
-		content := r.PostFormValue("content")
-		if title == "" || len(category) == 0 || content == "" {
-			ErrorController(w, r, http.StatusBadRequest, http.StatusText(http.StatusBadRequest))
-			return
-		}
-		query := "INSERT INTO users (id, title, content, user_id, creat_at) VALUES (?, ?, ?, ?, ?)"
-		stm, err := models.Database.Prepare(query)
-		if err != nil {
-			ErrorController(w, r, http.StatusInternalServerError, http.StatusText(http.StatusInternalServerError))
-			return
-		}
-		defer stm.Close()
-		res, err := stm.Exec(user.UserName, title, content,,time.Now())
 	} else {
 		ErrorController(w, r, http.StatusMethodNotAllowed, "")
 		return
