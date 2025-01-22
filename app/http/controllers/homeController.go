@@ -13,12 +13,7 @@ func HomeController(w http.ResponseWriter, r *http.Request) {
 	} else {
 		logedIn = true
 	}
-	data := struct {
-		IsLoggedIn bool
-		Post       []models.Posts
-		Comment    []models.Comment
-		Category   []models.Category
-	}{
+	data := models.Data{
 		IsLoggedIn: logedIn,
 	}
 	if r.Method == "GET" {
