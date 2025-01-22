@@ -90,7 +90,7 @@ func RegisterController(w http.ResponseWriter, r *http.Request) {
 		ErrorController(w, r, http.StatusInternalServerError, "")
 		return
 	}
-	err = CreateSession(id, token.String(), int(time.Now().Hour())*24)
+	err = CreateSession(id, token.String(),  time.Now().Add((24 * time.Hour)))
 
 	if err != nil {
 		ErrorController(w, r, http.StatusInternalServerError, "")
@@ -100,7 +100,7 @@ func RegisterController(w http.ResponseWriter, r *http.Request) {
 		Name:     "token",
 		Value:    token.String(),
 		HttpOnly: true,
-		MaxAge:   int(time.Now().Hour()) * 24,
+		Expires:    time.Now().Add((24 * time.Hour)),
 	})
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 
@@ -128,7 +128,7 @@ func insert(user models.User) (int, map[string]string) {
 	return int(id), map[string]string{}
 }
 
-func CreateSession(id int, token string, expired int) error {
+func CreateSession(id int, token string, expired time.Time) error {
 	query := `
 	INSERT INTO sessionss (user_id, token, expired_at) 
 	VALUES (?, ?, ?) 
