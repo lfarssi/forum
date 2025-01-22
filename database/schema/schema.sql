@@ -9,7 +9,6 @@ CREATE TABLE IF NOT EXISTS categories (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   name VARCHAR(255) UNIQUE NOT NULL
 );
-
 CREATE TABLE IF NOT EXISTS posts (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   title VARCHAR(255) NOT NULL,
@@ -57,6 +56,13 @@ CREATE TABLE IF NOT EXISTS sessionss (
   FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
+CREATE TABLE IF NOT EXISTS post_categorie (
+  post_id INTEGER NOT NULL,
+  categorie_id INTEGER NOT NULL,
+  FOREIGN KEY (post_id) REFERENCES posts(id),
+  FOREIGN KEY (categorie_id) REFERENCES categories(id),
+  PRIMARY KEY (post_id, categorie_id)
+);
 
 INSERT INTO categories (name) 
 VALUES ('Sport'), ('Music'), ('Movies'), ('Art'), ('It'), ('Science'), ('Politics'), ('Economy'), ('Health'), ('Fashion'), ('Food'), ('Travel'), ('Education'), ('History'), ('Culture'), ('Religion'), ('Nature'), ('Technology'), ('Social'), ('Other') 
