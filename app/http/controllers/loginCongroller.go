@@ -68,7 +68,7 @@ func LoginController(w http.ResponseWriter, r *http.Request) {
 		ErrorController(w, r, http.StatusInternalServerError, "")
 		return
 	}
-	err = CreateSession(id, token.String(), int(time.Now().Hour())*24)
+	err = CreateSession(id, token.String(), time.Now().Add((24 * time.Hour)))
 	if err != nil {
 		ErrorController(w, r, http.StatusInternalServerError, "")
 		return
@@ -76,7 +76,7 @@ func LoginController(w http.ResponseWriter, r *http.Request) {
 	http.SetCookie(w, &http.Cookie{
 		Name:     "token",
 		Value:    token.String(),
-		MaxAge:   int(time.Now().Hour()) * 24,
+		Expires:    time.Now().Add((24 * time.Hour)),
 		HttpOnly: true,
 	})
 	http.Redirect(w, r, "/", http.StatusSeeOther)
