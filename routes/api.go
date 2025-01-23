@@ -11,6 +11,7 @@ func ApiRouter() {
 	http.HandleFunc("/singUp", controllers.RegisterController)
 	http.HandleFunc("/logout", controllers.LogoutController)
 	http.HandleFunc("/create_post", controllers.CreatePosts)
+	http.HandleFunc("/create_comment", controllers.CreatCommentController)
 	http.HandleFunc("/resources/", controllers.CssJsController)
 
 }
