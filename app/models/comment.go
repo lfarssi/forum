@@ -12,3 +12,17 @@ type Comment struct {
 	Likes     int       `json:"likes"`
 	Dislikes  int       `json:"dislikes"`
 }
+
+func CreatComment(comment Comment) error {
+	qwiri := `
+		INSERT INTO comments
+		(content , user_id, date_creation, post_id)
+		VALUES (?,?,?,?);
+	
+	`
+	_, err := Database.Exec(qwiri, comment.Content, comment.UserID, comment.CreatedAt, comment.PostID)
+	if err != nil {
+		return err
+	}
+	return nil
+}
