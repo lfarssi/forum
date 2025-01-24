@@ -2,11 +2,11 @@ package controllers
 
 import (
 	"encoding/json"
+	"net/http"
+	"time"
+
 	"forum/app/models"
 	"forum/utils"
-	"net/http"
-	"strings"
-	"time"
 
 	"github.com/gofrs/uuid"
 )
@@ -16,12 +16,11 @@ func ParseRegister(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
-	 if r.Method != "GET" {
+	if r.Method != "GET" {
 		ErrorController(w, r, http.StatusMethodNotAllowed, "")
 		return
 	}
 	ParseFileController(w, r, "auth/register", "")
-
 }
 
 func RegisterController(w http.ResponseWriter, r *http.Request) {
@@ -35,7 +34,7 @@ func RegisterController(w http.ResponseWriter, r *http.Request) {
 		ErrorController(w, r, http.StatusInternalServerError, "")
 		return
 	}
-	//fmt.Println("user", user)
+	// fmt.Println("user", user)
 	if user.UserName == "" || user.Email == "" || user.Password == "" || user.ConfirmationPassword == "" {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
@@ -73,7 +72,7 @@ func RegisterController(w http.ResponseWriter, r *http.Request) {
 	}
 
 	user.Password = utils.HashPassword(user.Password)
-	id, errInsertion := insert(user)
+	id, errInsertion := models.Register(user)
 	if len(errInsertion) > 0 {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
@@ -90,8 +89,7 @@ func RegisterController(w http.ResponseWriter, r *http.Request) {
 		ErrorController(w, r, http.StatusInternalServerError, "")
 		return
 	}
-	err = CreateSession(id, token.String(),  time.Now().Add((24 * time.Hour)))
-
+	err = models.CreateSession(id, token.String(), time.Now().Add((24 * time.Hour)))
 	if err != nil {
 		ErrorController(w, r, http.StatusInternalServerError, "")
 		return
@@ -100,48 +98,8 @@ func RegisterController(w http.ResponseWriter, r *http.Request) {
 		Name:     "token",
 		Value:    token.String(),
 		HttpOnly: true,
-		Expires:    time.Now().Add((24 * time.Hour)),
+		Expires:  time.Now().Add((24 * time.Hour)),
 	})
 	http.Redirect(w, r, "/", http.StatusSeeOther)
-
 }
 
-func insert(user models.User) (int, map[string]string) {
-	query := "INSERT INTO users (username, email, password) VALUES (?, ?, ?)"
-	stm, err := models.Database.Prepare(query)
-	if err != nil {
-		return 0, map[string]string{"error": "error preparing query"}
-	}
-	defer stm.Close()
-	res, err := stm.Exec(user.UserName, user.Email, user.Password)
-	if err != nil {
-		if strings.Contains(err.Error(), "username") {
-			return 0, map[string]string{"username": "username already exists"}
-		} else if strings.Contains(err.Error(), "email") {
-			return 0, map[string]string{"email": "email already exists"}
-		}
-	}
-	id, err := res.LastInsertId()
-	if err != nil {
-		return 0, map[string]string{"error": "error getting last id"}
-	}
-	return int(id), map[string]string{}
-}
-
-func CreateSession(id int, token string, expired time.Time) error {
-	query := `
-	INSERT INTO sessionss (user_id, token, expired_at) 
-	VALUES (?, ?, ?) 
-	ON CONFLICT DO UPDATE SET token = EXCLUDED.token , date = CURRENT_TIMESTAMP
-	`
-	stm, err := models.Database.Prepare(query)
-	if err != nil {
-		return err
-	}
-	defer stm.Close()
-	_, err = stm.Exec(id, token, expired)
-	if err != nil {
-		return err
-	}
-	return nil
-}
