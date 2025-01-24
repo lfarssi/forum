@@ -3,13 +3,13 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
-	"forum/app/models"
-	"forum/utils"
 	"net/http"
 	"time"
 
+	"forum/app/models"
+	"forum/utils"
+
 	"github.com/gofrs/uuid"
-	"golang.org/x/crypto/bcrypt"
 )
 
 func ParseLogin(w http.ResponseWriter, r *http.Request) {
@@ -24,6 +24,7 @@ func ParseLogin(w http.ResponseWriter, r *http.Request) {
 	}
 	ParseFileController(w, r, "auth/login", "")
 }
+
 func LoginController(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
 		ErrorController(w, r, http.StatusMethodNotAllowed, "")
@@ -53,7 +54,7 @@ func LoginController(w http.ResponseWriter, r *http.Request) {
 		})
 		return
 	}
-	id, authErr := checkAuth(user.UserName, user.Password)
+	id, authErr := models.Login(user.UserName, user.Password)
 	if len(authErr) > 0 {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
@@ -68,7 +69,7 @@ func LoginController(w http.ResponseWriter, r *http.Request) {
 		ErrorController(w, r, http.StatusInternalServerError, "")
 		return
 	}
-	err = CreateSession(id, token.String(), time.Now().Add((24 * time.Hour)))
+	err = models.CreateSession(id, token.String(), time.Now().Add((24 * time.Hour)))
 	if err != nil {
 		ErrorController(w, r, http.StatusInternalServerError, "")
 		return
@@ -76,27 +77,8 @@ func LoginController(w http.ResponseWriter, r *http.Request) {
 	http.SetCookie(w, &http.Cookie{
 		Name:     "token",
 		Value:    token.String(),
-		Expires:    time.Now().Add((24 * time.Hour)),
+		Expires:  time.Now().Add((24 * time.Hour)),
 		HttpOnly: true,
 	})
 	http.Redirect(w, r, "/", http.StatusSeeOther)
-
-}
-func checkAuth(userName, password string) (int, map[string]string) {
-	query := "SELECT id, password FROM users WHERE username = ?"
-	statement, err := models.Database.Prepare(query)
-	if err != nil {
-		return 0, map[string]string{"error": "database error"}
-	}
-	defer statement.Close()
-	var id int
-	var hashedPassword string
-	err = statement.QueryRow(userName).Scan(&id, &hashedPassword)
-	if err != nil {
-		return 0, map[string]string{"username": "Username not found"}
-	}
-	if bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password)) != nil {
-		return 0, map[string]string{"password": "Password Incorrect"}
-	}
-	return id, map[string]string{}
 }
