@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 
 	"forum/app/models"
@@ -12,7 +11,6 @@ func HomeController(w http.ResponseWriter, r *http.Request) {
 	var logedIn bool
 	comments, err := models.GetComments(1)
 	if err != nil {
-		fmt.Println("zaba")
 		ErrorController(w, r, http.StatusInternalServerError, "")
 		return
 	}
@@ -22,7 +20,6 @@ func HomeController(w http.ResponseWriter, r *http.Request) {
 	} else {
 		logedIn = true
 	}
-	fmt.Println(comments)
 	data := models.Data{
 		IsLoggedIn: logedIn,
 		Comment:    comments,
