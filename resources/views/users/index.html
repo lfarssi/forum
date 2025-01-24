@@ -18,7 +18,15 @@
                 <button>create post</button>
             </a>
         {{ end }}
+        <section>
+            {{range .Comment}}
+            <pre>
+                {{.Content}}
+            </pre>
+            {{end}}
+        </section>
     </main>
+
     {{template "footer" .}}
     <script src="/resources/js/index.js"></script>
 <script>
