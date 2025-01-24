@@ -1,7 +1,6 @@
 package models
 
 import (
-	"fmt"
 	"time"
 )
 
@@ -41,7 +40,6 @@ func GetComments(postid int) ([]Comment, error) {
 	`
 	rows, err := Database.Query(qwiri, postid)
 	if err != nil {
-		fmt.Println("awal error")
 		return nil, err
 	}
 	defer rows.Close()
@@ -49,14 +47,12 @@ func GetComments(postid int) ([]Comment, error) {
 	for rows.Next() {
 
 		var c Comment
-		if err := rows.Scan(&c.ID,&c.Content, &c.UserID,  &c.CreatedAt, &c.PostID, &c.Username); err != nil {
-			fmt.Println("error 2")
+		if err := rows.Scan(&c.ID, &c.Content, &c.UserID, &c.CreatedAt, &c.PostID, &c.Username); err != nil {
 			return nil, err
 		}
 		comments = append(comments, c)
 	}
 	if err := rows.Err(); err != nil {
-		fmt.Println("eroor 3")
 		return nil, err
 	}
 	return comments, nil
