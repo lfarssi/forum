@@ -1,0 +1,17 @@
+{{define "posts"}}
+{{range .Posts}}
+    <h2>{{.Username}}</h2>
+    <h1>
+        {{.Title}}
+
+    </h1>
+    <p>posted on: {{.CreatedAt}}</p>
+    <p>{{.Content}}</p>
+    <div>
+        {{range .Categories}}
+        <span class="category">{{.}}</span>
+        {{end}}
+    </div>
+
+{{end}}
+{{end}}

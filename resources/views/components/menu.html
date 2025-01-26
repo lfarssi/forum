@@ -3,18 +3,31 @@
     <h2>Menu</h2>
      <div>
       <div>
+          <button popovertarget="formPost">create post</button>
+      </a>
+  
+      </div>
+      <div>
 
         <a href="/likedPost" >Liked Posts</a>
       </div>
-      <div1 class="categories">
-        <label for="categories">Categories</label>
-        <select name="categories" id="categories">
-          <option value="all">All</option>
-          {{range .Categories}}
-            <option value="{{.ID}}">{{.Name}}</option>
-          {{end}}
-        </select>
-      </div1>
+      <div class="categories">
+        
+         <button class="btn" popovertarget="categories">
+            Categories
+         </button>
+         <div id="categories" popover>
+          <form action="/PostByCategories" method="get">
+            {{range .Category}}
+            <input type="checkbox" id="filter-{{.Name}}" name="categories" value="{{.ID}}">
+            <label for="filter-{{.Name}}">{{.Name}}</label>
+            {{end}}
+            <button type="">
+              Filter
+            </button>
+          </form>
+         </div>
+      </div>
       </div>
   </section>
 {{end}}

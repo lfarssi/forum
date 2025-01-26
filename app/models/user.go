@@ -1,6 +1,7 @@
 package models
 
 import (
+	"net/http"
 	"strings"
 
 	"golang.org/x/crypto/bcrypt"
@@ -52,4 +53,22 @@ func Register(user User) (int, map[string]string) {
 		return 0, map[string]string{"error": "error getting last id"}
 	}
 	return int(id), map[string]string{}
+}
+
+
+
+func GetUserId(r *http.Request) (int, error) {
+	var userId int
+	token, err := r.Cookie("token")
+	if err != nil || token.Value == "" {
+		return 0, err
+	}
+	value:=token.Value
+	query := "SELECT user_id FROM sessionss WHERE token = ?"
+	stm, err := Database.Prepare(query)
+	if err != nil {
+		return 0, err
+	}
+	err = stm.QueryRow(value).Scan(&userId)
+	return int(userId), err
 }

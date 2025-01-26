@@ -12,6 +12,8 @@ func ParseFileController(w http.ResponseWriter, r *http.Request, filename string
 		"./resources/views/components/navbar.html",
 		"./resources/views/components/footer.html",
 		"./resources/views/components/menu.html",
+		"./resources/views/components/posts.html",
+		"./resources/views/components/displayPost.html",
 	}
 	allFiles := append([]string{filepath}, components...)
 	// fmt.Println("filepath: ", filepath)
