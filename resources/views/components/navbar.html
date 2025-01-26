@@ -1,7 +1,7 @@
 {{define "navbar"}}
-<header>
+<header class="navbar">
     <h1><a href="/">Forum</a></h1>
-    <nav>
+    <nav >
       {{if .IsLoggedIn}}
         <a href="/logout">Logout</a>
         {{else}}

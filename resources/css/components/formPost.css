@@ -1,0 +1,84 @@
+/* Styling for the post form section */
+#formPost {
+    background-color: #111; /* Dark background */
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    max-width: 500px;
+    margin: 2rem auto;
+}
+
+/* Input fields and text area */
+#formPost input[type="text"],
+#formPost textarea {
+    width: 100%;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid #444;
+    border-radius: 8px;
+    background-color: #222;
+    color: #fff;
+    font-size: 1rem;
+}
+
+/* Category checkbox container */
+.categories-checkbox {
+    margin: 20px 0;
+    display: flex;
+    flex-wrap: wrap; /* Allow the checkboxes to wrap onto new lines if needed */
+    gap: 10px; /* Space between checkbox elements */
+}
+
+/* Styling for each category checkbox */
+.categorie-label {
+    border: 1px solid #b50000;
+    padding: 10px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center; /* Align checkbox and label properly */
+    transition: background-color 0.3s ease, color 0.3s ease;
+    cursor: pointer; /* Add cursor pointer to indicate interactivity */
+}
+
+/* Checkbox hover effect */
+.categorie:hover .categorie-label,
+.categorie:hover input[type="checkbox"]:checked + .categorie-    {
+    background-color: #b50000;
+    color: white !important;
+}
+
+/* Change style when checkbox is checked */
+input[type="checkbox"]:checked + .categorie-label {
+    background-color: #b50000;
+    color: white;
+}
+
+/* Label for category */
+.categorie-label {
+    color: #e60000; /* Red for labels */
+    font-size: 1rem;
+    margin-left: 10px;
+}
+
+/* Submit button */
+#formPost button {
+    width: 100%;
+    padding: 1rem;
+    background-color: #e60000; /* Red background */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#formPost button:hover {
+    background-color: #b50000; /* Darker red on hover */
+}
+
+/* Make form responsive on smaller screens */
+@media (max-width: 768px) {
+    #formPost {
+        width: 90%; /* Make form take up more space on smaller screens */
+    }
+}

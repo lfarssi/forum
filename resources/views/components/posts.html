@@ -1,16 +1,23 @@
 {{define "postForm"}}
 <div id="formPost" popover>
-
     <form action="/create_post" method="post">
-        <input type="text" name="title" placeholder="title">
-        {{range .Category}}
-        <input type="checkbox" id="{{.Name}}" name="categories" value="{{.ID}}">
-        <label for="{{.Name}}">{{.Name}}</label>
-        {{end}}
-        <label for="Other">Other</label>
-       <textarea name="content" id="content" placeholder="post body"></textarea>
-        <button type="submit">Submit</button>
+        <label for="title">Title</label>
+        <input type="text" id="title" name="title" placeholder="write something...">
+        
+        <div class="categories-checkbox">
+            {{range .Category}}
+            <div class="categorie">
+                <input type="checkbox" id="cat-{{.ID}}" name="categories" value="{{.ID}}" hidden>
+                <label for="cat-{{.ID}}" class="categorie-label">{{.Name}}</label>
+            </div>
+            {{end}}
+        </div>
+        
+        <label for="content">Content</label>
+        <textarea name="content" id="content" placeholder="write something..."></textarea>
+        
+        <button type="submit">Post</button>
     </form>
 </div>
-    <script src="/resources/js/index.js"></script>
+<script src="/resources/js/index.js"></script>
 {{end}}

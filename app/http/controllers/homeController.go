@@ -10,11 +10,7 @@ import (
 
 func HomeController(w http.ResponseWriter, r *http.Request) {
 	var logedIn bool
-	comments, err := models.GetComments(1)
-	if err != nil {
-		ErrorController(w, r, http.StatusInternalServerError, "")
-		return
-	}
+	
 	categories, err := models.GetCategories()
 	if err!= nil {
         ErrorController(w, r, http.StatusInternalServerError, "")
@@ -31,10 +27,17 @@ func HomeController(w http.ResponseWriter, r *http.Request) {
 		ErrorController(w, r, http.StatusInternalServerError, "")
         return
 	}	
-
+	for i:= range posts {
+		comment, err := models.GetComments(posts[i].ID)
+		if err != nil {
+			ErrorController(w, r, http.StatusInternalServerError, "")
+			return
+		}
+		posts[i].Comments = comment
+		posts[i].CommentsCount = len(comment)
+	}
 	data := models.Data{
 		IsLoggedIn: logedIn,
-		Comment:    comments,
 		Category: categories,
 		Posts:    posts,
 	}
