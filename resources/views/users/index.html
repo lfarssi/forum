@@ -13,12 +13,16 @@
 <body>
    {{template "navbar" .}}
     <main> 
-        {{ if .IsLoggedIn}}
-            <a href="/posts">
-                <button>create post</button>
-            </a>
-        {{ end }}
-        
+        <section>
+            {{template "menu" .}}
+        </section>
+       <section class="post-formulaire">
+
+            {{template "postForm" .}}
+       </section>
+       <section class="posts">
+        {{template "posts" .}}
+       </section>
     </main>
 
     {{template "footer" .}}

@@ -1,0 +1,16 @@
+{{define "postForm"}}
+<div id="formPost" popover>
+
+    <form action="/create_post" method="post">
+        <input type="text" name="title" placeholder="title">
+        {{range .Category}}
+        <input type="checkbox" id="{{.Name}}" name="categories" value="{{.ID}}">
+        <label for="{{.Name}}">{{.Name}}</label>
+        {{end}}
+        <label for="Other">Other</label>
+       <textarea name="content" id="content" placeholder="post body"></textarea>
+        <button type="submit">Submit</button>
+    </form>
+</div>
+    <script src="/resources/js/index.js"></script>
+{{end}}

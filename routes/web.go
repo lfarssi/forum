@@ -8,7 +8,7 @@ import (
 
 func WebRouter() {
 	http.HandleFunc("/", controllers.HomeController)
-	http.HandleFunc("/posts", controllers.PostController)
+	http.HandleFunc("/PostByCategories", controllers.PostByCategoriesController)
 	http.HandleFunc("/categories", controllers.CategoryController)
 	http.HandleFunc("/comments", controllers.CommentController)
 	http.HandleFunc("/reacts", controllers.ReactController)

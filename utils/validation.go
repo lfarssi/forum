@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"fmt"
 	"net/http"
 	"regexp"
 
@@ -23,6 +22,7 @@ func IsValidUsername(username string) bool {
 
 	return regulierExpr.MatchString(username)
 }
+
 func IsValidPassword(password string) bool {
 	regex := `^[a-zA-Z0-9._%+-]{8,}$`
 
@@ -38,7 +38,6 @@ func HashPassword(password string) string {
 
 func IsLoggedIn(r *http.Request) bool {
 	cookie, err := r.Cookie("token")
-	fmt.Println(cookie)
 	if err != nil || cookie.Value == "" {
 		return false
 	}
