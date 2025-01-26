@@ -1,6 +1,8 @@
 {{define "posts"}}
+
 {{range .Posts}}
-    <h2>{{.Username}}</h2>
+<div class="post">
+    <h2><i class="fa-regular fa-user"></i>{{.Username}}</h2>
     <h1>
         {{.Title}}
 
@@ -12,6 +14,42 @@
         <span class="category">{{.}}</span>
         {{end}}
     </div>
+    <button type="button" class="btn">
+        {{.Likes}} <i class="fa-regular fa-thumbs-up"></i>
+    </button>
+    <button type="button" class="btn">
+        {{.Dislikes}} <i class="fa-regular fa-thumbs-down"></i>
+    </button>
+    <button type="button" class="btn comments-btn">
+        {{.CommentsCount}}<i class="fa-regular fa-comment"></i>
+    </button>
+    <div class="comments" >
+        {{range .Comments}}
+        <div>
+
+            <h3> <i class="fa-regular fa-user"></i>{{.Username}}</h3>
+            <p>{{.Content}}</p>
+            <button  class="btn" type="button">
+                {{.Likes}} <i class="fa-regular fa-thumbs-up"></i>
+            </button>
+            <button class="btn" type="button">
+                {{.Dislikes}} <i class="fa-regular fa-thumbs-down"></i>
+            </button>
+        </div>
+
+        {{end}}
+        <div>
+
+            <form action="/create_comment" method="post">
+                <input type="checkbox" checked value="{{.ID}}" name="post_id" hidden>
+                <textarea name="content"placeholder="write something..."></textarea>
+                <button class="btn" type="submit" >comment</button>
+            </form>
+        </div>
+    </div>
+</div>
+   
 
 {{end}}
+
 {{end}}

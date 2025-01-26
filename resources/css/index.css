@@ -1,3 +1,4 @@
+/* General Reset */
 * {
     margin: 0;
     padding: 0;
@@ -5,7 +6,49 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
-    background-color: black !important;
-    color: white;
+    font-family: 'Arial', sans-serif;
+    background-color: #1c1c1c; /* Dark background for better contrast */
+    color: #f0f0f0; /* Light text for readability */
+    line-height: 1.6;
+}
+
+/* Main Layout */
+main {
+    display: flex;
+    gap: 2rem;
+    padding: 2rem;
+    justify-content: flex-start;
+    margin-top: 20px;
+    width: 100%;
+}
+
+
+/* Posts Section */
+.posts {
+    flex: 1; /* Adjusted to fill remaining space */
+    margin-left: 270px; /* Added margin to account for the menu's width */
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: 1fr; /* One post per row */
+}
+
+
+
+
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    main {
+        flex-direction: column; /* Stack content on smaller screens */
+    }
+
+    .menu {
+        width: 100%; /* Make the menu full width on mobile */
+        position: relative; /* Remove the fixed positioning */
+        margin-bottom: 1rem;
+    }
+
+    .posts {
+        margin-left: 0; /* Remove left margin on mobile */
+    }
 }

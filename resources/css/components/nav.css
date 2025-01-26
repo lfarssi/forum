@@ -1,4 +1,4 @@
-header{
+.navbar{
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -6,8 +6,11 @@ header{
     color: white;
     
 }
-nav a {
+.navbar a {
     text-decoration: none;
     color: white;
     padding: 0 1rem;
+}
+.navbar a:hovre {
+    color: #e60000;
 }

@@ -1,33 +1,40 @@
 {{define "menu"}}
-  <section>
-    <h2>Menu</h2>
-     <div>
-      <div>
-          <button popovertarget="formPost">create post</button>
+<div class="menu">
+  <h2>Menu</h2>
+  <div>
+    <div>
+      <button popovertarget="formPost" class="btn-menu">create post</button>
       </a>
-  
-      </div>
-      <div>
 
-        <a href="/likedPost" >Liked Posts</a>
-      </div>
-      <div class="categories">
-        
-         <button class="btn" popovertarget="categories">
-            Categories
-         </button>
-         <div id="categories" popover>
+    </div>
+    <div>
+      <button class="btn-menu">
+
+        Liked Posts
+      </button>
+    </div>
+    <div class="categories">
+
+      <button class="btn-menu" popovertarget="categories">
+        Categories
+      </button>
+      <div id="categories"  popover>
+        <div class="categories-checkbox ">
           <form action="/PostByCategories" method="get">
             {{range .Category}}
-            <input type="checkbox" id="filter-{{.Name}}" name="categories" value="{{.ID}}">
-            <label for="filter-{{.Name}}">{{.Name}}</label>
+            <div class="categorie">
+              <input type="checkbox" id="filter-{{.Name}}"  name="categories" value="{{.ID}}" hidden>
+
+              <label for="filter-{{.Name}}" class="categorie-label">{{.Name}}</label>
+            </div>
             {{end}}
-            <button type="">
+            <button type="submit" class="btn-filter ">
               Filter
             </button>
           </form>
-         </div>
+        </div>
       </div>
-      </div>
-  </section>
+    </div>
+  </div>
+</div>
 {{end}}

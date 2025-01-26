@@ -1,0 +1,95 @@
+/* Menu Styling */
+.menu {
+    width: 250px; /* Fixed width for the menu */
+    background-color: #333;
+    color: #fff;
+    padding: 2rem;
+    position: fixed;
+    top: 10%;
+    left: 0;
+    bottom: 0;
+    z-index: 1000; /* Ensure it is above content */
+    box-shadow: 4px 0 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Menu Button */
+.btn-menu {
+    background-color: #c62828; /* Darker red button */
+    color: #fff;
+    border: none;
+    padding: 0.8rem 1.2rem;
+    margin: 0.5rem 0;
+    font-size: 1rem;
+    width: 100%;
+    text-align: left;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-menu:hover {
+    background-color: #b71c1c; /* Darker red on hover */
+}
+
+/* Heading Style */
+.menu h2 {
+    font-size: 1.8rem;
+    color: #fff;
+    margin-bottom: 1.5rem;
+}
+#categories {
+    background-color: black;
+    margin: auto;
+    width: 60%;
+}
+/* Category checkbox container (arranged in rows) */
+.categories-checkbox {
+    margin: 20px 0;
+    display: flex;
+    flex-direction: row;  /* Arrange children (checkboxes) in rows */
+    flex-wrap: wrap;      /* Allow checkboxes to wrap if there's not enough space */
+    gap: 10px;            /* Add space between checkboxes */
+}
+
+/* Styling for each category checkbox */
+.categorie {
+    display: inline-flex;  /* Use inline-flex for horizontal arrangement of checkbox and label */
+    align-items: center;   /* Vertically center the checkbox and label */
+    margin: 5px;           /* Add margin between checkboxes */
+}
+
+/* Styling for checkbox labels */
+.categorie-label {
+    color: #e60000;        /* Red color for labels */
+    font-size: 1rem;
+    margin-left: 5px;      /* Space between checkbox and label */
+}
+
+/* Filter Button Style */
+.btn-filter {
+    background-color: #333;
+    color: #e60000;
+    border: none;
+    margin: auto;
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    width: 20%;  /* Ensure it takes up full width */
+    text-align: center;
+    display: block;  /* Make the button behave like a block-level element */
+}
+
+/* Filter Button Hover Effect */
+.btn-filter:hover {
+    background-color: #b50000;  /* Darker red for hover */
+    color: white;
+}
+
+/* Focus state for accessibility */
+.btn-filter:focus {
+    outline: 2px solid #fff;  /* White outline on focus */
+    outline-offset: 4px;
+}
+

@@ -64,7 +64,7 @@ func RegisterController(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(map[string]interface{}{"confirmPassword": "password unmatched"})
 		return
-	} else if !utils.IsValidPassword(user.Password) {
+	} else if utils.IsValidPassword(user.Password) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(map[string]interface{}{"password": "Weak password"})

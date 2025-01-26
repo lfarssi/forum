@@ -11,6 +11,7 @@ type Posts struct {
 	Dislikes   int       `json:"dislikes"`
 	CreatedAt  time.Time `json:"created_at"`
 	Comments   []Comment `json:"comments"`
+	CommentsCount   int 
 	Username   string    `json:"username"`
 }
 
