@@ -1,7 +1,7 @@
 {{define "posts"}}
 
 {{range .Posts}}
-<div class="post">
+<div class="post" data-id="{{.ID}}">
     <h2><i class="fa-regular fa-user"></i>{{.Username}}</h2>
     <h1>
         {{.Title}}
@@ -14,10 +14,10 @@
         <span class="category">{{.}}</span>
         {{end}}
     </div>
-    <button type="button" class="btn">
+    <button type="button" class="btn likepost">
         {{.Likes}} <i class="fa-regular fa-thumbs-up"></i>
     </button>
-    <button type="button" class="btn">
+    <button type="button" class="btn dislikepost">
         {{.Dislikes}} <i class="fa-regular fa-thumbs-down"></i>
     </button>
     <button type="button" class="btn comments-btn">
@@ -26,13 +26,12 @@
     <div class="comments" >
         {{range .Comments}}
         <div>
-
             <h3> <i class="fa-regular fa-user"></i>{{.Username}}</h3>
             <p>{{.Content}}</p>
-            <button  class="btn" type="button">
+            <button  class="btn likecomment" type="button">
                 {{.Likes}} <i class="fa-regular fa-thumbs-up"></i>
             </button>
-            <button class="btn" type="button">
+            <button class="btn dislikecomment" type="button">
                 {{.Dislikes}} <i class="fa-regular fa-thumbs-down"></i>
             </button>
         </div>

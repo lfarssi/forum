@@ -95,7 +95,7 @@ func RegisterController(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	http.SetCookie(w, &http.Cookie{
-		Name:     "token",
+		Name:     "	",
 		Value:    token.String(),
 		HttpOnly: true,
 		Expires:  time.Now().Add((24 * time.Hour)),

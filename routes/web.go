@@ -11,7 +11,7 @@ func WebRouter() {
 	http.HandleFunc("/PostByCategories", controllers.PostByCategoriesController)
 	http.HandleFunc("/categories", controllers.CategoryController)
 	http.HandleFunc("/comments", controllers.CommentController)
-	http.HandleFunc("/reacts", controllers.ReactController)
+	// http.HandleFunc("/reacts", controllers.ReactController)
 	http.HandleFunc("/login", middleware.AlreadyLoggedIn(controllers.ParseLogin))
 	http.HandleFunc("/register", middleware.AlreadyLoggedIn(controllers.ParseRegister))
 }
