@@ -28,7 +28,7 @@
     </button>
     <div class="comments" >
         {{range .Comments}}
-        <div>
+        <div class="comment" data-id="{{.ID}}>
 
             <h2> <img src="/resources/imgs/profile.png" alt="profile pictures"><span class="username">{{.Username}}</span></h2>
             <p>{{.Content}}</p>
