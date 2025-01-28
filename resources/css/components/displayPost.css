@@ -7,6 +7,12 @@
     margin-bottom: 2rem;
     color: #f0f0f0;
 }
+.comment{
+    padding: 15px;
+    border-radius: 20px;
+    background-color: #444;
+}
+
 .post .profile{
     border: #444 solid  5px;
     border-radius: 5px;
@@ -82,6 +88,12 @@
     color: white;
 }
 
+.btn-comment{
+    background-color: #444 !important;
+}
+.btn-comment:hover{
+    background-color: #e60000 !important;
+}
 /* Comments Section Styling */
 .comments {
     background-color: #333;

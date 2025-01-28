@@ -34,7 +34,7 @@
 .btn-menu:hover {
     background-color: #b71c1c; /* Darker red on hover */
     color: white;
-    border: 1px solid white;
+    /* border: 1px solid white; */
     transition: background-color 0.3s ease-in-out;
 }
 
