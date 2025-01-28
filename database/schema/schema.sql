@@ -35,7 +35,6 @@ CREATE TABLE IF NOT EXISTS reactPost(
   react_type  VARCHAR(255) NOT NULL,
   FOREIGN KEY (user_id) REFERENCES users(id),
   FOREIGN KEY (post_id) REFERENCES posts(id)
-  -- UNIQUE(user_id, post_id)
 );
 
 CREATE TABLE IF NOT EXISTS reactComment(
@@ -45,8 +44,6 @@ CREATE TABLE IF NOT EXISTS reactComment(
   react_type VARCHAR(255) NOT NULL,
   FOREIGN KEY (user_id) REFERENCES users(id),
   FOREIGN KEY (comment_id) REFERENCES comments(id)
-  --  UNIQUE(user_id, comment_id)
-
 );
 
 
@@ -68,5 +65,5 @@ CREATE TABLE IF NOT EXISTS post_categorie (
 );
 
 INSERT INTO categories (name) 
-VALUES ('Sport'), ('Music'), ('Movies'), ('Art'), ('It'), ('Science'), ('Politics'), ('Economy'), ('Health'), ('Fashion'), ('Food'), ('Travel'), ('Education'), ('History'), ('Culture'), ('Religion'), ('Nature'), ('Technology'), ('Social'), ('Other') 
+VALUES ('Sport'), ('Music'), ('Movies'), ('Science'), ('Politics'), ('Culture'), ('Technology')
 ON CONFLICT (name) DO NOTHING;

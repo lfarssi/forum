@@ -4,7 +4,11 @@
     align-items: center;
     padding: 1rem 2rem;
     color: white;
+    background-color: #FD0101;
     
+}
+.navbar .title{
+    color: white;
 }
 .navbar a {
     text-decoration: none;
@@ -14,3 +18,4 @@
 .navbar a:hovre {
     color: #e60000;
 }
+

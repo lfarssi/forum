@@ -10,13 +10,16 @@
     bottom: 0;
     z-index: 1000; /* Ensure it is above content */
     box-shadow: 4px 0 8px rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+    margin: 20px 0 0 20px;
+    height: 45%;
 }
 
 /* Menu Button */
 .btn-menu {
-    background-color: #c62828; /* Darker red button */
-    color: #fff;
-    border: none;
+    background-color:   black; /* Darker red button */
+    color: #FF1212;
+    border: 1px solid  #FF1212;
     padding: 0.8rem 1.2rem;
     margin: 0.5rem 0;
     font-size: 1rem;
@@ -25,17 +28,23 @@
     border-radius: 8px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    text-align: center;
 }
 
 .btn-menu:hover {
     background-color: #b71c1c; /* Darker red on hover */
+    color: white;
+    border: 1px solid white;
+    transition: background-color 0.3s ease-in-out;
 }
+
 
 /* Heading Style */
 .menu h2 {
     font-size: 1.8rem;
-    color: #fff;
+    color:#b71c1c ;
     margin-bottom: 1.5rem;
+    text-align: center;
 }
 #categories {
     background-color: black;
@@ -49,6 +58,7 @@
     flex-direction: row;  /* Arrange children (checkboxes) in rows */
     flex-wrap: wrap;      /* Allow checkboxes to wrap if there's not enough space */
     gap: 10px;            /* Add space between checkboxes */
+    
 }
 
 /* Styling for each category checkbox */

@@ -2,31 +2,35 @@
 
 {{range .Posts}}
 <div class="post" data-id="{{.ID}}">
-    <h2><i class="fa-regular fa-user"></i>{{.Username}}</h2>
+    <div class="header">
+    <h2><img src="/resources/imgs/profile.png" alt="profile pictures"><span class="username">{{.Username}}</span></h2>
+    <p class="created-at">{{.CreatedAt}}</p>
+    </div>
     <h1>
         {{.Title}}
 
     </h1>
-    <p>posted on: {{.CreatedAt}}</p>
-    <p>{{.Content}}</p>
-    <div>
+    <div class="categories">
         {{range .Categories}}
         <span class="category">{{.}}</span>
         {{end}}
     </div>
+    <p class="content">{{.Content}}</p>
+ 
     <button type="button" class="btn likepost">
         {{.Likes}} <i class="fa-regular fa-thumbs-up"></i>
     </button>
-    <button type="button" class="btn dislikepost">
+    <button type="button" class="btn">
         {{.Dislikes}} <i class="fa-regular fa-thumbs-down"></i>
     </button>
-    <button type="button" class="btn comments-btn">
+    <button type="button" class="btn dislikepost">
         {{.CommentsCount}}<i class="fa-regular fa-comment"></i>
     </button>
     <div class="comments" >
         {{range .Comments}}
-        <div>
-            <h3> <i class="fa-regular fa-user"></i>{{.Username}}</h3>
+        <div class="comment" data-id="{{.ID}}>
+
+            <h2> <img src="/resources/imgs/profile.png" alt="profile pictures"><span class="username">{{.Username}}</span></h2>
             <p>{{.Content}}</p>
             <button  class="btn likecomment" type="button">
                 {{.Likes}} <i class="fa-regular fa-thumbs-up"></i>
