@@ -12,6 +12,50 @@ type React struct {
 	Sender    string
 }
 
+func GetReactionPost(idpost int, status string) ([]React, error) {
+	var reacts []React
+	query := `
+		SELECT post_id, react_type, user_id FROM reactPost
+		WHERE post_id = ? AND react_type = ?
+	`
+	rows, err := Database.Query(query, idpost, status)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var react React
+		err := rows.Scan(&react.PostID, &react.Status, &react.UserID)
+		if err != nil {
+			return nil , err
+		}
+		reacts = append(reacts, react)
+	}
+	return reacts, nil
+
+}
+func GetReactionComment(idcomment int, status string) ([]React, error) {
+	var reacts []React
+	query := `
+		SELECT comment_id, react_type, user_id FROM reactComment
+		WHERE comment_id = ? AND react_type = ?
+	`
+	rows, err := Database.Query(query, idcomment, status)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var react React
+		err := rows.Scan(&react.CommentID, &react.Status, &react.UserID)
+		if err != nil {
+			continue
+		}
+		reacts = append(reacts, react)
+	}
+	return reacts, nil
+
+}
 func InsertReactPost(react React) error {
 	react_type, err := ExistReact(react.UserID, react.PostID)
 	if err == sql.ErrNoRows {
