@@ -112,9 +112,9 @@ document.addEventListener("DOMContentLoaded", () => {
     let dislikecomment = document.querySelectorAll(".dislikecomment")
     dislikecomment.forEach(btn=>{
         btn.addEventListener("click", async (e) =>{
-            const postId = e.target.closest('.comment').dataset.id
+            const commentid = e.target.closest('.comment').dataset.id
             const data = new FormData()
-            data.append("comment_id", postId)
+            data.append("comment_id", commentid)
             data.append("status", "dislike")
             data.append("sender", "comment")
             try {
