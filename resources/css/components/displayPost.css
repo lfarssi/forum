@@ -7,24 +7,48 @@
     margin-bottom: 2rem;
     color: #f0f0f0;
 }
+.post .profile{
+    border: #444 solid  5px;
+    border-radius: 5px;
+}
+.username{
+   color:#FD0101 ;
+    margin-left: 15px;
+}
+.post .header {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center; 
+}
+
+.post .created-at {
+    font-size: 0.9rem; 
+    color:#FD0101 ; 
+    margin: 0; 
+}
 
 /* Hover Effect for Posts */
 .post:hover {
     transform: translateY(-4px);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
 }
-
+.categories{
+    margin: 0 0 8px 12px  ;
+}
 .post h1 {
     font-size: 2rem;
-    color: #e60000; /* Red for post titles */
-    margin-bottom: 1rem;
+    color: white; /* Red for post titles */
 }
 
 .post h2 {
     font-size: 1.2rem;
     color: #bbb;
     margin-bottom: 1rem;
+   display: flex;
+    align-items: center;
+
 }
+
 
 .post p {
     font-size: 1rem;

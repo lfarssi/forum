@@ -2,18 +2,21 @@
 
 {{range .Posts}}
 <div class="post">
-    <h2><i class="fa-regular fa-user"></i>{{.Username}}</h2>
+    <div class="header">
+    <h2><img src="/resources/imgs/profile.png" alt="profile pictures"><span class="username">{{.Username}}</span></h2>
+    <p class="created-at">{{.CreatedAt}}</p>
+    </div>
     <h1>
         {{.Title}}
 
     </h1>
-    <p>posted on: {{.CreatedAt}}</p>
-    <p>{{.Content}}</p>
-    <div>
+    <div class="categories">
         {{range .Categories}}
         <span class="category">{{.}}</span>
         {{end}}
     </div>
+    <p class="content">{{.Content}}</p>
+ 
     <button type="button" class="btn">
         {{.Likes}} <i class="fa-regular fa-thumbs-up"></i>
     </button>
@@ -27,7 +30,7 @@
         {{range .Comments}}
         <div>
 
-            <h3> <i class="fa-regular fa-user"></i>{{.Username}}</h3>
+            <h2> <img src="/resources/imgs/profile.png" alt="profile pictures"><span class="username">{{.Username}}</span></h2>
             <p>{{.Content}}</p>
             <button  class="btn" type="button">
                 {{.Likes}} <i class="fa-regular fa-thumbs-up"></i>

@@ -65,5 +65,5 @@ CREATE TABLE IF NOT EXISTS post_categorie (
 );
 
 INSERT INTO categories (name) 
-VALUES ('Sport'), ('Music'), ('Movies'), ('Art'), ('It'), ('Science'), ('Politics'), ('Economy'), ('Health'), ('Fashion'), ('Food'), ('Travel'), ('Education'), ('History'), ('Culture'), ('Religion'), ('Nature'), ('Technology'), ('Social'), ('Other') 
+VALUES ('Sport'), ('Music'), ('Movies'), ('Science'), ('Politics'), ('Culture'), ('Technology')
 ON CONFLICT (name) DO NOTHING;

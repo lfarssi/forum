@@ -1,22 +1,23 @@
 package models
 
-import "time"
+import (
+	"time"
+)
 
 type Posts struct {
-	ID         int       `json:"id"`
-	Title      string    `json:"title"`
-	Content    string    `json:"content"`
-	Categories []string  `json:"categories"`
-	Likes      int       `json:"likes"`
-	Dislikes   int       `json:"dislikes"`
-	CreatedAt  time.Time `json:"created_at"`
-	Comments   []Comment `json:"comments"`
-	CommentsCount   int 
-	Username   string    `json:"username"`
+	ID            int       `json:"id"`
+	Title         string    `json:"title"`
+	Content       string    `json:"content"`
+	Categories    []string  `json:"categories"`
+	Likes         int       `json:"likes"`
+	Dislikes      int       `json:"dislikes"`
+	CreatedAt     time.Time `json:"created_at"`
+	Comments      []Comment `json:"comments"`
+	CommentsCount int
+	Username      string `json:"username"`
 }
 
-
-func CreatePost(title string, content string, categories []string, userId int) (int, error){
+func CreatePost(title string, content string, categories []string, userId int) (int, error) {
 	query := "INSERT INTO posts ( title, user_id, content, creat_at) VALUES ( ?, ?, ?, ?)"
 	stm1, err := Database.Prepare(query)
 	if err != nil {
@@ -29,9 +30,9 @@ func CreatePost(title string, content string, categories []string, userId int) (
 		return 0, err
 	}
 	id, err := res.LastInsertId()
-	if err!= nil {
-        return 0, err
-    }
+	if err != nil {
+		return 0, err
+	}
 	return int(id), nil
 }
 
@@ -45,29 +46,28 @@ func GetPosts() ([]Posts, error) {
     GROUP BY p.id
     ORDER BY p.creat_at DESC;
     `
-    rows, err := Database.Query(query)
-    if err!= nil {
-        return nil, err
-    }
-    defer rows.Close()
+	rows, err := Database.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
 
-    var posts []Posts
+	var posts []Posts
 	for rows.Next() {
 		var post Posts
-        var categories []string
 		var categorie string
-        err = rows.Scan(&post.ID, &post.Title, &post.Content, &categorie, &post.CreatedAt, &post.Username)
-        if err!= nil {
-            return nil, err
-        }
-		categories = append(categories, categorie)
-        post.Categories = categories
-        posts = append(posts, post)
+		err = rows.Scan(&post.ID, &post.Title, &post.Content, &categorie, &post.CreatedAt, &post.Username)
+		if err != nil {
+			return nil, err
+		}
+		post.Categories = append(post.Categories, categorie)
+
+		posts = append(posts, post)
 	}
 	return posts, nil
 }
 
-func GetPostsByCategory(idCategorie int) ([]Posts, error)  {
+func GetPostsByCategory(idCategorie int) ([]Posts, error) {
 	query := `
 	SELECT p.id, p.title, p.content, GROUP_CONCAT(c.name) AS categories, p.creat_at, u.username
 	FROM posts p
@@ -76,22 +76,22 @@ func GetPostsByCategory(idCategorie int) ([]Posts, error)  {
 	INNER JOIN categories c ON pc.categorie_id = c.id
 	WHERE pc.categorie_id =?`
 	rows, err := Database.Query(query, idCategorie)
-	if err!= nil {
-        return nil, err
-    }
+	if err != nil {
+		return nil, err
+	}
 	defer rows.Close()
 	var posts []Posts
 	for rows.Next() {
 		var post Posts
-        var categories []string
-        var categorie string
-        err = rows.Scan(&post.ID, &post.Title, &post.Content, &categorie, &post.CreatedAt, &post.Username)
-        if err!= nil {
-            return nil, err
-        }
-        categories = append(categories, categorie)
-        post.Categories = categories
-        posts = append(posts, post)
+		var categories []string
+		var categorie string
+		err = rows.Scan(&post.ID, &post.Title, &post.Content, &categorie, &post.CreatedAt, &post.Username)
+		if err != nil {
+			return nil, err
+		}
+		categories = append(categories, categorie)
+		post.Categories = categories
+		posts = append(posts, post)
 	}
 	return posts, nil
 
