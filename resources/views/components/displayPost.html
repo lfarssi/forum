@@ -10,7 +10,7 @@
         {{.Title}}
 
     </h1>
-    <div class="categories">
+    <div class="categories-d">
         {{range .Categories}}
         <span class="category">{{.}}</span>
         {{end}}
@@ -18,25 +18,25 @@
     <p class="content">{{.Content}}</p>
  
     <button type="button" class="btn likepost">
-        {{.Likes}} <i class="fa-regular fa-thumbs-up"></i>
-    </button>
-    <button type="button" class="btn">
-        {{.Dislikes}} <i class="fa-regular fa-thumbs-down"></i>
+        <span class="numlikepost">{{.Likes}}</span> <i class="fa-regular fa-thumbs-up"></i>
     </button>
     <button type="button" class="btn dislikepost">
+        <span class="numdislikepost">{{.Dislikes}}</span> <i class="fa-regular fa-thumbs-down"></i>
+    </button>
+    <button type="button" class="btn">
         {{.CommentsCount}}<i class="fa-regular fa-comment"></i>
     </button>
     <div class="comments" >
         {{range .Comments}}
-        <div class="comment" data-id="{{.ID}}>
+        <div class="comment" data-id="{{.ID}}">
 
             <h2> <img src="/resources/imgs/profile.png" alt="profile pictures"><span class="username">{{.Username}}</span></h2>
             <p>{{.Content}}</p>
             <button  class="btn likecomment" type="button">
-                {{.Likes}} <i class="fa-regular fa-thumbs-up"></i>
+                <span class="numlikecomment">{{.Likes}}</span> <i class="fa-regular fa-thumbs-up"></i>
             </button>
             <button class="btn dislikecomment" type="button">
-                {{.Dislikes}} <i class="fa-regular fa-thumbs-down"></i>
+               <span class="numdislikecomment"> {{.Dislikes}}</span> <i class="fa-regular fa-thumbs-down"></i>
             </button>
         </div>
 
