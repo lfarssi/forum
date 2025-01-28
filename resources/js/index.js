@@ -19,16 +19,18 @@ toggleComments();
 
 
 document.addEventListener("DOMContentLoaded", () => {
-    const numlikepost = document.querySelectorAll(".numlikepost")
-    const numdislikepost = document.querySelectorAll(".numlikepost")
-    const numlikepost = document.querySelectorAll(".numlikepost")
-    const numlikepost = document.querySelectorAll(".numlikepost")
+
+    const numlikecomment = document.querySelectorAll(".numlikecomment")
+    const numdislikecomment = document.querySelectorAll(".numdislikecomment")
     
     // like post
     let likepost = document.querySelectorAll(".likepost")
     likepost.forEach(btn=>{
         btn.addEventListener("click", async (e) =>{
-            const postId = e.target.closest('.post').dataset.id
+            const post = e.target.closest('.post')
+            const postId = post.dataset.id
+          const numlikepost = post.querySelector(".numlikepost")
+          const dislikebtn = post.querySelector(".dislikepost")
             
             const data = new FormData()
             data.append("post_id", postId)
@@ -41,7 +43,20 @@ document.addEventListener("DOMContentLoaded", () => {
                     body: data,
                 })
                 if (response.ok) {
-                    console.log("sucess");
+                    const reponse = await response.json()
+                    console.log(response.likes);
+                    
+                    // btn.classList.toggle("likedpost")
+                    // const isLiked = btn.classList.contains("likedpost")
+                    // numlikepost.textContent = parseInt(numlikepost.textContent) + (isLiked ? 1 : -1);
+                  
+                    // if (dislikebtn.classList.contains("dislikepost")) {
+                    //    const numdislikepost = post.querySelector("numdislikepost")
+                    //    dislikebtn.classList.remove("dislikepost")
+                    //    numdislikepost.textContent = parseInt(numdislikepost.textContent) - 1;
+
+                    // }
+                
                     
                 } else {
                     console.log("eerr");

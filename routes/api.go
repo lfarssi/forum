@@ -16,5 +16,6 @@ func ApiRouter() {
 	// http.HandleFunc("/likecomment", controllers.ReactPostController)
 	http.HandleFunc("/create_comment",middleware.AuthMiddleware( controllers.CreatCommentController))
 	http.HandleFunc("/resources/", controllers.CssJsController)
+	
 
 }

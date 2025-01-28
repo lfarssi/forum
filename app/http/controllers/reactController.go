@@ -30,6 +30,7 @@ func ReactPostController(w http.ResponseWriter, r *http.Request) {
 			ErrorController(w, r, http.StatusInternalServerError, "")
 			return
 		}
+		
 	} else if react.Sender == "comment" {
 		commentID, err := strconv.Atoi(r.FormValue("comment_id"))
 		if err != nil {
@@ -42,5 +43,6 @@ func ReactPostController(w http.ResponseWriter, r *http.Request) {
 			ErrorController(w, r, http.StatusInternalServerError, "")
 			return
 		}
+
 	}
 }
