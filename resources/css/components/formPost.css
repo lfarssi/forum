@@ -76,6 +76,11 @@ input[type="checkbox"]:checked + .categorie-label {
     background-color: #b50000; /* Darker red on hover */
 }
 
+.label{
+    color:white;
+    font-size: medium;
+}
+
 /* Make form responsive on smaller screens */
 @media (max-width: 768px) {
     #formPost {
