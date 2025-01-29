@@ -1,7 +1,7 @@
 {{define "postForm"}}
 <div id="formPost" popover>
     <form action="/create_post" method="post">
-        <label for="title">Title</label>
+        <label for="title" class="label">Title</label>
         <input type="text" id="title" name="title" placeholder="write something...">
         
         <div class="categories-checkbox">
@@ -13,7 +13,7 @@
             {{end}}
         </div>
         
-        <label for="content">Content</label>
+        <label for="content"  class="label">Content</label>
         <textarea name="content" id="content" placeholder="write something..."></textarea>
         
         <button type="submit">Post</button>
