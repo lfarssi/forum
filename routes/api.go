@@ -10,11 +10,10 @@ func ApiRouter() {
 
 	http.HandleFunc("/singIn", controllers.LoginController)
 	http.HandleFunc("/singUp", controllers.RegisterController)
-	http.HandleFunc("/logout", controllers.LogoutController)
-	http.HandleFunc("/create_post", middleware.AuthMiddleware( controllers.CreatePosts))
-	http.HandleFunc("/react", controllers.ReactPostController)
-	// http.HandleFunc("/likecomment", controllers.ReactPostController)
-	http.HandleFunc("/create_comment",middleware.AuthMiddleware( controllers.CreatCommentController))
+	http.HandleFunc("/logout", middleware.AuthMiddleware(controllers.LogoutController))
+	http.HandleFunc("/create_post", middleware.AuthMiddleware(middleware.RateLimitMiddleware( controllers.CreatePosts)))
+	http.HandleFunc("/react",middleware.AuthMiddleware(middleware.RateLimitMiddleware( controllers.ReactPostController)))
+	http.HandleFunc("/create_comment",middleware.AuthMiddleware(middleware.RateLimitMiddleware( controllers.CreatCommentController)))
 	http.HandleFunc("/resources/", controllers.CssJsController)
 	
 
