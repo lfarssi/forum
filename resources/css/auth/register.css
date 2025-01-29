@@ -186,6 +186,10 @@ button {
 
 button:hover {
     background-color:#ff0000;
-    color: black    ;
-    transition: 0.5s;
+    color: rgb(255, 255, 255) ;
+    transition:  0.3s ease-in-out;
+}
+
+.errregister{
+    color: red;
 }
