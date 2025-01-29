@@ -4,115 +4,56 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/resources/css/auth/register.css" />
-    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <title>Signup</title>
   </head>
   <body>
+    <!-- Left Image Section -->
+    <div class="image-section">
+      <img src="/resources/imgs/lain.png" alt="Lain" class="bottom-image" />
+    </div>
+
+    <!-- Right Signup Section -->
     <div class="register-container">
-      <form action="/singUp" method="POST" id="form" class="register-form">
-        <input
-          type="text"
-          id="username"
-          name="username"
-          placeholder="Username"
-          required
-        />
-        <br />
-        <div id="usernameErr"></div>
-       
-        <input
-          type="email"
-          id="email"
-          name="email"
-          placeholder="email"
-          required
-        />
-        <br />
-        <div id="emailErr"></div>
+      <form action="/signUp" method="POST" id="form" class="register-form">
+        <h1>Signup</h1>
+        <p>Create a new account</p>
 
-        <input
-          type="password"
-          id="password"
-          name="password"
-          placeholder="Password"
-          required
-        />
-        <br />
-        <div id="passwordErr"></div>
+        <div class="form-field">
+          <label>Username</label>
+          <div class="input-group">
+            <input type="text" id="username" name="username" placeholder="Username" required />
+            <i class="fa-solid fa-user"></i>
+          </div>
+        </div>
 
-        <input
-          type="password"
-          id="confirmationPassword"
-          name="confirmationPassword"
-          placeholder="confirmationPassword"
-          required
-        />
-        <br />
-        <div id="confirmationPasswordErr"></div>
+        <div class="form-field">
+          <label>Email address</label>
+          <div class="input-group">
+            <input type="email" id="email" name="email" placeholder="email@email.com" required />
+            <i class="fa-solid fa-envelope"></i>
+          </div>
+        </div>
 
-        <button type="submit">Register</button><br />
-        <a href="/login">You already have an account? login</a>
+        <div class="form-field">
+          <label>Password</label>
+          <div class="input-group">
+            <input type="password" id="password" name="password" placeholder="Enter your password" required />
+            <i class="fa-solid fa-lock"></i>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label>Password Verification</label>
+          <div class="input-group">
+            <input type="password" id="confirmationPassword" name="confirmationPassword" placeholder="Enter your password" required />
+            <i class="fa-solid fa-lock"></i>
+          </div>
+        </div>
+
+        <button type="submit">Signup now</button>
+        <p class="login-text">Already have an account? <a href="/login" class="login-link">Login</a></p>
       </form>
     </div>
-    <script>
-      document
-        .getElementById("form")
-        .addEventListener("submit", async function (event) {
-          event.preventDefault();
-          const username = document.getElementById("username").value;
-          const email = document.getElementById("email").value;
-          const password = document.getElementById("password").value;
-          const confirmationPassword = document.getElementById(
-            "confirmationPassword"
-          ).value;
-          const usernameErr = document.getElementById("usernameErr");
-          const emailErr = document.getElementById("emailErr");
-          const passwordErr = document.getElementById("passwordErr");
-          const confirmationPasswordErr = document.getElementById(
-            "confirmationPasswordErr"
-          );
-        
-          usernameErr.innerHTML = '';
-          emailErr.innerHTML = '';
-          passwordErr.innerHTML = '';
-          confirmationPasswordErr.innerHTML = '';
-          const response = await fetch("/singUp", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              username,
-              email,
-              password,
-              confirmationPassword,
-            }),
-          });
-          if (response.ok) {
-            window.location.href = "/";
-          } else {
-            const data = await response.json();
-          if (data.error) {
-            usernameErr.innerHTML = data.username;
-            emailErr.innerHTML = data.email;
-            passwordErr.innerHTML = data.password;
-            confirmationPasswordErr.innerHTML = data.confirmPassword;
-          }
-          if (data.username) {
-            usernameErr.innerHTML = data.username;
-          }
-          if (data.email) {
-            emailErr.innerHTML = data.email;
-          }
-          if (data.password) {
-            passwordErr.innerHTML = data.password;
-          }
-          if (data.confirmPassword) {
-            confirmationPasswordErr.innerHTML = data.confirmPassword;
-          }
-          }
-         
-         
-        });
-    </script>
   </body>
 </html>
