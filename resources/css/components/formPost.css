@@ -81,7 +81,6 @@ input[type="checkbox"]:checked + .categorie-label {
     font-size: medium;
 }
 
-/* Make form responsive on smaller screens */
 @media (max-width: 768px) {
     #formPost {
         width: 90%; /* Make form take up more space on smaller screens */

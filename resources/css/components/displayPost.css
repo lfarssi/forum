@@ -87,12 +87,21 @@
     background-color: #e60000; /* Red for hover */
     color: white;
 }
+.islikedpost{
+    background-color: #e60000 !important; 
+    color: white !important;
+}
+
+.isdislikedpost{
+    background-color: #e60000 !important;
+    color: white !important;
+}
 
 .btn-comment{
-    background-color: #444 !important;
+    background-color: #444 ;
 }
 .btn-comment:hover{
-    background-color: #e60000 !important;
+    background-color: #e60000 ;
 }
 /* Comments Section Styling */
 .comments {

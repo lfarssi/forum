@@ -16,6 +16,8 @@ type Posts struct {
 	Comments      []Comment `json:"comments"`
 	CommentsCount int
 	Username      string `json:"username"`
+	IsLiked 	bool 
+	IsDisliked	bool
 }
 
 func CreatePost(title string, content string, categories []string, userId int) (int, error) {

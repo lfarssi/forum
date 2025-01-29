@@ -13,6 +13,8 @@ type Comment struct {
 	Username  string    `json:"username"`
 	Likes     int       `json:"likes"`
 	Dislikes  int       `json:"dislikes"`
+	IsLiked 	bool 
+	IsDisliked	bool
 }
 
 func CreatComment(comment Comment) error {
