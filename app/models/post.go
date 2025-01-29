@@ -6,18 +6,19 @@ import (
 )
 
 type Posts struct {
-	ID            int       `json:"id"`
+	ID            int `json:"id"`
+	UserID        int
 	Title         string    `json:"title"`
 	Content       string    `json:"content"`
 	Categories    []string  `json:"categories"`
 	Likes         int       `json:"likes"`
 	Dislikes      int       `json:"dislikes"`
-	CreatedAt     string `json:"created_at"`
+	CreatedAt     string    `json:"created_at"`
 	Comments      []Comment `json:"comments"`
 	CommentsCount int
 	Username      string `json:"username"`
-	IsLiked 	bool 
-	IsDisliked	bool
+	IsLiked       bool
+	IsDisliked    bool
 }
 
 func CreatePost(title string, content string, categories []string, userId int) (int, error) {
@@ -67,7 +68,7 @@ func LikedPost(userID int) ([]Posts, error) {
 			return nil, err
 		}
 		post.Categories = append(post.Categories, categorie)
-		post.CreatedAt=CreatedAt.Format("2006-01-02 15:04:05")
+		post.CreatedAt = CreatedAt.Format("2006-01-02 15:04:05")
 		LikedPost = append(LikedPost, post)
 	}
 	return LikedPost, nil
@@ -76,7 +77,7 @@ func LikedPost(userID int) ([]Posts, error) {
 
 func GetPosts() ([]Posts, error) {
 	query := `
-    SELECT p.id, p.title, p.content, GROUP_CONCAT(c.name) AS categories, p.creat_at, u.username
+    SELECT p.id,p.user_id, p.title, p.content, GROUP_CONCAT(c.name) AS categories, p.creat_at, u.username
     FROM posts p
     INNER JOIN users u ON p.user_id = u.id
     INNER JOIN post_categorie pc ON p.id = pc.post_id
@@ -95,12 +96,12 @@ func GetPosts() ([]Posts, error) {
 		var post Posts
 		var CreatAt time.Time
 		var categorie string
-		err = rows.Scan(&post.ID, &post.Title, &post.Content, &categorie, &CreatAt, &post.Username)
+		err = rows.Scan(&post.ID,&post.UserID, &post.Title, &post.Content, &categorie, &CreatAt, &post.Username)
 		if err != nil {
 			return nil, err
 		}
 		post.Categories = append(post.Categories, categorie)
-		post.CreatedAt= CreatAt.Format("2006-01-02 15:04:05")
+		post.CreatedAt = CreatAt.Format("2006-01-02 15:04:05")
 		posts = append(posts, post)
 	}
 	return posts, nil

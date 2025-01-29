@@ -21,6 +21,14 @@ func HomeController(w http.ResponseWriter, r *http.Request) {
 	} else {
 		logedIn = true
 	}
+	var iduser int
+	if logedIn {
+		iduser, err = models.GetUserId(r)
+		if err != nil {
+			ErrorController(w, r, http.StatusInternalServerError, "")
+			return
+		}
+	}
 	posts, err := models.GetPosts()
 	if err != nil {
 		fmt.Println(err)
@@ -30,20 +38,14 @@ func HomeController(w http.ResponseWriter, r *http.Request) {
 	for i:= range posts {
 		comment, err := models.GetComments(posts[i].ID)
 		if err != nil {
-			fmt.Println("get comment")
 
 			ErrorController(w, r, http.StatusInternalServerError, "")
 			return
 		}
-		userID,err:=models.GetUserId(r)
-		if err!=nil{
-			ErrorController(w, r, http.StatusInternalServerError, "")
-			return
-		}
+		
 
 		likePost , err := models.GetReactionPost(posts[i].ID, "like")
 		if err != nil {
-			fmt.Println("like post")
 
 			ErrorController(w, r, http.StatusInternalServerError, "")
 			return
@@ -52,31 +54,27 @@ func HomeController(w http.ResponseWriter, r *http.Request) {
 		posts[i].Likes = len(likePost)
 		dislikePost , err := models.GetReactionPost(posts[i].ID, "dislike")
 		if err != nil {
-			fmt.Println("dislike post")
 
 			ErrorController(w, r, http.StatusInternalServerError, "")
 			return
 		}
 		posts[i].Dislikes = len(dislikePost)
-
+		
 		for _, reaction := range likePost {
-			if reaction.UserID == userID {
+			if reaction.UserID == iduser {
 				posts[i].IsLiked = true
 				break
 			}
 		}
 		for _, reaction := range dislikePost {
-			if reaction.UserID == userID {
+			if reaction.UserID == iduser {
 				posts[i].IsDisliked = true
 				break
 			}
 		}
-
-
 		for i:= range comment {
 			dislikecomment , err := models.GetReactionComment(comment[i].ID, "dislike")
 		if err != nil {
-			fmt.Println("dislike comment")
 
 			ErrorController(w, r, http.StatusInternalServerError, "")
 			return
@@ -84,24 +82,26 @@ func HomeController(w http.ResponseWriter, r *http.Request) {
 		comment[i].Dislikes= len(dislikecomment)
 		likecomment , err := models.GetReactionComment(comment[i].ID, "like")
 		if err != nil {
-			fmt.Println("like comment")
 			ErrorController(w, r, http.StatusInternalServerError, "")
 			return
 		}
 		comment[i].Likes= len(likecomment)
-		for _, reaction := range likecomment {
-			if reaction.UserID == userID {
-				comment[i].IsLiked = true
-				break
+		
+		comment[i].Likes = len(likecomment)
+			for _, reaction := range likecomment {
+				if reaction.UserID == iduser {
+					comment[i].IsLiked = true
+					break
+				}
+			}
+			for _, reaction := range dislikecomment {
+				if reaction.UserID == iduser {
+					comment[i].IsDisliked = true
+					break
+				}
 			}
 		}
-		for _, reaction := range dislikecomment {
-			if reaction.UserID == userID {
-				comment[i].IsDisliked = true
-				break
-			}
-		}
-		}
+		
 		posts[i].Comments = comment
 		posts[i].CommentsCount = len(comment)
 	}
