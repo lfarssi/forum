@@ -1,10 +1,13 @@
 package controllers
 
 import (
+	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 
 	"forum/app/models"
+	"forum/utils"
 )
 
 func ReactPostController(w http.ResponseWriter, r *http.Request) {
@@ -14,7 +17,23 @@ func ReactPostController(w http.ResponseWriter, r *http.Request) {
 	}
 	var react models.React
 
-	react.UserID = 1
+	var logedIn bool
+
+	if !utils.IsLoggedIn(r) {
+		logedIn = false
+	} else {
+		logedIn = true
+	}
+	var iduser int
+	var err error
+	if logedIn {
+		iduser, err = models.GetUserId(r)
+		if err != nil {
+			ErrorController(w, r, http.StatusInternalServerError, "")
+			return
+		}
+	}
+	react.UserID = iduser
 	react.Status = r.FormValue("status")
 	react.Sender = r.FormValue("sender")
 	if react.Sender == "post" {
@@ -30,7 +49,7 @@ func ReactPostController(w http.ResponseWriter, r *http.Request) {
 			ErrorController(w, r, http.StatusInternalServerError, "")
 			return
 		}
-		
+
 	} else if react.Sender == "comment" {
 		commentID, err := strconv.Atoi(r.FormValue("comment_id"))
 		if err != nil {
@@ -45,4 +64,79 @@ func ReactPostController(w http.ResponseWriter, r *http.Request) {
 		}
 
 	}
+	posts, err := models.GetPosts()
+	if err != nil {
+		ErrorController(w, r, http.StatusInternalServerError, "comment id not an integer")
+		return
+	}
+	for i := range posts {
+		likePost, err := models.GetReactionPost(posts[i].ID, "like")
+		if err != nil {
+			ErrorController(w, r, http.StatusInternalServerError, "comment id not an integer")
+			return
+		}
+		posts[i].Likes = len(likePost)
+
+		for _, reaction := range likePost {
+			if reaction.UserID == iduser {
+				posts[i].IsLiked = true
+				break
+			}
+		}
+	
+		dislikePost, err := models.GetReactionPost(posts[i].ID, "dislike")
+		if err != nil {
+			ErrorController(w, r, http.StatusInternalServerError, "comment id not an integer")
+			return
+		}
+		posts[i].Dislikes = len(dislikePost)
+		for _, reaction := range dislikePost {
+			if reaction.UserID == iduser {
+				posts[i].IsDisliked = true
+				break
+			}
+		}
+		comment, err := models.GetComments(posts[i].ID)
+		if err != nil {
+			ErrorController(w, r, http.StatusInternalServerError, "comment id not an integer")
+			return
+		}
+		for i := range comment {
+			likeComment, err := models.GetReactionComment(comment[i].ID, "like")
+			if err != nil {
+				ErrorController(w, r, http.StatusInternalServerError, "comment id not an integer")
+				return
+			}
+			comment[i].Likes = len(likeComment)
+			
+			fmt.Println("like", likeComment)
+			dislikeComment, err := models.GetReactionComment(comment[i].ID, "dislike")
+			if err != nil {
+				ErrorController(w, r, http.StatusInternalServerError, "comment id not an integer")
+				return
+			}
+			comment[i].Likes = len(likeComment)
+			for _, reaction := range likeComment {
+				if reaction.UserID == iduser {
+					comment[i].IsLiked = true
+					break
+				}
+			}
+			for _, reaction := range dislikeComment {
+				if reaction.UserID == iduser {
+					comment[i].IsDisliked = true
+					break
+				}
+			}
+		
+			comment[i].Dislikes = len(dislikeComment)
+			fmt.Println("dislke", dislikeComment)
+
+		}
+		posts[i].Comments = comment
+
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(posts)
 }

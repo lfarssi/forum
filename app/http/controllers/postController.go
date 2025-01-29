@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	"forum/app/models"
+	"forum/utils"
 )
 
 func PostByCategoriesController(w http.ResponseWriter, r *http.Request) {
@@ -50,6 +51,14 @@ func PostByCategoriesController(w http.ResponseWriter, r *http.Request) {
 }
 
 func LikedPostController(w http.ResponseWriter, r *http.Request) {
+		var logedIn bool
+
+		
+		if !utils.IsLoggedIn(r) {
+			logedIn = false
+		} else {
+			logedIn = true
+		}
 	categories, err := models.GetCategories()
 	if err != nil {
 		ErrorController(w, r, http.StatusInternalServerError, "")
@@ -73,8 +82,8 @@ func LikedPostController(w http.ResponseWriter, r *http.Request) {
 			ErrorController(w, r, http.StatusInternalServerError, "")
 			return
 		}
-		userID,err:=models.GetUserId(r)
-		if err!=nil{
+		userID, err := models.GetUserId(r)
+		if err != nil {
 			ErrorController(w, r, http.StatusInternalServerError, "")
 			return
 		}
@@ -145,13 +154,14 @@ func LikedPostController(w http.ResponseWriter, r *http.Request) {
 	data := models.Data{
 		Category: categories,
 		Posts:    likedpost,
+		IsLoggedIn: logedIn,
 	}
 	ParseFileController(w, r, "users/index", data)
 	fmt.Println("liked posts ", likedpost)
 }
 
 func CreatePosts(w http.ResponseWriter, r *http.Request) {
-	title := html.EscapeString(r.PostFormValue("title")) 
+	title := html.EscapeString(r.PostFormValue("title"))
 	category := r.PostForm["categories"]
 	content := html.EscapeString(r.PostFormValue("content"))
 	if title == "" || len(category) == 0 || content == "" {
