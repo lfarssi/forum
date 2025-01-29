@@ -73,6 +73,11 @@ func LikedPostController(w http.ResponseWriter, r *http.Request) {
 			ErrorController(w, r, http.StatusInternalServerError, "")
 			return
 		}
+		userID,err:=models.GetUserId(r)
+		if err!=nil{
+			ErrorController(w, r, http.StatusInternalServerError, "")
+			return
+		}
 		likePost, err := models.GetReactionPost(likedpost[i].ID, "like")
 		if err != nil {
 			fmt.Println("like post")
@@ -80,6 +85,7 @@ func LikedPostController(w http.ResponseWriter, r *http.Request) {
 			ErrorController(w, r, http.StatusInternalServerError, "")
 			return
 		}
+
 		likedpost[i].Likes = len(likePost)
 		dislikePost, err := models.GetReactionPost(likedpost[i].ID, "dislike")
 		if err != nil {
@@ -89,6 +95,19 @@ func LikedPostController(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		likedpost[i].Dislikes = len(dislikePost)
+
+		for _, reaction := range likePost {
+			if reaction.UserID == userID {
+				likedpost[i].IsLiked = true
+				break
+			}
+		}
+		for _, reaction := range dislikePost {
+			if reaction.UserID == userID {
+				likedpost[i].IsDisliked = true
+				break
+			}
+		}
 
 		for i := range comment {
 			dislikecomment, err := models.GetReactionComment(comment[i].ID, "dislike")
@@ -106,6 +125,18 @@ func LikedPostController(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			comment[i].Likes = len(likecomment)
+			for _, reaction := range likecomment {
+				if reaction.UserID == userID {
+					comment[i].IsLiked = true
+					break
+				}
+			}
+			for _, reaction := range dislikecomment {
+				if reaction.UserID == userID {
+					comment[i].IsDisliked = true
+					break
+				}
+			}
 		}
 		likedpost[i].Comments = comment
 		likedpost[i].CommentsCount = len(comment)

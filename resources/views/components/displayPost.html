@@ -17,10 +17,11 @@
     </div>
     <p class="content">{{.Content}}</p>
  
-    <button type="button" class="btn likepost">
+    <button type="button" class="btn likepost {{if .IsLiked}} islikedpost{{end}}">
         <span class="numlikepost">{{.Likes}}</span> <i class="fa-regular fa-thumbs-up"></i>
     </button>
-    <button type="button" class="btn dislikepost">
+    
+    <button type="button" class="btn dislikepost {{if .IsDisliked}} isdislikedpost {{end}}">
         <span class="numdislikepost">{{.Dislikes}}</span> <i class="fa-regular fa-thumbs-down"></i>
     </button>
     <button type="button" class="btn">
@@ -32,10 +33,10 @@
 
             <h2> <img src="/resources/imgs/profile.png" alt="profile pictures"><span class="username">{{.Username}}</span></h2>
             <p>{{.Content}}</p>
-            <button  class="btn likecomment" type="button">
+            <button  class="btn likecomment {{if .IsLiked}}islikedpost {{end}}" type="button" >
                 <span class="numlikecomment">{{.Likes}}</span> <i class="fa-regular fa-thumbs-up"></i>
             </button>
-            <button class="btn dislikecomment" type="button">
+            <button class="btn dislikecomment {{if .IsDisliked}} isdislikedpost {{end}}" type="button" >
                <span class="numdislikecomment"> {{.Dislikes}}</span> <i class="fa-regular fa-thumbs-down"></i>
             </button>
         </div>

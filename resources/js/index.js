@@ -19,19 +19,33 @@ toggleComments();
 
 
 document.addEventListener("DOMContentLoaded", () => {
-
-    const numlikecomment = document.querySelectorAll(".numlikecomment")
-    const numdislikecomment = document.querySelectorAll(".numdislikecomment")
-    
-    // like post
+    function updateReactionCount(element, newCount, toggleClass) {
+        element.textContent = newCount;
+        element.closest("button").classList.toggle(toggleClass);
+    }
     let likepost = document.querySelectorAll(".likepost")
     likepost.forEach(btn=>{
         btn.addEventListener("click", async (e) =>{
             const post = e.target.closest('.post')
             const postId = post.dataset.id
-          const numlikepost = post.querySelector(".numlikepost")
-          const dislikebtn = post.querySelector(".dislikepost")
-            
+            const numDislike = post.querySelector(".numdislikepost");
+            let updatedDislikes = parseInt(numDislike.textContent);
+            const numLike = post.querySelector(".numlikepost");
+            let updatedLikes = parseInt(numLike.textContent);
+            const oppositeDislikeButton = post.querySelector(".dislikepost");
+
+            if (btn.classList.contains("islikedpost")) {
+                updatedLikes -= 1;
+                updateReactionCount(numLike, updatedLikes, "islikedpost");
+                oppositeDislikeButton.classList.remove("isdislikedpost"); // Remove dislike class
+            } else {
+                updatedLikes += 1;
+                updatedDislikes -= 1;
+                updateReactionCount(numLike, updatedLikes, "islikedpost");
+                updateReactionCount(numDislike, updatedDislikes, "isdislikedpost");
+                oppositeDislikeButton.classList.remove("isdislikedpost"); // Remove dislike class
+            }
+            btn.disabled = true;
             const data = new FormData()
             data.append("post_id", postId)
             data.append("status", "like")
@@ -43,29 +57,17 @@ document.addEventListener("DOMContentLoaded", () => {
                     body: data,
                 })
                 if (response.ok) {
-                    const reponse = await response.json()
+                    console.log("OK");
                     console.log(response.likes);
-                    
-                    // btn.classList.toggle("likedpost")
-                    // const isLiked = btn.classList.contains("likedpost")
-                    // numlikepost.textContent = parseInt(numlikepost.textContent) + (isLiked ? 1 : -1);
-                  
-                    // if (dislikebtn.classList.contains("dislikepost")) {
-                    //    const numdislikepost = post.querySelector("numdislikepost")
-                    //    dislikebtn.classList.remove("dislikepost")
-                    //    numdislikepost.textContent = parseInt(numdislikepost.textContent) - 1;
-
-                    // }
-                
-                    
                 } else {
                     console.log("eerr");
-                    
+                    updateReactionCount(numLike, updatedLikes - 1, "islikedpost");
                 }
-            } catch {
+            } catch  {
                 console.log("err like post");
                 
             }
+            btn.disabled = false;
         })
     })
 
@@ -73,11 +75,30 @@ document.addEventListener("DOMContentLoaded", () => {
     let dislikepost = document.querySelectorAll(".dislikepost")
     dislikepost.forEach(btn=>{
         btn.addEventListener("click", async (e) =>{
-            const postId = e.target.closest('.post').dataset.id
+            const post = e.target.closest('.post')
+            const postId = post.dataset.id
             const data = new FormData()
             data.append("post_id", postId)
             data.append("status", "dislike")
             data.append("sender", "post")
+            const numDislike = post.querySelector(".numdislikepost");
+            let updatedDislikes = parseInt(numDislike.textContent);
+            const oppositeLikeButton = post.querySelector(".likepost");
+            const numLike = post.querySelector(".numlikepost");
+            let updatedLikes = parseInt(numLike.textContent);
+            if (btn.classList.contains("isdislikedpost")) {
+                updatedDislikes -= 1;
+                updateReactionCount(numDislike, updatedDislikes, "isdislikedpost");
+                oppositeLikeButton.classList.remove("islikedpost"); // Remove like class
+            } else {
+                updatedDislikes += 1;
+                updatedLikes -= 1;
+                updateReactionCount(numLike, updatedLikes, "islikedpost");
+                updateReactionCount(numDislike, updatedDislikes, "isdislikedpost");
+                oppositeLikeButton.classList.remove("islikedpost"); // Remove like class
+            }
+            btn.disabled = true;
+
             try {
                 const response = await fetch("/react",{
                     method: "POST", 
@@ -89,12 +110,13 @@ document.addEventListener("DOMContentLoaded", () => {
                     
                 } else {
                     console.log("eerr");
-                    
+                    updateReactionCount(numDislike, updatedDislikes - 1, "isdislikedpost");
                 }
             } catch {
                 console.log("err dislike post");
                 
             }
+            btn.disabled = false;
         })
     })
 
@@ -103,15 +125,37 @@ document.addEventListener("DOMContentLoaded", () => {
     let likecomment = document.querySelectorAll(".likecomment")
     likecomment.forEach(btn=>{
         btn.addEventListener("click", async (e) =>{
-            const commentid = e.target.closest('.comment').dataset.id
-            console.log(commentid);
+            const comment = e.target.closest('.comment');
+            const commentId = comment.dataset.id;
             
             const data = new FormData()
-            data.append("comment_id", commentid)
+            data.append("comment_id", commentId)
             data.append("status", "like")
             data.append("sender", "comment")
+            const numDislike = comment.querySelector(".numdislikecomment");
+            
+            let updatedDislikes = parseInt(numDislike.textContent);
+            const numLike = comment.querySelector(".numlikecomment");
+            let updatedLikes = parseInt(numLike.textContent);
+            const oppositeDislikeButton = comment.querySelector(".dislikecomment");
+
+            if (btn.classList.contains("islikedpost")) {
+                updatedLikes -= 1;
+                updateReactionCount(numLike, updatedLikes, "islikedpost");
+                oppositeDislikeButton.classList.remove("isdislikedpost"); // Remove dislike class
+            } else {
+                updatedLikes += 1;
+                updatedDislikes -= 1;
+                updateReactionCount(numDislike, updatedDislikes, "isdislikedpost");
+                updateReactionCount(numLike, updatedLikes, "islikedpost");
+                oppositeDislikeButton.classList.remove("isdislikedpost"); // Remove dislike class
+            }
+
+            btn.disabled = true;
+
+
             try {
-console.log("fdsfs");
+
 
                 const response = await fetch("/react",{
                     method: "POST", 
@@ -122,11 +166,12 @@ console.log("fdsfs");
                     
                 } else {
                     console.log("eerr");
-                    
+                    updateReactionCount(numLike, updatedLikes - 1, "islikedpost");
                 }
             } catch {
                 console.log("err like comment");
             }
+            btn.disabled = false;
         })
     })
 
@@ -135,9 +180,28 @@ console.log("fdsfs");
     let dislikecomment = document.querySelectorAll(".dislikecomment")
     dislikecomment.forEach(btn=>{
         btn.addEventListener("click", async (e) =>{
-            const commentid = e.target.closest('.comment').dataset.id
-            const data = new FormData()
-            data.append("comment_id", commentid)
+            const comment = e.target.closest('.comment');
+            const commentId = comment.dataset.id;
+            const numDislike = comment.querySelector(".numdislikecomment");
+            const numLike = comment.querySelector(".numlikecomment");
+            let updatedLikes = parseInt(numLike.textContent);
+            let updatedDislikes = parseInt(numDislike.textContent);
+             const oppositeLikeButton = comment.querySelector(".likecomment");
+
+            if (btn.classList.contains("isdislikedpost")) {
+                updatedDislikes -= 1;
+                updateReactionCount(numDislike, updatedDislikes, "isdislikedpost");
+                oppositeLikeButton.classList.remove("islikedpost"); // Remove like class
+            } else {
+                updatedDislikes += 1;
+                updatedLikes -= 1;
+                updateReactionCount(numLike, updatedLikes, "islikedpost");
+                updateReactionCount(numDislike, updatedDislikes, "isdislikedpost");
+                oppositeLikeButton.classList.remove("islikedpost"); // Remove like class
+            }
+            btn.disabled = true;  
+             const data = new FormData()
+            data.append("comment_id", commentId)
             data.append("status", "dislike")
             data.append("sender", "comment")
             try {
@@ -151,12 +215,14 @@ console.log("fdsfs");
                     
                 } else {
                     console.log("eerr");
+                    updateReactionCount(numDislike, updatedDislikes - 1, "isdislikedpost");
                     
                 }
             } catch {
                 console.log("err like post");
                 
             }
+            btn.disabled = false;
         })
     })
 
