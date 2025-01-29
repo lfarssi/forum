@@ -1,4 +1,4 @@
-.login-container{
+/* .login-container{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -37,7 +37,7 @@ button {
     padding: 14px 20px;
     border-radius: 15px;
     margin: 8px 0;
-    border: none;
+    border.login none;
     cursor: pointer;
 }
 
@@ -46,4 +46,29 @@ button:hover {
     color: white;
     transition: 0.5s;
 
+} */
+ *{
+    margin: 0;
+    padding: 0;
+ }
+ .container {
+    justify-content: center;
+    background-color:green;
+    display: grid;
+    grid-auto-flow: column;
+ }
+.img-container{
+    background-color: red;
+    width: 70vw;
+    height: 100vh;
+}
+.login-container {
+    margin: 0;
+    padding: 0;
+    background-color: black;
+    justify-content: center;
+    height: 100vh;
+    width: 30vw;
+    align-items: center;
+    justify-content: center;
 }
