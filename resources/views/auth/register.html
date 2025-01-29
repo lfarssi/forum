@@ -13,7 +13,7 @@
     </div>
 
     <div class="register-container">
-      <form action="/signUp" method="POST" id="form" class="register-form">
+      <form action="/register" method="POST" id="form" class="register-form">
         <h1>Signup</h1>
         <p>Create a new account</p>
 
@@ -21,6 +21,7 @@
           <label>Username</label>
           <div class="input-group">
             <input type="text" id="username" name="username" placeholder="Username" required />
+            <div id="usernameErr"></div>
             <i class="fa-solid fa-user"></i>
           </div>
         </div>
@@ -29,6 +30,7 @@
           <label>Email address</label>
           <div class="input-group">
             <input type="email" id="email" name="email" placeholder="email@email.com" required />
+            <div id="emailErr"></div>
             <i class="fa-solid fa-envelope"></i>
           </div>
         </div>
@@ -37,6 +39,7 @@
           <label>Password</label>
           <div class="input-group">
             <input type="password" id="password" name="password" placeholder="Enter your password" required />
+            <div id="passwordErr"></div>
             <i class="fa-solid fa-lock"></i>
           </div>
         </div>
@@ -45,6 +48,7 @@
           <label>Password Verification</label>
           <div class="input-group">
             <input type="password" id="confirmationPassword" name="confirmationPassword" placeholder="Enter your password" required />
+            <div id="confirmationPasswordErr"></div>
             <i class="fa-solid fa-lock"></i>
           </div>
         </div>
@@ -53,5 +57,66 @@
         <p class="login-text">Already have an account? <a href="/login" class="login-link">Login</a></p>
       </form>
     </div>
+    <script>
+      document
+        .getElementById("form")
+        .addEventListener("submit", async function (event) {
+          event.preventDefault();
+          const username = document.getElementById("username").value;
+          const email = document.getElementById("email").value;
+          const password = document.getElementById("password").value;
+          const confirmationPassword = document.getElementById(
+            "confirmationPassword"
+          ).value;
+          const usernameErr = document.getElementById("usernameErr");
+          const emailErr = document.getElementById("emailErr");
+          const passwordErr = document.getElementById("passwordErr");
+          const confirmationPasswordErr = document.getElementById(
+            "confirmationPasswordErr"
+          );
+        
+          usernameErr.innerHTML = '';
+          emailErr.innerHTML = '';
+          passwordErr.innerHTML = '';
+          confirmationPasswordErr.innerHTML = '';
+          const response = await fetch("/singUp", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              username,
+              email,
+              password,
+              confirmationPassword,
+            }),
+          });
+          if (response.ok) {
+            window.location.href = "/";
+          } else {
+            const data = await response.json();
+          if (data.error) {
+            usernameErr.innerHTML = data.username;
+            emailErr.innerHTML = data.email;
+            passwordErr.innerHTML = data.password;
+            confirmationPasswordErr.innerHTML = data.confirmPassword;
+          }
+          if (data.username) {
+            usernameErr.innerHTML = data.username;
+          }
+          if (data.email) {
+            emailErr.innerHTML = data.email;
+          }
+          if (data.password) {
+            passwordErr.innerHTML = data.password;
+          }
+          if (data.confirmPassword) {
+            confirmationPasswordErr.innerHTML = data.confirmPassword;
+          }
+          }
+         
+         
+        });
+    </script>
   </body>
-</html>
+</html>signUp
