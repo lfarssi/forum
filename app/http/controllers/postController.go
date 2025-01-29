@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"fmt"
+	"html"
 	"net/http"
 	"strconv"
 
@@ -119,9 +120,9 @@ func LikedPostController(w http.ResponseWriter, r *http.Request) {
 }
 
 func CreatePosts(w http.ResponseWriter, r *http.Request) {
-	title := r.PostFormValue("title")
+	title := html.EscapeString(r.PostFormValue("title")) 
 	category := r.PostForm["categories"]
-	content := r.PostFormValue("content")
+	content := html.EscapeString(r.PostFormValue("content"))
 	if title == "" || len(category) == 0 || content == "" {
 
 		ErrorController(w, r, http.StatusBadRequest, http.StatusText(http.StatusBadRequest))

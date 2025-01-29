@@ -44,7 +44,7 @@ func LikedPost(userID int) ([]Posts, error) {
 	INNER JOIN reactPost r ON u.id =r.user_id
 	  INNER JOIN post_categorie pc ON p.id = pc.post_id
     INNER JOIN categories c ON pc.categorie_id = c.id
-	WHERE react_type='like' AND u.id=?
+	WHERE react_type='like' AND r.user_id=?
 	`
 	rows, err := Database.Query(query, userID)
 	if err != nil {
