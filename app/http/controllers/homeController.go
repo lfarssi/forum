@@ -24,7 +24,7 @@ func HomeController(w http.ResponseWriter, r *http.Request) {
 	if logedIn {
 		iduser, err = models.GetUserId(r)
 		if err != nil {
-			ErrorController(w, r, http.StatusInternalServerError, "")
+			LogoutController(w,r)
 			return
 		}
 	}
