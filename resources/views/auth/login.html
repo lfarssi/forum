@@ -1,81 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/resources/css/auth/login.css" />
-    <title>Document</title>
-  </head>
-  <body>
-    <div id="container">
-      <div class="login-container">
-        <form action="/singIn" method="POST" id="form" class="login-form">
-          <input
-            type="text"
-            name="username"
-            id="username"
-            placeholder="username"
-            required
-          /><br />
-          <div class="usernameErr"></div>
 
-          <input
-            type="password"
-            name="password"
-            id="password"
-            placeholder="Password"
-            required
-          /><br />
-          <div class="passwordErr"></div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/resources/css/auth/login.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
-          <button type="submit" id="btn">Login</button><br />
-          <a href="/register">You don't have an account yet? register</a>
-        </form>
-      </div>
-      <div class="img-container">
-        <p>hjduisdhuih</p>
-      </div>
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="container">
+    <div class="login-container">
+      <h1>Login</h1>
+      <p>Login into your account</p>
+      <form action="/singIn" method="post" id="form" class="login-form">
+        <label for="username">Username</label>
+        <div id="usr-icon">
+          <input type="text" name="username" id="username" placeholder="username" required />
+
+          <i class="fa-solid fa-user icon-container"></i>
+        </div>
+        <br />
+        <div class="usernameErr"></div>
+        <label for="password">Password</label>
+        <div id="usr-icon">
+          <input type="password" name="password" id="password" placeholder="Password" required />
+
+          <i class="fa-solid fa-lock icon-container lock"></i>
+
+        </div>
+        <br />
+        <div class="passwordErr"></div>
+
+        <button type="submit" id="btn">Login</button><br />
+      </form>
+      <p id="or">OR</p>
+      <a href="/register"><button>Register</button></a>
+    </div>
+    <div class="img-container">
+      <img src="/resources/imgs/image.png" alt="image">
     </div>
 
-      
-    <script>
-   
-    
-      document.getElementById("form")
-        .addEventListener("submit", async function (event) {
-          event.preventDefault();
-          const username = document.getElementById("username").value;
-          const password = document.getElementById("password").value;
-          const usernameErr = document.querySelector(".usernameErr");
+  </div>
+
+
+  <script>
+
+
+    document.getElementById("form")
+      .addEventListener("submit", async function (event) {
+        event.preventDefault();
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+        const usernameErr = document.querySelector(".usernameErr");
         const passwordErr = document.querySelector(".passwordErr");
 
-          usernameErr.innerHTML = '';
-          passwordErr.innerHTML = '';
-          console.log(username, password);
-          const response = await fetch("/singIn", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ username, password }),
-          });
-        
-          if (response.ok) {
-            window.location.href = "/";
-          } else{
-            const data = await response.json();
-            if (data.error) {
-              usernameErr.innerHTML = data.error;
-              passwordErr.innerHTML = data.error;
-            }
-            if (data.username) {
-              usernameErr.innerHTML = data.username;
-            } 
-            if (data.password) {
-              passwordErr.innerHTML = data.password;
-            }
-          }
+        usernameErr.innerHTML = '';
+        passwordErr.innerHTML = '';
+        console.log(username, password);
+        const response = await fetch("/singIn", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ username, password }),
         });
-    </script>
-  </body>
+
+        if (response.ok) {
+          window.location.href = "/";
+        } else {
+          const data = await response.json();
+          if (data.error) {
+            usernameErr.innerHTML = data.error;
+            passwordErr.innerHTML = data.error;
+          }
+          if (data.username) {
+            usernameErr.innerHTML = data.username;
+          }
+          if (data.password) {
+            passwordErr.innerHTML = data.password;
+          }
+        }
+      });
+  </script>
+</body>
+
 </html>
