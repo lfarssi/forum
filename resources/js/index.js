@@ -14,8 +14,81 @@ function toggleComments() {
     });
 }
 
-// Call the function when needed
 toggleComments();
+
+
+
+
+const commentForm = document.querySelectorAll(".comment-form");
+commentForm.forEach((btn)=>{
+    btn.addEventListener("click", async (e)=>{
+        const post = e.target.closest(".post");
+        const postId =post.dataset.id;
+        const content = post.querySelector(".content")
+        let data = new FormData()
+        data.append("post_id", postId)
+        data.append("content", content.value)
+        if (content.value == "") {
+            alert("Comment is empty")
+            return;
+        } else if (content.value.length > 10000) {
+            alert("Comment is too long")
+            return
+        }
+        try{
+            const response = await fetch("/create_comment",{
+                method: "POST",
+                body: data,
+            })
+            if (response.ok) {
+                window.location.href = "/" 
+            } else {
+                if (response.error) {
+                    console.log(response.error);
+                }
+            }
+        }catch{
+
+        }
+    });
+})
+
+
+const postForm = document.querySelector('post-form');
+postForm.addEventListener("submit", async (e)=>{
+
+    e.preventDefault();
+    const title = postForm.querySelector(".title")
+    const categories = postForm.querySelectorAll(".categories")
+    const content = postForm.querySelector(".content")
+    let data = new FormData()
+    data.append("title", title.value)
+    data.append("categories", categories.value)
+    data.append("content", content.value)
+    if (content.value == "") {
+        alert("Post is empty")
+        return;
+    } else if (content.value.length > 10000) {
+        alert("Post is too long")
+        return
+    }
+    try{
+        const response = await fetch("/create_post",{
+            method: "POST",
+            body: data,
+        })
+        if (response.ok) {
+            window.location.href = "/" 
+        } else {
+            if (response.error) {
+                console.log(response.error);
+            }
+        }
+    }catch{
+
+    }
+})
+
 
 
 document.addEventListener("DOMContentLoaded", () => {

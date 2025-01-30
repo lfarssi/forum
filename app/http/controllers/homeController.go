@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 
 	"forum/app/models"
@@ -12,6 +13,7 @@ func HomeController(w http.ResponseWriter, r *http.Request) {
 	
 	categories, err := models.GetCategories()
 	if err!= nil {
+		fmt.Println(err)
         ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch Category")
         return
     }
