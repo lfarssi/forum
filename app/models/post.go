@@ -1,7 +1,6 @@
 package models
 
 import (
-	"fmt"
 	"time"
 )
 
@@ -53,7 +52,6 @@ func LikedPost(userID int) ([]Posts, error) {
 	`
 	rows, err := Database.Query(query, userID)
 	if err != nil {
-		fmt.Println("query ", err)
 		return nil, err
 	}
 	defer rows.Close()
@@ -64,7 +62,6 @@ func LikedPost(userID int) ([]Posts, error) {
 		var CreatedAt time.Time
 		err = rows.Scan(&post.ID, &post.Title, &post.Content, &CreatedAt, &post.Username, &categorie)
 		if err != nil {
-			fmt.Println("scan", err)
 			return nil, err
 		}
 		post.Categories = append(post.Categories, categorie)
@@ -96,7 +93,7 @@ func GetPosts() ([]Posts, error) {
 		var post Posts
 		var CreatAt time.Time
 		var categorie string
-		err = rows.Scan(&post.ID,&post.UserID, &post.Title, &post.Content, &categorie, &CreatAt, &post.Username)
+		err = rows.Scan(&post.ID, &post.UserID, &post.Title, &post.Content, &categorie, &CreatAt, &post.Username)
 		if err != nil {
 			return nil, err
 		}

@@ -87,15 +87,11 @@
     background-color: #e60000; /* Red for hover */
     color: white;
 }
-.islikedpost{
+.isReacted{
     background-color: #e60000 !important; 
     color: white !important;
 }
 
-.isdislikedpost{
-    background-color: #e60000 !important;
-    color: white !important;
-}
 
 .btn-comment{
     background-color: #444 ;
@@ -191,7 +187,33 @@
     }
 
     .post .btn {
+        width: 20%;
+    }
+
+    .comments {
+        padding: 0.8rem;
+    }
+
+    .comments-btn {
         width: 100%;
+    }
+}
+
+@media (max-width: 480PX) {
+    .post {
+        padding: 1rem;
+    }
+
+    .post h1 {
+        font-size: 1.6rem;
+    }
+
+    .post h2 {
+        font-size: 1rem;
+    }
+
+    .post .btn {
+        width: 20%;
     }
 
     .comments {

@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 
 	"forum/app/models"
@@ -31,7 +30,7 @@ func HomeController(w http.ResponseWriter, r *http.Request) {
 	}
 	posts, err := models.GetPosts()
 	if err != nil {
-		fmt.Println(err)
+		
 		ErrorController(w, r, http.StatusInternalServerError, "")
         return
 	}	
@@ -50,7 +49,6 @@ func HomeController(w http.ResponseWriter, r *http.Request) {
 			ErrorController(w, r, http.StatusInternalServerError, "")
 			return
 		}
-		fmt.Println("like:",likePost)
 		posts[i].Likes = len(likePost)
 		dislikePost , err := models.GetReactionPost(posts[i].ID, "dislike")
 		if err != nil {

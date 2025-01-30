@@ -18,7 +18,6 @@ func DatabaseExecution() {
 		fmt.Println(" failed to open database: ", err)
 		return
 	}
-	//defer Database.Close()
 
 	// Read the schema SQL file
 	schema, err := ioutil.ReadFile("./database/schema/schema.sql")
@@ -32,5 +31,17 @@ func DatabaseExecution() {
 	if err != nil {
 		fmt.Println(" failed to execute schema:", err)
 		return
+	}
+}
+
+
+func CloseDatabase() {
+	if Database != nil {
+		err := Database.Close()
+		if err != nil {
+			fmt.Println("Error closing database:", err)
+		} else {
+			fmt.Println("Database closed successfully.")
+		}
 	}
 }
