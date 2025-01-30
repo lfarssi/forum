@@ -64,7 +64,7 @@ func LikedPostController(w http.ResponseWriter, r *http.Request) {
 	}
 	userId, err := models.GetUserId(r)
 	if err != nil {
-		ErrorController(w, r, http.StatusInternalServerError, "")
+		LogoutController(w,r)
 		return
 	}
 	likedpost, err := models.LikedPost(userId)
@@ -167,19 +167,19 @@ func CreatePosts(w http.ResponseWriter, r *http.Request) {
 
 	userId, err := models.GetUserId(r)
 	if err != nil {
-		ErrorController(w, r, http.StatusInternalServerError, http.StatusText(http.StatusInternalServerError))
+		LogoutController(w,r)
 		return
 	}
 
 	idPost, err := models.CreatePost(title, content, category, userId)
 	if err != nil {
-		ErrorController(w, r, http.StatusInternalServerError, http.StatusText(http.StatusInternalServerError))
+		ErrorController(w, r, http.StatusInternalServerError, "")
 		return
 	}
 	for _, c := range category {
 		catId, err := strconv.Atoi(c)
 		if err != nil {
-			ErrorController(w, r, http.StatusBadRequest, http.StatusText(http.StatusBadRequest))
+			ErrorController(w, r, http.StatusBadRequest,"")
 			return
 		}
 		err = models.InsertIntoCategoryPost(int(idPost), catId)
@@ -224,7 +224,7 @@ func CreatedPostController(w http.ResponseWriter, r *http.Request)  {
 		}
 		userID, err := models.GetUserId(r)
 		if err != nil {
-			ErrorController(w, r, http.StatusInternalServerError, "")
+			LogoutController(w,r)
 			return
 		}
 		likePost, err := models.GetReactionPost(createdPost[i].ID, "like")
