@@ -1,53 +1,5 @@
-/* .login-container{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f1f1f1;
-}
 
-.login-form{
-    width: 100%;
-    max-width: 330px;
-    padding: 15px;
-    margin: auto;
-    background-color: #f1f1f1;
-    border-radius: 10px;
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-    overflow: hidden;
-    text-align: center;
-    position: relative;
-    transition: 0.5s;
-}
-input {
-    width: 80%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    display: inline-block;
-    border: none;
-    background-color: #f1f1f1;
-    border-bottom: 1px solid #ccc;
-}
-
-
-button {
-    width: 50%;
-    background-color:rgb(0, 174, 255);
-    color: white;
-    padding: 14px 20px;
-    border-radius: 15px;
-    margin: 8px 0;
-    border.login none;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: rgb(5, 113, 255);
-    color: white;
-    transition: 0.5s;
-
-} */
-*{
+ *{
     margin: 0;
     padding: 0;
  }

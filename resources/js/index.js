@@ -156,7 +156,6 @@ document.addEventListener("DOMContentLoaded", () => {
                         if(res.id==postId){
                             if (Array.isArray(res.comments)){
                                 res.comments.forEach((comm)=>{
-                                    
                                     if(comm.id==commentId){
                                         console.log(comm);
                                         console.log(comm.dislikes);
