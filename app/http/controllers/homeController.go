@@ -12,7 +12,7 @@ func HomeController(w http.ResponseWriter, r *http.Request) {
 	
 	categories, err := models.GetCategories()
 	if err!= nil {
-        ErrorController(w, r, http.StatusInternalServerError, "")
+        ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch Category")
         return
     }
 	if !utils.IsLoggedIn(r) {
@@ -31,14 +31,14 @@ func HomeController(w http.ResponseWriter, r *http.Request) {
 	posts, err := models.GetPosts()
 	if err != nil {
 		
-		ErrorController(w, r, http.StatusInternalServerError, "")
+		ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch Post")
         return
 	}	
 	for i:= range posts {
 		comment, err := models.GetComments(posts[i].ID)
 		if err != nil {
 
-			ErrorController(w, r, http.StatusInternalServerError, "")
+			ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch Comment")
 			return
 		}
 		
@@ -46,14 +46,14 @@ func HomeController(w http.ResponseWriter, r *http.Request) {
 		likePost , err := models.GetReactionPost(posts[i].ID, "like")
 		if err != nil {
 
-			ErrorController(w, r, http.StatusInternalServerError, "")
+			ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch like posts")
 			return
 		}
 		posts[i].Likes = len(likePost)
 		dislikePost , err := models.GetReactionPost(posts[i].ID, "dislike")
 		if err != nil {
 
-			ErrorController(w, r, http.StatusInternalServerError, "")
+			ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch dislike posts")
 			return
 		}
 		posts[i].Dislikes = len(dislikePost)
@@ -74,13 +74,13 @@ func HomeController(w http.ResponseWriter, r *http.Request) {
 			dislikecomment , err := models.GetReactionComment(comment[i].ID, "dislike")
 		if err != nil {
 
-			ErrorController(w, r, http.StatusInternalServerError, "")
+			ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch dislike comment")
 			return
 		}
 		comment[i].Dislikes= len(dislikecomment)
 		likecomment , err := models.GetReactionComment(comment[i].ID, "like")
 		if err != nil {
-			ErrorController(w, r, http.StatusInternalServerError, "")
+			ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch like comment")
 			return
 		}
 		comment[i].Likes= len(likecomment)

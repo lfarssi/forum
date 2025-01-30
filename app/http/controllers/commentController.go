@@ -29,7 +29,7 @@ func CreatCommentController(w http.ResponseWriter, r *http.Request) {
 		ErrorController(w,r , http.StatusBadRequest, "Empty String")
 		return
 	}else if len(comment.Content)>=10000{
-		ErrorController(w,r , http.StatusRequestEntityTooLarge, "")
+		ErrorController(w,r , http.StatusRequestEntityTooLarge, "Comment to large")
 		return
 	}
 	userId,err:=models.GetUserId(r)
@@ -40,7 +40,7 @@ func CreatCommentController(w http.ResponseWriter, r *http.Request) {
 	comment.UserID = userId 
 	
 	if err = models.CreatComment(comment) ; err != nil {
-		ErrorController(w, r, http.StatusInternalServerError, "")
+		ErrorController(w, r, http.StatusInternalServerError, "Cannot Create Comment ")
 		return
 	}
 	http.Redirect(w,r , "/", http.StatusFound)

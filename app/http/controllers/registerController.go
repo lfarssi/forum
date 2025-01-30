@@ -91,13 +91,12 @@ func RegisterController(w http.ResponseWriter, r *http.Request) {
 
 	token, err := uuid.NewV4()
 	if err != nil {
-		fmt.Println("error uuid",err)
 		ErrorController(w, r, http.StatusInternalServerError, "")
 		return
 	}
 	err = models.CreateSession(id, token.String(), time.Now().Add((24 * time.Hour)))
 	if err != nil {
-		ErrorController(w, r, http.StatusInternalServerError, "")
+		ErrorController(w, r, http.StatusInternalServerError, "Cannot Create Sessions")
 		return
 	}
 	http.SetCookie(w, &http.Cookie{

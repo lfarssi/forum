@@ -45,7 +45,7 @@ func ReactPostController(w http.ResponseWriter, r *http.Request) {
 
 		err = models.InsertReactPost(react)
 		if err != nil {
-			ErrorController(w, r, http.StatusInternalServerError, "")
+			ErrorController(w, r, http.StatusInternalServerError, "Cannot Insert React Posts")
 			return
 		}
 
@@ -58,7 +58,7 @@ func ReactPostController(w http.ResponseWriter, r *http.Request) {
 		react.CommentID = commentID
 		err = models.InsertReactComment(react)
 		if err != nil {
-			ErrorController(w, r, http.StatusInternalServerError, "")
+			ErrorController(w, r, http.StatusInternalServerError, "Cannot Insert React Comments")
 			return
 		}
 
