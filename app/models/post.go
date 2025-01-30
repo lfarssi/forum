@@ -72,6 +72,38 @@ func LikedPost(userID int) ([]Posts, error) {
 
 }
 
+func CreatedPost(iduser int) ([]Posts, error) {
+	query := `
+	SELECT p.id , p.title,p.content,p.creat_at ,u.username , GROUP_CONCAT(DISTINCT c.name) AS categories
+	FROM posts p 
+	INNER JOIN users u ON u.id=p.user_id
+	  INNER JOIN post_categorie pc ON p.id = pc.post_id
+    INNER JOIN categories c ON pc.categorie_id = c.id
+	WHERE p.user_id=?
+	GROUP BY p.id
+	ORDER BY p.creat_at DESC
+	`
+	rows, err := Database.Query(query, iduser)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var createdPost []Posts
+	for rows.Next() {
+		var post Posts
+		var categorie string
+		var CreatedAt time.Time
+		err = rows.Scan(&post.ID, &post.Title, &post.Content, &CreatedAt, &post.Username, &categorie)
+		if err != nil {
+			return nil, err
+		}
+		post.Categories = append(post.Categories, categorie)
+		post.CreatedAt = CreatedAt.Format("2006-01-02 15:04:05")
+		createdPost = append(createdPost, post)
+	}
+	return createdPost, nil
+}
+
 func GetPosts() ([]Posts, error) {
 	query := `
     SELECT p.id,p.user_id, p.title, p.content, GROUP_CONCAT(c.name) AS categories, p.creat_at, u.username

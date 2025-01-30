@@ -190,3 +190,107 @@ func CreatePosts(w http.ResponseWriter, r *http.Request) {
 	}
 	http.Redirect(w, r, "/", http.StatusFound)
 }
+
+
+func CreatedPostController(w http.ResponseWriter, r *http.Request)  {
+	var logedIn bool
+
+	if !utils.IsLoggedIn(r) {
+		logedIn = false
+	} else {
+		logedIn = true
+	}
+	categories, err := models.GetCategories()
+	if err != nil {
+		ErrorController(w, r, http.StatusInternalServerError, "")
+		return
+	}
+	userId, err := models.GetUserId(r)
+	if err != nil {
+		ErrorController(w, r, http.StatusInternalServerError, "")
+		return
+	}
+	createdPost, err := models.CreatedPost(userId)
+	if err != nil {
+		ErrorController(w, r, http.StatusInternalServerError, "")
+		return
+	}
+	for i := range createdPost {
+		comment, err := models.GetComments(createdPost[i].ID)
+		if err != nil {
+
+			ErrorController(w, r, http.StatusInternalServerError, "")
+			return
+		}
+		userID, err := models.GetUserId(r)
+		if err != nil {
+			ErrorController(w, r, http.StatusInternalServerError, "")
+			return
+		}
+		likePost, err := models.GetReactionPost(createdPost[i].ID, "like")
+		if err != nil {
+
+			ErrorController(w, r, http.StatusInternalServerError, "")
+			return
+		}
+
+		createdPost[i].Likes = len(likePost)
+		dislikePost, err := models.GetReactionPost(createdPost[i].ID, "dislike")
+		if err != nil {
+
+			ErrorController(w, r, http.StatusInternalServerError, "")
+			return
+		}
+		createdPost[i].Dislikes = len(dislikePost)
+
+		for _, reaction := range likePost {
+			if reaction.UserID == userID {
+				createdPost[i].IsLiked = true
+				break
+			}
+		}
+		for _, reaction := range dislikePost {
+			if reaction.UserID == userID {
+				createdPost[i].IsDisliked = true
+				break
+			}
+		}
+
+		for i := range comment {
+			dislikecomment, err := models.GetReactionComment(comment[i].ID, "dislike")
+			if err != nil {
+
+				ErrorController(w, r, http.StatusInternalServerError, "")
+				return
+			}
+			comment[i].Dislikes = len(dislikecomment)
+			likecomment, err := models.GetReactionComment(comment[i].ID, "like")
+			if err != nil {
+				ErrorController(w, r, http.StatusInternalServerError, "")
+				return
+			}
+			comment[i].Likes = len(likecomment)
+			for _, reaction := range likecomment {
+				if reaction.UserID == userID {
+					comment[i].IsLiked = true
+					break
+				}
+			}
+			for _, reaction := range dislikecomment {
+				if reaction.UserID == userID {
+					comment[i].IsDisliked = true
+					break
+				}
+			}
+		}
+		createdPost[i].Comments = comment
+		createdPost[i].CommentsCount = len(comment)
+	}
+
+	data := models.Data{
+		Category:   categories,
+		Posts:      createdPost,
+		IsLoggedIn: logedIn,
+	}
+	ParseFileController(w, r, "users/index", data)
+}
