@@ -15,7 +15,7 @@
     <div class="login-container">
       <h1>Login</h1>
       <p>Login into your account</p>
-      <form action="/singIn" method="post" id="form" class="login-form">
+      <form action="/signIn" method="POST" id="form" class="login-form">
         <label for="username">Username</label>
         <div id="usr-icon">
           <input type="text" name="username" id="username" placeholder="username" required />
@@ -59,8 +59,9 @@
 
         usernameErr.innerHTML = '';
         passwordErr.innerHTML = '';
-        console.log(username, password);
-        const response = await fetch("/singIn", {
+        try{
+          console.log(username, password);
+        const response = await fetch("/signIn", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -82,7 +83,11 @@
           if (data.password) {
             passwordErr.innerHTML = data.password;
           }
+        } 
+        }catch(e) {
+          console.log(e)
         }
+        
       });
   </script>
 </body>

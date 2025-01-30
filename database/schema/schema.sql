@@ -53,7 +53,8 @@ CREATE TABLE IF NOT EXISTS sessionss (
   token VARCHAR(255) NOT NULL,
   expired_at TIMESTAMP NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (user_id) REFERENCES users(id)
+  FOREIGN KEY (user_id) REFERENCES users(id), 
+  UNIQUE(user_id)
 );
 
 CREATE TABLE IF NOT EXISTS post_categorie (

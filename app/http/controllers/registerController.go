@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -12,10 +13,6 @@ import (
 )
 
 func ParseRegister(w http.ResponseWriter, r *http.Request) {
-	if utils.IsLoggedIn(r) {
-		http.Redirect(w, r, "/", http.StatusSeeOther)
-		return
-	}
 	if r.Method != "GET" {
 		ErrorController(w, r, http.StatusMethodNotAllowed, "")
 		return
@@ -31,10 +28,12 @@ func RegisterController(w http.ResponseWriter, r *http.Request) {
 	user := models.User{}
 	err := json.NewDecoder(r.Body).Decode(&user)
 	if err != nil {
+		fmt.Println("decoding",err)
 		ErrorController(w, r, http.StatusInternalServerError, "")
 		return
 	}
 	if user.UserName == "" || user.Email == "" || user.Password == "" || user.ConfirmationPassword == "" {
+		fmt.Println("the fields empty")
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(map[string]interface{}{
@@ -45,6 +44,7 @@ func RegisterController(w http.ResponseWriter, r *http.Request) {
 		})
 		return
 	} else if !utils.IsValidUsername(user.UserName) {
+		fmt.Println("invalid username")
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(map[string]interface{}{
@@ -52,6 +52,7 @@ func RegisterController(w http.ResponseWriter, r *http.Request) {
 		})
 		return
 	} else if !utils.IsValidEmail(user.Email) {
+		fmt.Println("invalid email")
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(map[string]interface{}{
@@ -59,11 +60,13 @@ func RegisterController(w http.ResponseWriter, r *http.Request) {
 		})
 		return
 	} else if user.Password != user.ConfirmationPassword {
+		fmt.Println("invalid confirmation")
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(map[string]interface{}{"confirmPassword": "password unmatched"})
 		return
 	} else if utils.IsValidPassword(user.Password) {
+		fmt.Println("invalid password ")
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(map[string]interface{}{"password": "Weak password"})
@@ -72,7 +75,10 @@ func RegisterController(w http.ResponseWriter, r *http.Request) {
 
 	user.Password = utils.HashPassword(user.Password)
 	id, errInsertion := models.Register(user)
+	
 	if len(errInsertion) > 0 {
+		fmt.Println("errinsertion",errInsertion)
+		fmt.Println("len errinsertion",len(errInsertion))
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(map[string]interface{}{
@@ -85,6 +91,7 @@ func RegisterController(w http.ResponseWriter, r *http.Request) {
 
 	token, err := uuid.NewV4()
 	if err != nil {
+		fmt.Println("error uuid",err)
 		ErrorController(w, r, http.StatusInternalServerError, "")
 		return
 	}
