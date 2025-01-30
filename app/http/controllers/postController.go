@@ -16,7 +16,7 @@ func PostByCategoriesController(w http.ResponseWriter, r *http.Request) {
 	}
 	categoriess, err := models.GetCategories()
 	if err != nil {
-		ErrorController(w, r, http.StatusInternalServerError, "")
+		ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch Category")
 		return
 	}
 	r.ParseForm()
@@ -31,7 +31,7 @@ func PostByCategoriesController(w http.ResponseWriter, r *http.Request) {
 		}
 		postTemp, err := models.GetPostsByCategory(idCategorie)
 		if err != nil {
-			ErrorController(w, r, http.StatusInternalServerError, "")
+			ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch Post by category")
 			return
 		}
 		for _, post := range postTemp {
@@ -59,7 +59,7 @@ func LikedPostController(w http.ResponseWriter, r *http.Request) {
 	}
 	categories, err := models.GetCategories()
 	if err != nil {
-		ErrorController(w, r, http.StatusInternalServerError, "")
+		ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch Category")
 		return
 	}
 	userId, err := models.GetUserId(r)
@@ -69,25 +69,25 @@ func LikedPostController(w http.ResponseWriter, r *http.Request) {
 	}
 	likedpost, err := models.LikedPost(userId)
 	if err != nil {
-		ErrorController(w, r, http.StatusInternalServerError, "")
+		ErrorController(w, r, http.StatusInternalServerError, "Cannot liked posts")
 		return
 	}
 	for i := range likedpost {
 		comment, err := models.GetComments(likedpost[i].ID)
 		if err != nil {
 
-			ErrorController(w, r, http.StatusInternalServerError, "")
+			ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch comment")
 			return
 		}
 		userID, err := models.GetUserId(r)
 		if err != nil {
-			ErrorController(w, r, http.StatusInternalServerError, "")
+			LogoutController(w,r)
 			return
 		}
 		likePost, err := models.GetReactionPost(likedpost[i].ID, "like")
 		if err != nil {
 
-			ErrorController(w, r, http.StatusInternalServerError, "")
+			ErrorController(w, r, http.StatusInternalServerError, "Cannot get posts likes")
 			return
 		}
 
@@ -95,7 +95,7 @@ func LikedPostController(w http.ResponseWriter, r *http.Request) {
 		dislikePost, err := models.GetReactionPost(likedpost[i].ID, "dislike")
 		if err != nil {
 
-			ErrorController(w, r, http.StatusInternalServerError, "")
+			ErrorController(w, r, http.StatusInternalServerError, "Cannot get posts dislikes")
 			return
 		}
 		likedpost[i].Dislikes = len(dislikePost)
@@ -117,13 +117,13 @@ func LikedPostController(w http.ResponseWriter, r *http.Request) {
 			dislikecomment, err := models.GetReactionComment(comment[i].ID, "dislike")
 			if err != nil {
 
-				ErrorController(w, r, http.StatusInternalServerError, "")
+				ErrorController(w, r, http.StatusInternalServerError, "Cannot comment dislikes")
 				return
 			}
 			comment[i].Dislikes = len(dislikecomment)
 			likecomment, err := models.GetReactionComment(comment[i].ID, "like")
 			if err != nil {
-				ErrorController(w, r, http.StatusInternalServerError, "")
+				ErrorController(w, r, http.StatusInternalServerError, "Cannot get comment likes")
 				return
 			}
 			comment[i].Likes = len(likecomment)
@@ -173,7 +173,7 @@ func CreatePosts(w http.ResponseWriter, r *http.Request) {
 
 	idPost, err := models.CreatePost(title, content, category, userId)
 	if err != nil {
-		ErrorController(w, r, http.StatusInternalServerError, "")
+		ErrorController(w, r, http.StatusInternalServerError, "Cannot Create Post")
 		return
 	}
 	for _, c := range category {
@@ -202,24 +202,24 @@ func CreatedPostController(w http.ResponseWriter, r *http.Request)  {
 	}
 	categories, err := models.GetCategories()
 	if err != nil {
-		ErrorController(w, r, http.StatusInternalServerError, "")
+		ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch Category")
 		return
 	}
 	userId, err := models.GetUserId(r)
 	if err != nil {
-		ErrorController(w, r, http.StatusInternalServerError, "")
+		LogoutController(w,r)
 		return
 	}
 	createdPost, err := models.CreatedPost(userId)
 	if err != nil {
-		ErrorController(w, r, http.StatusInternalServerError, "")
+		ErrorController(w, r, http.StatusInternalServerError, "Cannot Create Posts")
 		return
 	}
 	for i := range createdPost {
 		comment, err := models.GetComments(createdPost[i].ID)
 		if err != nil {
 
-			ErrorController(w, r, http.StatusInternalServerError, "")
+			ErrorController(w, r, http.StatusInternalServerError, "Cannot Get comments")
 			return
 		}
 		userID, err := models.GetUserId(r)
@@ -230,7 +230,7 @@ func CreatedPostController(w http.ResponseWriter, r *http.Request)  {
 		likePost, err := models.GetReactionPost(createdPost[i].ID, "like")
 		if err != nil {
 
-			ErrorController(w, r, http.StatusInternalServerError, "")
+			ErrorController(w, r, http.StatusInternalServerError, "Cannot like posts")
 			return
 		}
 
@@ -238,7 +238,7 @@ func CreatedPostController(w http.ResponseWriter, r *http.Request)  {
 		dislikePost, err := models.GetReactionPost(createdPost[i].ID, "dislike")
 		if err != nil {
 
-			ErrorController(w, r, http.StatusInternalServerError, "")
+			ErrorController(w, r, http.StatusInternalServerError, "Cannot get dislikes posts")
 			return
 		}
 		createdPost[i].Dislikes = len(dislikePost)
@@ -260,13 +260,13 @@ func CreatedPostController(w http.ResponseWriter, r *http.Request)  {
 			dislikecomment, err := models.GetReactionComment(comment[i].ID, "dislike")
 			if err != nil {
 
-				ErrorController(w, r, http.StatusInternalServerError, "")
+				ErrorController(w, r, http.StatusInternalServerError, "Cannot get dislikes comment")
 				return
 			}
 			comment[i].Dislikes = len(dislikecomment)
 			likecomment, err := models.GetReactionComment(comment[i].ID, "like")
 			if err != nil {
-				ErrorController(w, r, http.StatusInternalServerError, "")
+				ErrorController(w, r, http.StatusInternalServerError, "Cannot get likes comments")
 				return
 			}
 			comment[i].Likes = len(likecomment)

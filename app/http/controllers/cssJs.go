@@ -16,14 +16,14 @@ func CssJsController(w http.ResponseWriter, r *http.Request) {
 	info, err := os.Stat(fullPath)
 	if err != nil {
 		if os.IsNotExist(err) {
-			ErrorController(w, r, http.StatusNotFound, "")
+			ErrorController(w, r, http.StatusNotFound, "Path Doesn't Exist")
 		} else {
 			ErrorController(w, r, http.StatusInternalServerError, "")
 		}
 		return
 	}
 	if info.IsDir() {
-		ErrorController(w, r, http.StatusForbidden, "")
+		ErrorController(w, r, http.StatusForbidden, "You can't access this directory")
 		return
 	}
 
