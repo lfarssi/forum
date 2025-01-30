@@ -11,6 +11,7 @@ import (
 
 func main() {
 	models.DatabaseExecution()
+	defer models.CloseDatabase()
 	routes.WebRouter()
 	routes.ApiRouter()
 	fmt.Println("Server is running on http://localhost:8080")

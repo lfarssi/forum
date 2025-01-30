@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -109,7 +108,6 @@ func ReactPostController(w http.ResponseWriter, r *http.Request) {
 			}
 			comment[i].Likes = len(likeComment)
 			
-			fmt.Println("like", likeComment)
 			dislikeComment, err := models.GetReactionComment(comment[i].ID, "dislike")
 			if err != nil {
 				ErrorController(w, r, http.StatusInternalServerError, "comment id not an integer")
@@ -130,7 +128,6 @@ func ReactPostController(w http.ResponseWriter, r *http.Request) {
 			}
 		
 			comment[i].Dislikes = len(dislikeComment)
-			fmt.Println("dislke", dislikeComment)
 
 		}
 		posts[i].Comments = comment

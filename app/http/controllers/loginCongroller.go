@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"time"
 
@@ -47,7 +46,6 @@ func LoginController(w http.ResponseWriter, r *http.Request) {
 		return
 	} else if !utils.IsValidUsername(user.UserName) {
 		w.Header().Set("Content-Type", "application/json")
-		fmt.Println("ùù", user.UserName, "=>", user.Password)
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(map[string]interface{}{
 			"username": "Invalid username",

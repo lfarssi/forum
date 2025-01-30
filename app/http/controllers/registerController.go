@@ -34,7 +34,6 @@ func RegisterController(w http.ResponseWriter, r *http.Request) {
 		ErrorController(w, r, http.StatusInternalServerError, "")
 		return
 	}
-	// fmt.Println("user", user)
 	if user.UserName == "" || user.Email == "" || user.Password == "" || user.ConfirmationPassword == "" {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)

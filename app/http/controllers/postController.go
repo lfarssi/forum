@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"html"
 	"net/http"
 	"strconv"
@@ -51,14 +50,13 @@ func PostByCategoriesController(w http.ResponseWriter, r *http.Request) {
 }
 
 func LikedPostController(w http.ResponseWriter, r *http.Request) {
-		var logedIn bool
+	var logedIn bool
 
-		
-		if !utils.IsLoggedIn(r) {
-			logedIn = false
-		} else {
-			logedIn = true
-		}
+	if !utils.IsLoggedIn(r) {
+		logedIn = false
+	} else {
+		logedIn = true
+	}
 	categories, err := models.GetCategories()
 	if err != nil {
 		ErrorController(w, r, http.StatusInternalServerError, "")
@@ -77,7 +75,6 @@ func LikedPostController(w http.ResponseWriter, r *http.Request) {
 	for i := range likedpost {
 		comment, err := models.GetComments(likedpost[i].ID)
 		if err != nil {
-			fmt.Println("get comment")
 
 			ErrorController(w, r, http.StatusInternalServerError, "")
 			return
@@ -89,7 +86,6 @@ func LikedPostController(w http.ResponseWriter, r *http.Request) {
 		}
 		likePost, err := models.GetReactionPost(likedpost[i].ID, "like")
 		if err != nil {
-			fmt.Println("like post")
 
 			ErrorController(w, r, http.StatusInternalServerError, "")
 			return
@@ -98,7 +94,6 @@ func LikedPostController(w http.ResponseWriter, r *http.Request) {
 		likedpost[i].Likes = len(likePost)
 		dislikePost, err := models.GetReactionPost(likedpost[i].ID, "dislike")
 		if err != nil {
-			fmt.Println("dislike post")
 
 			ErrorController(w, r, http.StatusInternalServerError, "")
 			return
@@ -121,7 +116,6 @@ func LikedPostController(w http.ResponseWriter, r *http.Request) {
 		for i := range comment {
 			dislikecomment, err := models.GetReactionComment(comment[i].ID, "dislike")
 			if err != nil {
-				fmt.Println("dislike comment")
 
 				ErrorController(w, r, http.StatusInternalServerError, "")
 				return
@@ -129,7 +123,6 @@ func LikedPostController(w http.ResponseWriter, r *http.Request) {
 			comment[i].Dislikes = len(dislikecomment)
 			likecomment, err := models.GetReactionComment(comment[i].ID, "like")
 			if err != nil {
-				fmt.Println("like comment")
 				ErrorController(w, r, http.StatusInternalServerError, "")
 				return
 			}
@@ -152,12 +145,11 @@ func LikedPostController(w http.ResponseWriter, r *http.Request) {
 	}
 
 	data := models.Data{
-		Category: categories,
-		Posts:    likedpost,
+		Category:   categories,
+		Posts:      likedpost,
 		IsLoggedIn: logedIn,
 	}
 	ParseFileController(w, r, "users/index", data)
-	fmt.Println("liked posts ", likedpost)
 }
 
 func CreatePosts(w http.ResponseWriter, r *http.Request) {
@@ -187,7 +179,6 @@ func CreatePosts(w http.ResponseWriter, r *http.Request) {
 	for _, c := range category {
 		catId, err := strconv.Atoi(c)
 		if err != nil {
-			fmt.Println("atoi")
 			ErrorController(w, r, http.StatusBadRequest, http.StatusText(http.StatusBadRequest))
 			return
 		}
