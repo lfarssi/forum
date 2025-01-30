@@ -1,122 +1,124 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/resources/css/auth/register.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-    <title>Signup</title>
-  </head>
-  <body>
-    <div class="image-section">
-      <img src="/resources/imgs/lain.png" alt="Lain" class="bottom-image" />
-    </div>
 
-    <div class="register-container">
-      <form action="/register" method="POST" id="form" class="register-form">
-        <h1>Signup</h1>
-        <p>Create a new account</p>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/resources/css/auth/register.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <title>Signup</title>
+</head>
 
-        <div class="form-field">
-          <label>Username</label>
-          <div class="input-group">
-            <input type="text" id="username" name="username" placeholder="Username" required />
-            <i class="fa-solid fa-user"></i>
-          </div>
-          <div class = "errregister" id="usernameErr"></div>
+<body>
+  <div class="image-section">
+    <img src="/resources/imgs/lain.png" alt="Lain" class="bottom-image" />
+  </div>
+
+  <div class="register-container">
+    <form action="/signUp" method="POST" id="form" class="register-form">
+      <h1>Signup</h1>
+      <p>Create a new account</p>
+
+      <div class="form-field">
+        <label>Username</label>
+        <div class="input-group">
+          <input type="text" id="username" name="username" placeholder="Username" required />
+          <i class="fa-solid fa-user"></i>
         </div>
+        <div class="errregister" id="usernameErr"></div>
+      </div>
 
-        <div class="form-field">
-          <label>Email address</label>
-          <div class="input-group">
-            <input type="email" id="email" name="email" placeholder="email@email.com" required />
-            <i class="fa-solid fa-envelope"></i>
-          </div>
-          <div class = "errregister" id="emailErr"></div>
+      <div class="form-field">
+        <label>Email address</label>
+        <div class="input-group">
+          <input type="email" id="email" name="email" placeholder="email@email.com" required />
+          <i class="fa-solid fa-envelope"></i>
         </div>
+        <div class="errregister" id="emailErr"></div>
+      </div>
 
-        <div class="form-field">
-          <label>Password</label>
-          <div class="input-group">
-            <input type="password" id="password" name="password" placeholder="Enter your password" required />
-            <i class="fa-solid fa-lock"></i>
-          </div>
-          <div class = "errregister" id="passwordErr"></div>
+      <div class="form-field">
+        <label>Password</label>
+        <div class="input-group">
+          <input type="password" id="password" name="password" placeholder="Enter your password" required />
+          <i class="fa-solid fa-lock"></i>
         </div>
+        <div class="errregister" id="passwordErr"></div>
+      </div>
 
-        <div class="form-field">
-          <label>Password Verification</label>
-          <div class="input-group">
-            <input type="password" id="confirmationPassword" name="confirmationPassword" placeholder="Enter your password" required />
-            <i class="fa-solid fa-lock"></i>
-          </div>
-          <div class = "errregister" id="confirmationPasswordErr"></div>
+      <div class="form-field">
+        <label>Password Verification</label>
+        <div class="input-group">
+          <input type="password" id="confirmationPassword" name="confirmationPassword" placeholder="Enter your password"
+            required />
+          <i class="fa-solid fa-lock"></i>
         </div>
+        <div class="errregister" id="confirmationPasswordErr"></div>
+      </div>
 
-        <button type="submit">Signup now</button>
-        <p class="login-text">Already have an account? <a href="/login" class="login-link">Login</a></p>
-      </form>
-    </div>
-    <script>
-      document
-        .getElementById("form")
-        .addEventListener("submit", async function (event) {
-          event.preventDefault();
-          const username = document.getElementById("username").value;
-          const email = document.getElementById("email").value;
-          const password = document.getElementById("password").value;
-          const confirmationPassword = document.getElementById(
-            "confirmationPassword"
-          ).value;
-          const usernameErr = document.getElementById("usernameErr");
-          const emailErr = document.getElementById("emailErr");
-          const passwordErr = document.getElementById("passwordErr");
-          const confirmationPasswordErr = document.getElementById(
-            "confirmationPasswordErr"
-          );
-        
-          usernameErr.innerHTML = '';
-          emailErr.innerHTML = '';
-          passwordErr.innerHTML = '';
-          confirmationPasswordErr.innerHTML = '';
-          const response = await fetch("/singUp", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              username,
-              email,
-              password,
-              confirmationPassword,
-            }),
-          });
-          if (response.ok) {
-            window.location.href = "/";
-          } else {
-            const data = await response.json();
-          if (data.error) {
-            usernameErr.innerHTML = data.username;
-            emailErr.innerHTML = data.email;
-            passwordErr.innerHTML = data.password;
-            confirmationPasswordErr.innerHTML = data.confirmPassword;
-          }
-          if (data.username) {
-            usernameErr.innerHTML = data.username;
-          }
-          if (data.email) {
-            emailErr.innerHTML = data.email;
-          }
-          if (data.password) {
-            passwordErr.innerHTML = data.password;
-          }
-          if (data.confirmPassword) {
-            confirmationPasswordErr.innerHTML = data.confirmPassword;
-          }
-          }
-         
-         
-        });
-    </script>
-  </body>
-</html>signUp
+      <button type="submit" class="btn-register" >Signup now</button>
+      <p class="login-text">Already have an account? <a href="/login" class="login-link">Login</a></p>
+    </form>
+  </div>
+  <script>
+        const doc=document.getElementById("form").addEventListener("submit", async function (event) {
+        event.preventDefault();
+        const username = document.getElementById("username").value;
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        const confirmationPassword = document.getElementById(
+          "confirmationPassword"
+        ).value;
+        const usernameErr = document.getElementById("usernameErr");
+        const emailErr = document.getElementById("emailErr");
+        const passwordErr = document.getElementById("passwordErr");
+        const confirmationPasswordErr = document.getElementById(
+          "confirmationPasswordErr"
+        );
+
+        usernameErr.innerHTML = '';
+        emailErr.innerHTML = '';
+        passwordErr.innerHTML = '';
+        confirmationPasswordErr.innerHTML = '';
+
+        try {
+  const response = await fetch("/signUp", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      username,
+      email,
+      password,
+      confirmationPassword,
+    }),
+  });
+
+  if (response.ok) {
+    window.location.href = "/";
+    return;
+  }
+
+  // Check Content-Type before parsing JSON
+  const contentType = response.headers.get("Content-Type");
+  if (!contentType || !contentType.includes("application/json")) {
+    throw new Error("Server returned an invalid response. Expected JSON but got something else.");
+  }
+
+  const data = await response.json();
+
+  if (data.username) usernameErr.innerHTML = data.username;
+  if (data.email) emailErr.innerHTML = data.email;
+  if (data.password) passwordErr.innerHTML = data.password;
+  if (data.confirmPassword) confirmationPasswordErr.innerHTML = data.confirmPassword;
+  
+} catch (e) {
+  console.error("Error:", e);
+  alert("An unexpected error occurred. Please try again later.");
+}
+      });
+  </script>
+</body>
+
+</html>

@@ -8,8 +8,8 @@ import (
 
 func ApiRouter() {
 
-	http.HandleFunc("/singIn", controllers.LoginController)
-	http.HandleFunc("/singUp", controllers.RegisterController)
+	http.HandleFunc("/signIn", controllers.LoginController)
+	http.HandleFunc("/signUp", controllers.RegisterController)
 	http.HandleFunc("/logout", middleware.AuthMiddleware(controllers.LogoutController))
 	http.HandleFunc("/create_post", middleware.AuthMiddleware(middleware.RateLimitMiddleware( controllers.CreatePosts)))
 	http.HandleFunc("/react",middleware.AuthMiddleware(middleware.RateLimitMiddleware( controllers.ReactPostController)))

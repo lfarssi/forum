@@ -15,7 +15,7 @@ func CreateSession(id int, token string, expired time.Time) error {
 	query := `
 	INSERT INTO sessionss (user_id, token, expired_at) 
 	VALUES (?, ?, ?) 
-	ON CONFLICT DO UPDATE SET token = EXCLUDED.token , date = CURRENT_TIMESTAMP
+	ON CONFLICT DO UPDATE SET token = EXCLUDED.token , expired_at = CURRENT_TIMESTAMP
 	`
 	stm, err := Database.Prepare(query)
 	if err != nil {
