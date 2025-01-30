@@ -23,7 +23,7 @@ func CreatCommentController(w http.ResponseWriter, r *http.Request) {
 	comment.PostID, err =strconv.Atoi( r.FormValue("post_id"))
 	if err != nil{
 		ErrorController(w,r , http.StatusBadRequest, "Post number Invalid")
-		return 
+		return 	
 	}
 	if len(comment.Content)==0{
 		ErrorController(w,r , http.StatusBadRequest, "Empty String")
