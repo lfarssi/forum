@@ -138,29 +138,39 @@ func GetPosts() ([]Posts, error) {
 
 func GetPostsByCategory(idCategorie int) ([]Posts, error) {
 	query := `
-	SELECT   p.id, p.title, p.content, GROUP_CONCAT(c.name) AS categories, p.creat_at, u.username
+	SELECT   p.id, p.title, p.content, c.name, p.creat_at, u.username
 	FROM posts p
 	INNER JOIN users u ON p.user_id = u.id
 	INNER JOIN post_categorie pc ON p.id = pc.post_id
 	INNER JOIN categories c ON pc.categorie_id = c.id
-	WHERE pc.categorie_id =?`
+	WHERE pc.categorie_id =?
+	ORDER BY p.creat_at DESC;
+	`
 	rows, err := Database.Query(query, idCategorie)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	var posts []Posts
+	tempPosts := make(map[int]*Posts)
 	for rows.Next() {
 		var post Posts
-		var categories []string
 		var categorie string
 		err = rows.Scan(&post.ID, &post.Title, &post.Content, &categorie, &post.CreatedAt, &post.Username)
 		if err != nil {
 			return nil, err
 		}
-		categories = append(categories, categorie)
-		post.Categories = categories
-		posts = append(posts, post)
+		if temposts, ok := tempPosts[post.ID]; ok {
+			temposts.Categories = append(temposts.Categories, categorie)
+		} else {
+			post.Categories = CorrectCategories(post.ID)
+
+			tempPosts[post.ID] = &post
+		}
+		
+	}
+	for _, post := range tempPosts {
+		posts = append(posts, *post)
 	}
 	return posts, nil
 
