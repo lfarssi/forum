@@ -19,10 +19,12 @@ func AuthMiddleware(auth http.HandlerFunc) http.HandlerFunc {
 		token, err := r.Cookie("token")
 		if err != nil {
 			http.Redirect(w, r, "/login", http.StatusSeeOther)
+
 			return
 		}
 		sessionId := token.Value
 		_, err = models.GetSession(sessionId)
+
 		if err != nil {
 			http.Redirect(w, r, "/login", http.StatusSeeOther)
 			return

@@ -60,9 +60,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     console.log("eerr");
 
                 }
-            } catch (e) {
-                console.log(e);
-
+            } catch(e) {
+                window.location.href= "/login"
 
             }
 
@@ -114,6 +113,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             } catch {
                 console.log("err dislike post");
+                window.location.href= "/login"
+
 
             }
 
@@ -174,6 +175,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             } catch {
                 console.log("err like comment");
+                window.location.href= "/login"
+
             }
 
         })
@@ -237,6 +240,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             } catch {
                 console.log("err ldislike comment");
+                window.location.href= "/login"
+
 
             }
         })
