@@ -32,3 +32,25 @@ func InsertIntoCategoryPost(postId, categorieId int) error {
     }
     return nil
 }
+
+
+func CorrectCategories(id int) []string {
+	query:= `SELECT c.name FROM categories c
+	INNER JOIN post_categorie pc ON c.id = pc.categorie_id
+	WHERE pc.post_id = ?`
+	rows, err := Database.Query(query, id)
+	if err != nil {
+		return nil
+	}
+	defer rows.Close()
+	categories := []string{}
+	for rows.Next() {
+		var categorie string
+		err := rows.Scan(&categorie)
+		if err != nil {
+			continue
+		}
+		categories = append(categories, categorie)
+	}
+	return categories
+}

@@ -14,6 +14,13 @@ func PostByCategoriesController(w http.ResponseWriter, r *http.Request) {
 		ErrorController(w, r, http.StatusMethodNotAllowed, "")
 		return
 	}
+	var logedIn bool
+
+	if !utils.IsLoggedIn(r) {
+		logedIn = false
+	} else {
+		logedIn = true
+	}
 	categoriess, err := models.GetCategories()
 	if err != nil {
 		ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch Category")
@@ -45,6 +52,7 @@ func PostByCategoriesController(w http.ResponseWriter, r *http.Request) {
 	data := models.Data{
 		Category: categoriess,
 		Posts:    posts,
+		IsLoggedIn: logedIn,
 	}
 	ParseFileController(w, r, "users/index", data)
 }
