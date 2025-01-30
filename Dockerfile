@@ -1,0 +1,19 @@
+FROM golang:1.22.3-alpine
+
+LABEL maintainer="jononl3adama@gmail.com" \
+    version="1.0" \
+    description="A simple forum application " 
+
+WORKDIR /app
+
+COPY go.mod go.sum ./
+
+RUN go mod tidy
+
+COPY . .
+
+RUN go build -o myapp .
+
+EXPOSE 8080
+
+CMD ["./myapp"]
