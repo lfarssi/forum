@@ -9,8 +9,6 @@ import (
 	"forum/app/models"
 )
 
-func CommentController(w http.ResponseWriter, r *http.Request) {
-}
 
 func CreatCommentController(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
