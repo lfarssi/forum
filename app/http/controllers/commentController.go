@@ -34,7 +34,7 @@ func CreatCommentController(w http.ResponseWriter, r *http.Request) {
 	}
 	userId,err:=models.GetUserId(r)
 	if err != nil{
-		ErrorController(w,r , http.StatusInternalServerError, "")
+		LogoutController(w,r)
 		return 
 	}
 	comment.UserID = userId 
