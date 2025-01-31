@@ -7,6 +7,31 @@
     margin-bottom: 2rem;
     color: #f0f0f0;
 }
+.flash-alert {
+    display: none;
+    background-color: #2c2c2c;
+    border: 1px solid red;
+    color: red;
+    padding: 10px;
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 5px;
+    font-size: 16px;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.flash-alert.show {
+    display: block;
+    opacity: 1;
+}
+.warning-icon{
+    margin-left: 5px;
+}
+
 .comment{
     padding: 15px;
     border-radius: 20px;
@@ -93,12 +118,7 @@
 }
 
 
-.btn-comment{
-    background-color: #444 ;
-}
-.btn-comment:hover{
-    background-color: #e60000 ;
-}
+
 /* Comments Section Styling */
 .comments {
     background-color: #333;
@@ -145,7 +165,17 @@
     flex-direction: column;
     gap: 0.5rem;
 }
-
+.nothing{
+    color: red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    height: 80vh;
+}
+.dead{
+    margin-left: 15px;
+}
 .comments form textarea {
     width: 100%;
     padding: 1rem;
@@ -158,18 +188,19 @@
 
 .comments form button {
     padding: 1rem;
-    background-color: #e60000;
-    color: white;
-    width: 20%;
+    background-color: #444 ;
+    color: red;
     border: none;
+    width: fit-content;
     border-radius: 8px;
     cursor: pointer;
     font-size: 1rem;
-    transition: background-color 0.3s ease;
+    transition:  0.3s ease-in-out;
 }
 
 .comments form button:hover {
     background-color: #b50000; /* Darker red for button hover */
+    color: white;
 }
 
 /* Mobile Responsiveness */

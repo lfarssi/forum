@@ -17,7 +17,7 @@ type Comment struct {
 	IsDisliked	bool
 }
 
-func CreatComment(comment Comment) error {
+func CreateComment(comment Comment) error {
 	qwiri := `
 		INSERT INTO comments
 		(content , user_id, date_creation, post_id)

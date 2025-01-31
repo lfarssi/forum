@@ -47,8 +47,10 @@
 }
 #categories {
     background-color: black;
-    margin: auto;
-    width: 60%;
+   margin:auto;
+    width: fit-content;
+    padding: 20px;
+    border-radius: 15px;
 }
 /* Category checkbox container (arranged in rows) */
 .categories-checkbox {
@@ -56,15 +58,15 @@
     display: flex;
     flex-direction: row;  /* Arrange children (checkboxes) in rows */
     flex-wrap: wrap;      /* Allow checkboxes to wrap if there's not enough space */
-    gap: 10px;            /* Add space between checkboxes */
-    
 }
 
 /* Styling for each category checkbox */
 .categorie {
+    
     display: inline-flex;  /* Use inline-flex for horizontal arrangement of checkbox and label */
     align-items: center;   /* Vertically center the checkbox and label */
-    margin: 5px;           /* Add margin between checkboxes */
+    margin: auto;
+     /* Add margin between checkboxes */
 }
 
 /* Styling for checkbox labels */
@@ -79,7 +81,7 @@
     background-color: #333;
     color: #e60000;
     border: none;
-    margin: auto;
+    margin: 20px auto;
     padding: 1rem 1.5rem;
     font-size: 1rem;
     border-radius: 15px;

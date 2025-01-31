@@ -13,7 +13,7 @@ func ApiRouter() {
 	http.HandleFunc("/logout", controllers.LogoutController)
 	http.HandleFunc("/create_post", middleware.AuthMiddleware(middleware.RateLimitMiddleware( controllers.CreatePosts)))
 	http.HandleFunc("/react",middleware.AuthMiddleware(middleware.RateLimitMiddleware( controllers.ReactPostController)))
-	http.HandleFunc("/create_comment",middleware.AuthMiddleware(middleware.RateLimitMiddleware( controllers.CreatCommentController)))
+	http.HandleFunc("/create_comment",middleware.AuthMiddleware(middleware.RateLimitMiddleware( controllers.CreateCommentController)))
 	http.HandleFunc("/resources/", controllers.CssJsController)
 	
 
