@@ -7,8 +7,8 @@ import (
 )
 
 func WebRouter() {
-	http.HandleFunc("/",middleware.RateLimitMiddleware( controllers.HomeController))
-	http.HandleFunc("/PostByCategories",middleware.RateLimitMiddleware( controllers.PostByCategoriesController))
+	http.HandleFunc("/",controllers.HomeController)
+	http.HandleFunc("/PostByCategories", controllers.PostByCategoriesController)
 	http.HandleFunc("/createdPost",middleware.AuthMiddleware(middleware.RateLimitMiddleware(  controllers.CreatedPostController)))
 	http.HandleFunc("/myliked",middleware.AuthMiddleware(middleware.RateLimitMiddleware( controllers.LikedPostController)))
 	http.HandleFunc("/login", middleware.AlreadyLoggedIn(middleware.RateLimitMiddleware(controllers.ParseLogin)))
