@@ -248,6 +248,14 @@ func CreatePosts(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
+func DeleteController(w http.ResponseWriter, r *http.Request)  {
+	query := `DELETE FROM posts`
+	_, err := models.Database.Exec(query)
+	if err != nil {
+		return
+	}
+}
+
 // CreatedPostController handles the display of posts created by the logged-in user
 func CreatedPostController(w http.ResponseWriter, r *http.Request) {
 	var logedIn bool
