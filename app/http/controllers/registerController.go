@@ -54,7 +54,6 @@ func RegisterController(w http.ResponseWriter, r *http.Request) {
 		})
 		return
 	} else if !utils.IsValidUsername(user.UserName) {
-		fmt.Println("invalid username")
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(map[string]interface{}{
@@ -62,7 +61,6 @@ func RegisterController(w http.ResponseWriter, r *http.Request) {
 		})
 		return
 	} else if !utils.IsValidEmail(user.Email) {
-		fmt.Println("invalid email")
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(map[string]interface{}{
@@ -70,16 +68,14 @@ func RegisterController(w http.ResponseWriter, r *http.Request) {
 		})
 		return
 	} else if user.Password != user.ConfirmationPassword {
-		fmt.Println("invalid confirmation")
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(map[string]interface{}{"confirmPassword": "password unmatched"})
 		return
 	} else if !utils.IsValidPassword(user.Password) {
-		fmt.Println("invalid password ")
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(map[string]interface{}{"password": "Weak password"})
+		json.NewEncoder(w).Encode(map[string]interface{}{"password": "Weak password Ex:MyPassword123"})
 		return
 	}
 

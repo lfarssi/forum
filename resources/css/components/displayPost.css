@@ -184,6 +184,7 @@
     border-radius: 8px;
     border: 1px solid #444;
     font-size: 1rem;
+    resize: none;
 }
 
 .comments form button {
@@ -232,6 +233,7 @@
 
 @media (max-width: 480PX) {
     .post {
+        width: fit-content;
         padding: 1rem;
     }
 
