@@ -49,6 +49,7 @@ main {
     }
 
     .posts {
-        margin-left: 0; /* Remove left margin on mobile */
+        width: 80%;
+        margin: auto; /* Remove left margin on mobile */
     }
 }
