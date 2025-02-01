@@ -107,9 +107,12 @@
 @media (max-width: 480PX) {
     .menu{
         width: fit-content;
+        height: fit-content;
     }
 .btn-menu {
     width: fit-content;
+    height: fit-content;
+
 }
 
 }
