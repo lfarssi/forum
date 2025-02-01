@@ -214,10 +214,14 @@
 @media (max-width: 768px) {
     .post {
         padding: 1rem;
+        max-width: 600px;
+        overflow-x: auto;
     }
 
     .post h1 {
         font-size: 1.6rem;
+           max-width: 400px;
+        overflow-x: auto;
     }
 
     .post h2 {
@@ -228,7 +232,7 @@
         color: #ccc;
         overflow-wrap: break-word; /* Allows long words to break */
         margin-bottom: 1rem;
-        max-width: 500px;
+        max-width: 400px;
         overflow-x: auto;
         max-height: 200px; 
         overflow-y: auto; 
@@ -247,14 +251,18 @@
     }
 }
 
-@media (max-width: 480PX) {
+@media (max-width: 480px) {
     .post {
         width: fit-content;
         padding: 1rem;
+        max-width: 400px;
+        overflow-x: auto;
     }
 
     .post h1 {
         font-size: 1.6rem;
+        max-width: 200px;
+        overflow-x: auto;
     }
 
     .post h2 {
