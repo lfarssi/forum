@@ -6,8 +6,6 @@
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     margin-bottom: 2rem;
     color: #f0f0f0;
-    max-height: 400px; /* Limit the height if necessary */
-    overflow-y: auto; /* Allows scrolling within the post if content overflows */
 }
 .flash-alert {
     display: none;
@@ -88,6 +86,8 @@
     color: #ccc;
     overflow-wrap: break-word; /* Allows long words to break */
     margin-bottom: 1rem;
+    max-width: 90%;
+    overflow-x: auto;
     max-height: 200px; /* Set a max height for the content */
     overflow-y: auto; /* Enable vertical scrolling */
 }
@@ -223,6 +223,16 @@
     .post h2 {
         font-size: 1rem;
     }
+    .post p {
+        font-size: 1rem;
+        color: #ccc;
+        overflow-wrap: break-word; /* Allows long words to break */
+        margin-bottom: 1rem;
+        max-width: 500px;
+        overflow-x: auto;
+        max-height: 200px; 
+        overflow-y: auto; 
+    }
 
     .post .btn {
         width: 20%;
@@ -257,8 +267,8 @@
         margin-bottom: 1rem;
         max-width: 200px;
         overflow-x: auto;
-        max-height: 200px; /* Set a max height for the content */
-        overflow-y: auto; /* Enable vertical scrolling */
+        max-height: 200px; 
+        overflow-y: auto; 
     }
 
     .post .btn {
