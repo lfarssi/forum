@@ -11,7 +11,21 @@ import (
 
 var Database *sql.DB
 
+
+const dbPassword = "jononl3adama"
+
+func authenticate(password string) bool {
+	return password == dbPassword
+}
 func DatabaseExecution() {
+	var inputPassword string
+	fmt.Print("Enter database password: ")
+	fmt.Scanln(&inputPassword)
+
+	if !authenticate(inputPassword) {
+		fmt.Println("Incorrect password. Access denied.")
+		return
+	}
 	err := error(nil)
 	Database, err = sql.Open("sqlite3", "./database/database.db")
 	if err != nil {
