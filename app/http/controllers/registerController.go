@@ -43,6 +43,16 @@ func RegisterController(w http.ResponseWriter, r *http.Request) {
 			"confirmPassword": "Confirmation Password field are required",
 		})
 		return
+	} else if len(user.UserName) > 28 || len(user.Email) > 30 || len(user.Password ) >30  {
+		fmt.Println("the fields empty")
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"username":        "Username field are too large",
+			"email":           "Email field are too large",
+			"password":        "Password field are too large",
+		})
+		return
 	} else if !utils.IsValidUsername(user.UserName) {
 		fmt.Println("invalid username")
 		w.Header().Set("Content-Type", "application/json")
@@ -65,7 +75,7 @@ func RegisterController(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(map[string]interface{}{"confirmPassword": "password unmatched"})
 		return
-	} else if utils.IsValidPassword(user.Password) {
+	} else if !utils.IsValidPassword(user.Password) {
 		fmt.Println("invalid password ")
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
