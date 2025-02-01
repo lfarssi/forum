@@ -19,6 +19,7 @@
     background-color: #222;
     color: #fff;
     font-size: 1rem;
+    resize: none;
 }
 
 /* Category checkbox container */

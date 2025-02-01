@@ -104,3 +104,12 @@
     outline-offset: 4px;
 }
 
+@media (max-width: 480PX) {
+    .menu{
+        width: fit-content;
+    }
+.btn-menu {
+    width: fit-content;
+}
+
+}
