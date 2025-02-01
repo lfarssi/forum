@@ -87,3 +87,9 @@ input[type="checkbox"]:checked + .categorie-label {
         width: 90%; /* Make form take up more space on smaller screens */
     }
 }
+
+@media (max-width: 480px) {
+    #formPost {
+        width: 90%; /* Make form take up more space on smaller screens */
+    }
+}

@@ -1,11 +1,13 @@
 .post {
-    background-color: #2c2c2c; /* Dark background for posts */
+    background-color: #2c2c2c;
     border-radius: 10px;
     padding: 1.5rem;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     margin-bottom: 2rem;
     color: #f0f0f0;
+    max-height: 400px; /* Limit the height if necessary */
+    overflow-y: auto; /* Allows scrolling within the post if content overflows */
 }
 .flash-alert {
     display: none;
@@ -84,8 +86,12 @@
 .post p {
     font-size: 1rem;
     color: #ccc;
+    overflow-wrap: break-word; /* Allows long words to break */
     margin-bottom: 1rem;
+    max-height: 200px; /* Set a max height for the content */
+    overflow-y: auto; /* Enable vertical scrolling */
 }
+
 
 .post .category {
     background-color: #e60000; /* Red for categories */
@@ -243,6 +249,16 @@
 
     .post h2 {
         font-size: 1rem;
+    }
+    .post p {
+        font-size: 1rem;
+        color: #ccc;
+        overflow-wrap: break-word; /* Allows long words to break */
+        margin-bottom: 1rem;
+        max-width: 200px;
+        overflow-x: auto;
+        max-height: 200px; /* Set a max height for the content */
+        overflow-y: auto; /* Enable vertical scrolling */
     }
 
     .post .btn {
