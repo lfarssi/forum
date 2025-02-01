@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 
 	"forum/app/models"
@@ -11,15 +10,14 @@ import (
 // HomeController handles the request for the homepage
 func HomeController(w http.ResponseWriter, r *http.Request) {
 	var logedIn bool
-	
+
 	// Get categories from the database
 	categories, err := models.GetCategories()
 	if err != nil {
-		fmt.Println(err)
 		// Handle error if categories cannot be fetched
-        ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch Category")
-        return
-    }
+		ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch Category")
+		return
+	}
 
 	// Check if the user is logged in
 	if !utils.IsLoggedIn(r) {
@@ -43,7 +41,7 @@ func HomeController(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		// Handle error if posts cannot be fetched
 		ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch Post")
-        return
+		return
 	}
 
 	// Loop through each post to add reactions (likes/dislikes) and comments
@@ -89,40 +87,40 @@ func HomeController(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// Loop through each comment on the post
-		for _, commentItem := range comment {
+		for i := range comment {
 			// Get the dislikes for the current comment
-			dislikecomment, err := models.GetReactionComment(commentItem.ID, "dislike")
+			dislikecomment, err := models.GetReactionComment(comment[i].ID, "dislike")
 			if err != nil {
 				// Handle error if dislike reactions for the comment cannot be fetched
 				ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch dislike comment")
 				return
 			}
-			commentItem.Dislikes = len(dislikecomment) // Set the dislike count for the comment
+			comment[i].Dislikes = len(dislikecomment) // Set the dislike count for the comment
 
 			// Get the likes for the current comment
-			likecomment, err := models.GetReactionComment(commentItem.ID, "like")
+			likecomment, err := models.GetReactionComment(comment[i].ID, "like")
 			if err != nil {
 				// Handle error if like reactions for the comment cannot be fetched
 				ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch like comment")
 				return
 			}
-			commentItem.Likes = len(likecomment) // Set the like count for the comment
+			comment[i].Likes = len(likecomment) // Set the like count for the comment
 
 			// Check if the logged-in user has liked or disliked this comment
 			for _, reaction := range likecomment {
 				if reaction.UserID == iduser {
-					commentItem.IsLiked = true
+					comment[i].IsLiked = true
 					break
 				}
 			}
 			for _, reaction := range dislikecomment {
 				if reaction.UserID == iduser {
-					commentItem.IsDisliked = true
+					comment[i].IsDisliked = true
 					break
 				}
 			}
 		}
-		
+
 		// Set the comments and comment count for the post
 		posts[i].Comments = comment
 		posts[i].CommentsCount = len(comment)
@@ -131,8 +129,8 @@ func HomeController(w http.ResponseWriter, r *http.Request) {
 	// Prepare the data to be passed to the template
 	data := models.Data{
 		IsLoggedIn: logedIn,
-		Category: categories,
-		Posts:    posts,
+		Category:   categories,
+		Posts:      posts,
 	}
 
 	// Check if the request method is GET and the URL path is the homepage
