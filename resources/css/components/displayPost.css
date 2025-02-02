@@ -13,7 +13,6 @@
 .flash-alert {
     display: none;
     background: linear-gradient(135deg, #ff4e50, #f9d423);
-    border: none;
     color: #ffffff;
     padding: 15px 20px;
     position: fixed;
@@ -26,18 +25,34 @@
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     z-index: 1000;
     opacity: 0;
+    overflow: hidden; /* Ensure timer bar stays inside bounds */
     transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
 }
 
 .flash-alert.show {
     display: block;
     opacity: 1;
-    transform: translateX(-50%) translateY(0);
+    transform: translateX(-50%);
 }
 
-/* Optional animations for added flair */
-.flash-alert {
-    transform: translateX(-50%) translateY(-10px);
+.flash-alert .timer-bar {
+    height: 5px;
+    background: rgba(255, 255, 255, 0.8);
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    animation: shrink-bar 5s linear forwards;
+}
+
+/* Animation for timer bar */
+@keyframes shrink-bar {
+    from {
+        width: 100%;
+    }
+    to {
+        width: 0%;
+    }
 }
 
 .warning-icon{
