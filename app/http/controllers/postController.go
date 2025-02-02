@@ -60,6 +60,78 @@ func PostByCategoriesController(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
+	for i := range posts {
+		// Fetch comments for each post
+		comment, err := models.GetComments(posts[i].ID)
+		if err != nil {
+			ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch comment")
+			return
+		}
+
+		// Get the user's reactions (likes/dislikes) for the post and comments
+		userID, err := models.GetUserId(r)
+		if err != nil {
+			LogoutController(w, r)
+			return
+		}
+		likePost, err := models.GetReactionPost(posts[i].ID, "like")
+		if err != nil {
+			ErrorController(w, r, http.StatusInternalServerError, "Cannot get posts likes")
+			return
+		}
+		posts[i].Likes = len(likePost)
+		dislikePost, err := models.GetReactionPost(posts[i].ID, "dislike")
+		if err != nil {
+			ErrorController(w, r, http.StatusInternalServerError, "Cannot get posts dislikes")
+			return
+		}
+		posts[i].Dislikes = len(dislikePost)
+
+		// Check if the user liked or disliked the post
+		for _, reaction := range likePost {
+			if reaction.UserID == userID {
+				posts[i].IsLiked = true
+				break
+			}
+		}
+		for _, reaction := range dislikePost {
+			if reaction.UserID == userID {
+				posts[i].IsDisliked = true
+				break
+			}
+		}
+
+		// Process each comment on the liked post
+		for i := range comment {
+			dislikecomment, err := models.GetReactionComment(comment[i].ID, "dislike")
+			if err != nil {
+				ErrorController(w, r, http.StatusInternalServerError, "Cannot comment dislikes")
+				return
+			}
+			comment[i].Dislikes = len(dislikecomment)
+			likecomment, err := models.GetReactionComment(comment[i].ID, "like")
+			if err != nil {
+				ErrorController(w, r, http.StatusInternalServerError, "Cannot get comment likes")
+				return
+			}
+			comment[i].Likes = len(likecomment)
+			// Check if the user liked or disliked the comment
+			for _, reaction := range likecomment {
+				if reaction.UserID == userID {
+					comment[i].IsLiked = true
+					break
+				}
+			}
+			for _, reaction := range dislikecomment {
+				if reaction.UserID == userID {
+					comment[i].IsDisliked = true
+					break
+				}
+			}
+		}
+		posts[i].Comments = comment
+		posts[i].CommentsCount = len(comment)
+	}
 
 	// Prepare data for rendering the page
 	data := models.Data{
