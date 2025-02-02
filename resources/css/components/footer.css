@@ -3,7 +3,7 @@ footer {
     padding: 8px 0;
     text-align: center;
     width: 100%;
-    position: relative;
+    position: fixed;
     bottom: 0%;
     left: 0%;
     right: 0%;
