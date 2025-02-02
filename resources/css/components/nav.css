@@ -20,6 +20,6 @@
     padding: 0 1rem;
 }
 .navbar a:hover {
-    color: #ccc;
+    transform: scale(1.1);
 }
 

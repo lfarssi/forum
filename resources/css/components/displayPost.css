@@ -6,6 +6,8 @@
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     margin-bottom: 2rem;
     color: #f0f0f0;
+    max-width: 1200px;
+    overflow-x: auto;
 }
 .flash-alert {
     display: none;
@@ -41,9 +43,9 @@
 .post .profile{
     border: #444 solid  5px;
     border-radius: 5px;
-}
+}   
 .username{
-   color:#FD0101 ;
+   color:#fdfdfd ;
     margin-left: 15px;
 }
 .post .header {
