@@ -10,6 +10,7 @@ body {
     background-color: #1c1c1c; /* Dark background for better contrast */
     color: #f0f0f0; /* Light text for readability */
     line-height: 1.6;
+    bottom: 0%;
 }
 
 /* Main Layout */
