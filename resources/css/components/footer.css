@@ -1,12 +1,12 @@
 footer {
     background-color: black;
-    padding: 5px 0;
+    padding: 8px 0;
     text-align: center;
     width: 100%;
     position: relative;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    bottom: 0%;
+    left: 0%;
+    right: 0%;
     z-index: 1000;
     /* border-top: 1px solid #e9ecef; */
     box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.15);
