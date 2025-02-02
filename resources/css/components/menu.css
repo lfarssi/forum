@@ -5,14 +5,14 @@
     color: #fff;
     padding: 2rem;
     position: fixed;
-    top: 15%;
+    top: 20%;
     left: 0;
     bottom: 0;
     z-index: 1000; /* Ensure it is above content */
     box-shadow: 4px 0 8px rgba(0, 0, 0, 0.2);
     border-radius: 20px;
     margin: 20px 0 0 20px;
-    height: 250px;
+    height: 300px;
 }
 
 /* Menu Button */

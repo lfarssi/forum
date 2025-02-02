@@ -119,7 +119,7 @@ func HomeController(w http.ResponseWriter, r *http.Request) {
 					break
 				}
 			}
-		}  
+		}
 
 		// Set the comments and comment count for the post
 		posts[i].Comments = comment
