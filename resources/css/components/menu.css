@@ -104,14 +104,25 @@
     outline-offset: 4px;
 }
 
-@media (max-width: 480PX) {
+@media (max-width: 480px) {
     .menu{
         width: fit-content;
         height: fit-content;
     }
 .btn-menu {
-    width: 100%;
+    width: fit-content;
 
 }
 
+@media (max-width: 250px) {
+    .menu{
+        width: fit-content;
+        height: fit-content;
+    }
+.btn-menu {
+    width: fit-content;
+
+}
+
+}
 }
