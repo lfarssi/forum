@@ -21,13 +21,15 @@ toggleComments(); // Call the toggleComments function to initialize the behavior
 const showFlashAlert = (message) => {
     const flashAlert = document.getElementById('flashAlert');
     const flashMessage = document.getElementById('flashMessage');
-
+    const close = document.querySelector(".close-btn")
     flashMessage.textContent = message; // Set the message content
     flashAlert.classList.add('show'); // Show the flash alert
-
+    close.addEventListener("click", ()=>{
+        flashAlert.classList.remove('show'); // Hide the flash alert after 2 seconds
+    })
     setTimeout(() => {
         flashAlert.classList.remove('show'); // Hide the flash alert after 2 seconds
-    }, 2000); 
+    }, 3000); 
 };
 
 // Handle comment form submission
