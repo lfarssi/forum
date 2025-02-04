@@ -5,7 +5,7 @@
     color: #fff;
     padding: 2rem;
     position: fixed;
-    top: 20%;
+    top: 10%;
     left: 0;
     bottom: 0;
     z-index: 1000; /* Ensure it is above content */
@@ -14,6 +14,7 @@
     margin: 20px 0 0 20px;
     height: fit-content;
 }
+
 
 /* Menu Button */
 .btn-menu {
@@ -106,23 +107,20 @@
 
 @media (max-width: 480px) {
     .menu{
-        width: fit-content;
-        height: fit-content;
+      display: none;
     }
-.btn-menu {
-    width: fit-content;
+    .btn-menu {
+        width: fit-content;
 
+    }
+    .menu_icon{
+        display: block;
+    }
 }
+   
 
 @media (max-width: 250px) {
     .menu{
-        width: fit-content;
-        height: fit-content;
+        display: none;
     }
-.btn-menu {
-    width: fit-content;
-
-}
-
-}
 }

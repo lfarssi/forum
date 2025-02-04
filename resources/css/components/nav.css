@@ -12,7 +12,7 @@
     
 }
 .navbar .title{
-    color: white;
+    display: flex;
 }
 .navbar a {
     text-decoration: none;
@@ -20,6 +20,6 @@
     padding: 0 1rem;
 }
 .navbar a:hover {
-    transform: scale(1.2);
+    transform: scale(1.1);
 }
 

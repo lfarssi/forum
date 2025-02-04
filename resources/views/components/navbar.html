@@ -1,13 +1,19 @@
 {{define "navbar"}}
 <header class="navbar">
-    <h1><a class="title" href="/">Forum</a></h1>
+    <h1 class="title">
+      <div class="menu_icon">
+
+        <i class="fa-solid fa-bars"></i>
+      </div>
+      <a class="link" href="/">Forum</a>
+      </h1>
     <nav >
       {{if .IsLoggedIn}}
-        <a href="/logout">Logout</a>
+        <a class="link" href="/logout">Logout</a>
         {{else}}
         <!-- if user login -->
-        <a href="/register">Register</a>
-        <a href="/login">Login</a>
+        <a class="link" href="/register">Register</a>
+        <a class="link" href="/login">Login</a>
         {{end}}
     </nav>
 </header>
