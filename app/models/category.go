@@ -54,3 +54,23 @@ func CorrectCategories(id int) []string {
 	}
 	return categories
 }
+
+func GetCategorieReport() ([]Category , error) {
+	query := `
+		SELECT id, name FROM categorie_report 
+	`
+	row,err:=Database.Query(query)
+	if err!=nil{
+		return nil,err
+	}
+	var categories []Category
+	for row.Next(){
+		var categorie Category
+		err:=row.Scan(&categorie.ID,&categorie.Name)
+		if err!=nil {
+			return nil,err
+		}		
+		categories=append(categories, categorie)
+	}
+	return categories,nil 
+}

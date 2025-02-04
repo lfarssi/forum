@@ -5,14 +5,14 @@
     color: #fff;
     padding: 2rem;
     position: fixed;
-    top: 10%;
+    top: 20%;
     left: 0;
     bottom: 0;
     z-index: 1000; /* Ensure it is above content */
     box-shadow: 4px 0 8px rgba(0, 0, 0, 0.2);
     border-radius: 20px;
     margin: 20px 0 0 20px;
-    height: 45%;
+    height: fit-content;
 }
 
 /* Menu Button */
@@ -26,7 +26,7 @@
     width: 100%;
     border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: 0.3s ease;
     text-align: center;
 }
 
@@ -104,3 +104,25 @@
     outline-offset: 4px;
 }
 
+@media (max-width: 480px) {
+    .menu{
+        width: fit-content;
+        height: fit-content;
+    }
+.btn-menu {
+    width: fit-content;
+
+}
+
+@media (max-width: 250px) {
+    .menu{
+        width: fit-content;
+        height: fit-content;
+    }
+.btn-menu {
+    width: fit-content;
+
+}
+
+}
+}

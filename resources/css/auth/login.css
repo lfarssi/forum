@@ -94,9 +94,7 @@ img {
     padding: 10px;
     display: flex;
     align-items: center;
-    margin-bottom: 2px;
     justify-content: center;
-    /* border: 1px solid white; */
 
 }
 
@@ -106,31 +104,24 @@ img {
     display: flex;
     align-items: center;
     border-radius: 15px;
-    /* padding: 5px; */
     width: 80%;
 }
 input {
     flex: 1; 
     border: none;
     outline: none;
-    height:20px ;
+    height:19px ;
     font-size: 1em;
     margin-top: 16px;
     border-radius: 5px 0px 0px 5px;
 }
 
 .icon-container {
-    /* color: ; */
     font-size: 1.2em;
-    /* padding: 10px; */
     border-radius: 0px 5px 5px 0px;
     cursor: pointer;
 }
-.lock{
-    margin-top: 1.5px;
-    /* padding-bottom: 12px;
-    padding-top: 8px; */
-}
+
 @media (max-width: 768px) {
     #container {
         display: flex;
