@@ -16,6 +16,24 @@ function toggleComments() {
 }
 
 toggleComments(); // Call the toggleComments function to initialize the behavior
+// Function to toggle the visibility of comments when the comments button is clicked
+function toggleMenu() {
+    const menu = document.querySelector(".menu_icon"); // Select all comment buttons
+    
+        const displaymenu = document.querySelector(".menu"); // Find the closest comments section in the post
+        displaymenu.style.display = "none"; // Initially hide the comments section
+
+        menu.addEventListener('click', () => { // Add event listener for click on the button
+            if (displaymenu.style.display === "none" || displaymenu.style.display === "") {
+                displaymenu.style.display = "block"; // Show displaymenu if they are hidden
+            } else {
+                displaymenu.style.display = "none"; // Hide displaymenu if they are visible
+            }
+        });
+   
+}
+
+toggleMenu(); // Call the toggleComments function to initialize the behavior
 
 // Function to show flash alerts with custom messages
 const showFlashAlert = (message) => {
