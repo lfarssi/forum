@@ -45,7 +45,7 @@ commentForm.forEach((form) => {
 
         console.log(content);
 
-        if (content.value == "") {
+        if (content.value.trim() == "") {
             showFlashAlert("Comment Is Empty"); // Show alert if the comment is empty
             console.log("error");
             return;
@@ -88,7 +88,7 @@ postForm.addEventListener("submit", async (e) => {
         data.append("categories", category.value); // Append selected categories to FormData
     });
 
-    if (content.value == "" || title.value == "") {
+    if (content.value.trim() == "" || title.value.trim() == "") {
         showFlashAlert("Post Info Is Empty"); // Show alert if any required field is empty
         return;
     } else if (content.value.length > 10000 || title.value.length > 255) {
