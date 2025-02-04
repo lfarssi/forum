@@ -11,15 +11,18 @@
     background-color: #FD0101;
     
 }
-.navbar .title{
+.menu_icon{
+    margin-right: 15px;
+}
+.navbar .title  {
     display: flex;
 }
-.navbar a {
+.link  {
     text-decoration: none;
     color: white;
     padding: 0 1rem;
 }
-.navbar a:hover {
+.link:hover {
     transform: scale(1.1);
 }
 
