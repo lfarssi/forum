@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#FF5733">
+    <link rel="stylesheet" href="/resources/css/components/footer.css">
+    <link rel="stylesheet" href="/resources/css/components/nav.css">
+    <link rel="stylesheet" href="/resources/css/components/menu.css">
+    <link rel="stylesheet" href="/resources/css/components/displayPost.css">
+    <link rel="stylesheet" href="/resources/css/components/formPost.css">
+    <link rel="stylesheet" href="/resources/css/index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="icon" type="image/png" href="/resources/imgs/Z01.png">
+    <title>Jonon l3adama </title>
+
+    
+</head>
+<body>
+   {{template "navbar" .}}
+    <main> 
+        <section>
+            {{template "menu" .}}
+        </section>
+       <section class="post-formulaire">
+
+            {{template "postForm" .}}
+       </section>
+       <section class="posts">
+        {{template "posts" .}}
+       </section>
+       <div id="flashAlert" class="flash-alert">
+        <span id="flashMessage"></span><i class="fa-solid fa-triangle-exclamation warning-icon"></i>
+        <div class="timer-bar"></div>
+    </div>  
+    </main>
+
+    {{template "footer" .}}
+    <script src="/resources/js/index.js"></script>
+ 
+</body>
+</html>

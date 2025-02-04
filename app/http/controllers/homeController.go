@@ -25,6 +25,7 @@ func HomeController(w http.ResponseWriter, r *http.Request) {
 	} else {
 		logedIn = true
 	}
+	var user models.User
 
 	var iduser int
 	// If the user is logged in, get their user ID
@@ -34,8 +35,13 @@ func HomeController(w http.ResponseWriter, r *http.Request) {
 			LogoutController(w, r) // Log out if there is an error getting user ID
 			return
 		}
+		user.Role , err = models.GetRoleUser(iduser)
+		if err != nil {
+			LogoutController(w, r) // Log out if there is an error getting user ID
+			return
+		}
 	}
-
+	
 	// Get posts from the database
 	posts, err := models.GetPosts()
 	if err != nil {
@@ -132,7 +138,7 @@ func HomeController(w http.ResponseWriter, r *http.Request) {
 		Category:   categories,
 		Posts:      posts,
 	}
-
+	
 	// Check if the request method is GET and the URL path is the homepage
 	if r.Method == "GET" {
 		if r.URL.Path != "/" {
@@ -140,8 +146,34 @@ func HomeController(w http.ResponseWriter, r *http.Request) {
 			ErrorController(w, r, http.StatusNotFound, http.StatusText(http.StatusNotFound))
 			return
 		}
+		if user.Role == "user" {
+			ParseFileController(w, r, "users/index", data)
+
+		} else if user.Role == "moderator" {
+			categorie_report , err := models.GetCategorieReport()
+			if err!=nil{
+				ErrorController(w,r,http.StatusInternalServerError,"Cannot Fetch the Categorie Report")
+			}
+			data= models.Data{
+				CategoryReport: categorie_report,
+			}
+			ParseFileController(w, r, "moderator/index", data)
+
+		} else if user.Role == "admin" {
+			categorie_report , err := models.GetCategorieReport()
+			if err!=nil{
+				ErrorController(w,r,http.StatusInternalServerError,"Cannot Fetch the Categorie Report")
+			}
+			data= models.Data{
+				CategoryReport: categorie_report,
+			}
+			ParseFileController(w, r, "admin/index", data)
+
+		} else {
+			ParseFileController(w, r, "guests/index", data)
+
+		}
 		// Parse and render the homepage template with the data
-		ParseFileController(w, r, "users/index", data)
 	} else {
 		// Handle method not allowed error for non-GET requests
 		ErrorController(w, r, http.StatusMethodNotAllowed, "")

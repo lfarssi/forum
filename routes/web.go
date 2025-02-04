@@ -8,6 +8,8 @@ import (
 
 func WebRouter() {
 	http.HandleFunc("/",controllers.HomeController)
+	http.HandleFunc("/delet_post",controllers.HomeController)
+
 	http.HandleFunc("/PostByCategories", controllers.PostByCategoriesController)
 	http.HandleFunc("/createdPost",middleware.AuthMiddleware(  controllers.CreatedPostController))
 	http.HandleFunc("/myliked",middleware.AuthMiddleware( controllers.LikedPostController))
