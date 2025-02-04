@@ -73,8 +73,9 @@
     transition: opacity 0.5s ease-in-out;
 }
 
-.flash-alert.show {
+.show {
     display: block;
+    z-index: 99999;
     opacity: 1;
 }
 .warning-icon{
