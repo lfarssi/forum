@@ -4,5 +4,6 @@ type Data struct {
 	Posts []Posts
 	Comment []Comment
 	Category []Category
+	CategoryReport []Category
 	IsLoggedIn bool
 }
