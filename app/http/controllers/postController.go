@@ -5,6 +5,7 @@ import (
 	"html"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"forum/app/models"
 	"forum/utils"
@@ -269,15 +270,15 @@ func CreatePosts(w http.ResponseWriter, r *http.Request) {
 	content := html.EscapeString(r.PostFormValue("content"))
 
 	// Validate the input fields
-	if title == "" || len(category) == 0 || content == "" {
+	if strings.TrimSpace(title)  == "" || len(category) == 0 || strings.TrimSpace(content) == "" {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode("error: empty fields")
+		json.NewEncoder(w).Encode("Error:Title or Content field's  empty ")
 		return
 	} else if len(content) > 10000 || len(title) > 255 {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusRequestEntityTooLarge)
-		json.NewEncoder(w).Encode("error: too large fields")
+		json.NewEncoder(w).Encode("Error: Title or Content field's too large")
 		return
 	}
 
@@ -293,7 +294,7 @@ func CreatePosts(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode("error: cannot create post")
+		json.NewEncoder(w).Encode("Error: Cannot create post")
 		return
 	}
 
