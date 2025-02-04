@@ -17,7 +17,7 @@ func ParseFileController(w http.ResponseWriter, r *http.Request, filename string
 	allFiles := append([]string{filepath}, components...)
 	temp, err := template.ParseFiles(allFiles...)
 	if err != nil {
-		ErrorController(w, r, http.StatusInternalServerError, "Cannot Parse File")
+		ErrorController(w, r, http.StatusInternalServerError, "Cannot Parse File"+ err.Error())
 		return
 	}
 	err1 := temp.Execute(w, data)
