@@ -1,8 +1,12 @@
 .navbar{
+    position: fixed;
     display: flex;
+    top: 0%;
+    z-index: 9999;
     justify-content: space-between;
     align-items: center;
     padding: 1rem 2rem;
+    width: 100%;
     color: white;
     background-color: #FD0101;
     
@@ -15,7 +19,7 @@
     color: white;
     padding: 0 1rem;
 }
-.navbar a:hovre {
-    color: #e60000;
+.navbar a:hover {
+    transform: scale(1.2);
 }
 

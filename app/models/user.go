@@ -12,6 +12,7 @@ type User struct {
 	Email                string `json:"email"`
 	Password             string `json:"password"`
 	ConfirmationPassword string `json:"confirmationPassword"`
+	Role                 string
 }
 
 func Login(userName, password string) (int, map[string]string) {
@@ -55,15 +56,13 @@ func Register(user User) (int, map[string]string) {
 	return int(id), map[string]string{}
 }
 
-
-
 func GetUserId(r *http.Request) (int, error) {
 	var userId int
 	token, err := r.Cookie("token")
 	if err != nil || token.Value == "" {
 		return 0, err
 	}
-	value:=token.Value
+	value := token.Value
 	query := "SELECT user_id FROM sessionss WHERE token = ?"
 	stm, err := Database.Prepare(query)
 	if err != nil {
@@ -71,4 +70,18 @@ func GetUserId(r *http.Request) (int, error) {
 	}
 	err = stm.QueryRow(value).Scan(&userId)
 	return int(userId), err
+}
+
+func GetRoleUser(user_id int) (string, error) {
+	var role string
+	query := `
+			SELECT role FROM users
+			WHERE id = ?
+		`
+	err := Database.QueryRow(query, user_id).Scan(&role)
+	if err != nil {
+		return "", err
+	}
+	return role, nil
+
 }

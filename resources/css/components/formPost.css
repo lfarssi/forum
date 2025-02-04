@@ -19,6 +19,7 @@
     background-color: #222;
     color: #fff;
     font-size: 1rem;
+    resize: none;
 }
 
 /* Category checkbox container */
@@ -82,6 +83,12 @@ input[type="checkbox"]:checked + .categorie-label {
 }
 
 @media (max-width: 768px) {
+    #formPost {
+        width: 90%; /* Make form take up more space on smaller screens */
+    }
+}
+
+@media (max-width: 480px) {
     #formPost {
         width: 90%; /* Make form take up more space on smaller screens */
     }

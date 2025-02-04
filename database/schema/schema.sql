@@ -2,6 +2,7 @@ CREATE TABLE IF NOT EXISTS users (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   username VARCHAR(255) UNIQUE NOT NULL,
   email VARCHAR(255) UNIQUE NOT NULL,
+  role VARCHAR(10) NOT NULL DEFAULT "user", 
   password VARCHAR(255) NOT NULL
 );
 DROP TABLE IF EXISTS categories;
@@ -26,6 +27,21 @@ CREATE TABLE IF NOT EXISTS comments (
   post_id INTEGER NOT NULL,
   FOREIGN KEY (user_id) REFERENCES users(id),
   FOREIGN KEY (post_id) REFERENCES posts(id)
+);
+CREATE TABLE IF NOT EXISTS categorie_report (
+  id INTEGER PRIMARY KEY AUTOINCREMENT, 
+  name VARCHAR(255) UNIQUE NOT NULL
+);
+
+
+CREATE TABLE IF NOT EXISTS report(
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL,
+   post_id INTEGER NOT NULL,
+   id_categorie_report INTEGER NOT NULL ,
+   FOREIGN KEY(user_id) REFERENCES users(id),
+   FOREIGN KEY(post_id) REFERENCES posts(id),
+   FOREIGN KEY(id_categorie_report) REFERENCES categorie_report(id)
 );
 
 CREATE TABLE IF NOT EXISTS reactPost(
@@ -67,4 +83,8 @@ CREATE TABLE IF NOT EXISTS post_categorie (
 
 INSERT INTO categories (name) 
 VALUES ('Sport'), ('Music'), ('Movies'), ('Science'), ('Politics'), ('Culture'), ('Technology')
+ON CONFLICT (name) DO NOTHING;
+
+INSERT INTO categorie_report (name) 
+VALUES ('Irrelevant'), ('Obscene'), ('Illegal'), ('Insulting')
 ON CONFLICT (name) DO NOTHING;

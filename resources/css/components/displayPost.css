@@ -1,12 +1,61 @@
 .post {
-    background-color: #2c2c2c; /* Dark background for posts */
+    background-color: #2c2c2c;
     border-radius: 10px;
+    top: 10%;
     padding: 1.5rem;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     margin-bottom: 2rem;
     color: #f0f0f0;
+    max-width: 1200px;
+    overflow-x: auto;
 }
+/*
+.flash-alert {
+    display: none;
+    background: linear-gradient(135deg, #ff4e50, #f9d423);
+    color: #ffffff;
+    padding: 15px 20px;
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 10px;
+    font-size: 16px;
+    font-family: 'Arial', sans-serif;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    opacity: 0;
+    overflow: hidden; 
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+}
+
+.flash-alert.show {
+    display: block;
+    opacity: 1;
+    transform: translateX(-50%);
+}
+
+.flash-alert .timer-bar {
+    height: 5px;
+    background: rgba(255, 255, 255, 0.8);
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    animation: shrink-bar 5s linear forwards;
+}
+
+@keyframes shrink-bar {
+    from {
+        width: 100%;
+    }
+    to {
+        width: 0%;
+    }
+}
+
+*/
 .flash-alert {
     display: none;
     background-color: #2c2c2c;
@@ -41,9 +90,9 @@
 .post .profile{
     border: #444 solid  5px;
     border-radius: 5px;
-}
+}   
 .username{
-   color:#FD0101 ;
+   color:#fdfdfd ;
     margin-left: 15px;
 }
 .post .header {
@@ -84,8 +133,14 @@
 .post p {
     font-size: 1rem;
     color: #ccc;
+    overflow-wrap: break-word; /* Allows long words to break */
     margin-bottom: 1rem;
+    max-width: 90%;
+    overflow-x: auto;
+    max-height: 200px; /* Set a max height for the content */
+    overflow-y: auto; /* Enable vertical scrolling */
 }
+
 
 .post .category {
     background-color: #e60000; /* Red for categories */
@@ -184,6 +239,7 @@
     border-radius: 8px;
     border: 1px solid #444;
     font-size: 1rem;
+    resize: none;
 }
 
 .comments form button {
@@ -207,14 +263,28 @@
 @media (max-width: 768px) {
     .post {
         padding: 1rem;
+        max-width: 600px;
+        overflow-x: auto;
     }
 
     .post h1 {
         font-size: 1.6rem;
+           max-width: 400px;
+        overflow-x: auto;
     }
 
     .post h2 {
         font-size: 1rem;
+    }
+    .post p {
+        font-size: 1rem;
+        color: #ccc;
+        overflow-wrap: break-word; /* Allows long words to break */
+        margin-bottom: 1rem;
+        max-width: 400px;
+        overflow-x: auto;
+        max-height: 200px; 
+        overflow-y: auto; 
     }
 
     .post .btn {
@@ -230,17 +300,32 @@
     }
 }
 
-@media (max-width: 480PX) {
+@media (max-width: 480px) {
     .post {
+        width: fit-content;
         padding: 1rem;
+        max-width: 400px;
+        overflow-x: auto;
     }
 
     .post h1 {
         font-size: 1.6rem;
+        max-width: 200px;
+        overflow-x: auto;
     }
 
     .post h2 {
         font-size: 1rem;
+    }
+    .post p {
+        font-size: 1rem;
+        color: #ccc;
+        overflow-wrap: break-word; /* Allows long words to break */
+        margin-bottom: 1rem;
+        max-width: 200px;
+        overflow-x: auto;
+        max-height: 200px; 
+        overflow-y: auto; 
     }
 
     .post .btn {

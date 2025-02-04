@@ -2,6 +2,7 @@
 * {
     margin: 0;
     padding: 0;
+
     box-sizing: border-box;
 }
 
@@ -18,7 +19,7 @@ main {
     gap: 2rem;
     padding: 2rem;
     justify-content: flex-start;
-    margin-top: 20px;
+    margin-top: 10%;
     width: 100%;
 }
 
@@ -49,6 +50,7 @@ main {
     }
 
     .posts {
-        margin-left: 0; /* Remove left margin on mobile */
+        width: 80%;
+        margin: auto; /* Remove left margin on mobile */
     }
 }
