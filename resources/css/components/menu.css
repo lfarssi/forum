@@ -5,7 +5,7 @@
     color: var(--text-color);
     padding: 2rem;
     position: fixed;
-    top: 60vh;
+    top: 60vh ;
     left: 0;
     bottom: 0;
     z-index: 1000; /* Ensure it is above content */
