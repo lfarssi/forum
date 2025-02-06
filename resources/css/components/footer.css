@@ -1,5 +1,5 @@
 footer {
-    background-color: black;
+    background-color: var(--bg-color);
     padding: 8px 0;
     text-align: center;
     width: 100%;
@@ -9,6 +9,6 @@ footer {
     right: 0%;
     z-index: 1000;
     /* border-top: 1px solid #e9ecef; */
-    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 -2px 4px var(--bg-color);
 }
 

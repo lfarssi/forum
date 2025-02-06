@@ -18,22 +18,36 @@ function toggleComments() {
 toggleComments(); // Call the toggleComments function to initialize the behavior
 // Function to toggle the visibility of comments when the comments button is clicked
 function toggleMenu() {
-    const menu = document.querySelector(".menu_icon"); // Select all comment buttons
+    const menu = document.querySelector(".menu_icon"); // Select the menu icon
+    const displaymenu = document.querySelector(".menu"); // Select the menu itself
+    const displayposts = document.querySelector(".posts")
     
-        const displaymenu = document.querySelector(".menu"); // Find the closest comments section in the post
-        displaymenu.style.display = "none"; // Initially hide the comments section
+    // Initially hide the menu with a smooth transition
+    displaymenu.style.transform = "translateY(-100%)"; // Move the menu out of view
+    displaymenu.style.transition = "transform 0.5s ease-in-out"; // Smooth transition effect
+    // displaymenu.style.display = "none"
+    displayposts.style.transform = "translateY(-18%)"
+    menu.addEventListener('click', () => {
+        // displaymenu.style.display = "block"
+        if (displaymenu.style.transform === "translateY(-100%)" || displaymenu.style.transform === "") {
+            displaymenu.style.transform = "translateY(15%)"; // Slide the menu into view
+            displayposts.style.transition = "transform 0.5s ease-in-out"; // Smooth transition effect
 
-        menu.addEventListener('click', () => { // Add event listener for click on the button
-            if (displaymenu.style.display === "none" || displaymenu.style.display === "") {
-                displaymenu.style.display = "block"; // Show displaymenu if they are hidden
-            } else {
-                displaymenu.style.display = "none"; // Hide displaymenu if they are visible
-            }
-        });
-   
+             displayposts.style.transform = "translateY(0%)"
+
+
+        } else {
+            displaymenu.style.transform = "translateY(-100%)"; // Slide the menu out of view
+            displayposts.style.transform = "translateY(-18%)"
+
+    // displaymenu.style.display = "none"
+
+        }
+    });
 }
 
-toggleMenu(); // Call the toggleComments function to initialize the behavior
+toggleMenu(); // Initialize the toggleMenu function
+
 
 // Function to show flash alerts with custom messages
 const showFlashAlert = (message) => {
