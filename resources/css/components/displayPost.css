@@ -18,7 +18,7 @@
     left: 50%;
     transform: translateX(-50%);
     background: #2c2c2c;
-    color: #fff;
+    color: var(--text-color);
     padding: 15px 20px;
     font-size: 16px;
     font-family: 'Arial', sans-serif;
@@ -90,7 +90,7 @@
     border-radius: 5px;
 }   
 .username{
-   color:#fdfdfd ;
+   color:var(--text-color) ;
     margin-left: 15px;
 }
 .post .header {
@@ -115,7 +115,7 @@
 }
 .post h1 {
     font-size: 2rem;
-    color: white; /* Red for post titles */
+    color: var(--text-color); /* Red for post titles */
 }
 
 .post h2 {
@@ -133,16 +133,15 @@
     color: #ccc;
     overflow-wrap: break-word; /* Allows long words to break */
     margin-bottom: 1rem;
-    max-width: 90%;
-    overflow-x: auto;
+    
     max-height: 200px; /* Set a max height for the content */
-    overflow-y: auto; /* Enable vertical scrolling */
+    overflow: auto; /* Enable vertical scrolling */
 }
 
 
 .post .category {
-    background-color: #e60000; /* Red for categories */
-    color: #fff;
+    background-color: var(--primary-color); /* Red for categories */
+    color: var(--text-color);
     padding: 0.3rem 0.6rem;
     margin-right: 0.5rem;
     border-radius: 8px;
@@ -150,8 +149,8 @@
 }
 
 .post .btn {
-    background-color: #333; /* Dark background for buttons */
-    color: #e60000; /* Red text */
+    background-color: var(--second-bg-color); /* Dark background for buttons */
+    color: var(--primary-color); /* Red text */
     border: none;
     padding: 0.8rem 1.5rem;
     margin: 0.5rem 0.5rem;
@@ -162,27 +161,27 @@
 }
 
 .post .btn:hover {
-    background-color: #e60000; /* Red for hover */
-    color: white;
+    background-color: var(--primary-color); /* Red for hover */
+    color: var(--text-color);
 }
 .isReacted{
-    background-color: #e60000 !important; 
-    color: white !important;
+    background-color: var(--primary-color) !important; 
+    color: var(--text-color) !important;
 }
 
 
 
 /* Comments Section Styling */
 .comments {
-    background-color: #333;
+    background-color: var(--second-bg-color);
     border-radius: 8px;
     padding: 1rem;
     margin-top: 1.5rem;
 }
 
 .comments-btn {
-    background-color: #333;
-    color: #e60000;
+    background-color: var(--second-bg-color);
+    color: var(--primary-color);
     padding: 0.8rem 1.5rem;
     font-size: 1rem;
     border: none;
@@ -193,8 +192,8 @@
 }
 
 .comments-btn:hover {
-    background-color: #e60000;
-    color: white;
+    background-color: var(--primary-color);
+    color: var(--text-color);
 }
 
 /* Individual Comment Styling */
@@ -204,7 +203,7 @@
 
 .comments h3 {
     font-size: 1.1rem;
-    color: #e60000; /* Red for comment username */
+    color: var(--primary-color); /* Red for comment username */
 }
 
 .comments p {
@@ -254,7 +253,7 @@
 
 .comments form button:hover {
     background-color: #b50000; /* Darker red for button hover */
-    color: white;
+    color: var(--text-color);
 }
 
 /* Mobile Responsiveness */

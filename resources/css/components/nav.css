@@ -7,22 +7,33 @@
     align-items: center;
     padding: 1rem 2rem;
     width: 100%;
-    color: white;
-    background-color: #FD0101;
+    color: var(--text-color);
+    background-color: var(--primary-color);
     
 }
 .menu_icon{
+    display: none;
     margin-right: 15px;
+    cursor: pointer;
 }
+
 .navbar .title  {
     display: flex;
 }
 .link  {
     text-decoration: none;
-    color: white;
+    color: var(--text-color);
     padding: 0 1rem;
 }
 .link:hover {
     transform: scale(1.1);
 }
 
+@media (max-width: 768px) {
+
+    .menu_icon{
+        display: block;
+        margin-right: 15px;
+        cursor: pointer;
+    }
+}

@@ -1,15 +1,15 @@
 /* Menu Styling */
 .menu {
     width: 250px; /* Fixed width for the menu */
-    background-color: #333;
-    color: #fff;
+    background-color: var(--second-bg-color);
+    color: var(--text-color);
     padding: 2rem;
     position: fixed;
-    top: 10%;
+    top: 60vh;
     left: 0;
     bottom: 0;
     z-index: 1000; /* Ensure it is above content */
-    box-shadow: 4px 0 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 4px 0 8px var(--bg-color);
     border-radius: 20px;
     margin: 20px 0 0 20px;
     height: fit-content;
@@ -18,9 +18,9 @@
 
 /* Menu Button */
 .btn-menu {
-    background-color:   black; /* Darker red button */
-    color: #FF1212;
-    border: 1px solid  #FF1212;
+    background-color:   var(--bg-color); /* Darker red button */
+    color: var(--primary-color);
+    border: 1px solid  var(--primary-color);
     padding: 0.8rem 1.2rem;
     margin: 0.5rem 0;
     font-size: 1rem;
@@ -32,9 +32,9 @@
 }
 
 .btn-menu:hover {
-    background-color: #b71c1c; /* Darker red on hover */
-    color: white;
-    /* border: 1px solid white; */
+    background-color: var(--primary-color); /* Darker red on hover */
+    color: var(--text-color);
+    /* border: 1px solid var(--text-color); */
     transition: background-color 0.3s ease-in-out;
 }
 
@@ -42,13 +42,13 @@
 /* Heading Style */
 .menu h2 {
     font-size: 1.8rem;
-    color:#b71c1c ;
+    color:var(--primary-color) ;
     margin-bottom: 1.5rem;
     text-align: center;
 }
 #categories {
-    background-color: black;
-   margin:auto;
+    background-color: var(--bg-color);
+    margin:auto;
     width: fit-content;
     padding: 20px;
     border-radius: 15px;
@@ -72,15 +72,15 @@
 
 /* Styling for checkbox labels */
 .categorie-label {
-    color: #e60000;        /* Red color for labels */
+    color: var(--primary-color);        /* Red color for labels */
     font-size: 1rem;
     margin-left: 5px;      /* Space between checkbox and label */
 }
 
 /* Filter Button Style */
 .btn-filter {
-    background-color: #333;
-    color: #e60000;
+    background-color: var(--second-bg-color);
+    color: var(--primary-color);
     border: none;
     margin: 20px auto;
     padding: 1rem 1.5rem;
@@ -95,22 +95,58 @@
 
 /* Filter Button Hover Effect */
 .btn-filter:hover {
-    background-color: #b50000;  /* Darker red for hover */
-    color: white;
+    background-color: var(--primary-color);  /* Darker red for hover */
+    color: var(--text-color);
 }
 
 /* Focus state for accessibility */
 .btn-filter:focus {
-    outline: 2px solid #fff;  /* White outline on focus */
+    outline: 2px solid var(--text-color);  /* var(--text-color) outline on focus */
     outline-offset: 4px;
+}
+@media (max-width: 768px) {
+    .menu {
+        background-color: var(--second-bg-color);
+        color: var(--text-color);
+        /* padding: 2rem; */
+        position: fixed;
+        top: -50%;
+        /* left: 5%; */
+        bottom: 0;
+        margin: auto;
+        z-index: 1000; /* Ensure it is above content */
+        box-shadow: 4px 0 8px var(--bg-color);
+        border-radius: 20px;
+        height: fit-content;
+    }
+    .btn-menu {
+       
+        width: 100%;
+        margin: 10px auto;
+
+    }
 }
 
 @media (max-width: 480px) {
-    .menu{
-      display: none;
+    .menu {
+        background-color: var(--second-bg-color);
+        color: var(--text-color);
+        position: fixed;
+        top: -50%;
+        margin: auto;
+        bottom: 0;
+        z-index: 1000; /* Ensure it is above content */
+        box-shadow: 4px 0 8px var(--bg-color);
+        border-radius: 20px;
+        /* margin: 20px 10px 10px 20px; */
+
+        height: fit-content;
     }
     .btn-menu {
-        width: fit-content;
+        width: 80%;
+        /* margin: auto; */
+        margin: 10px auto;
+
 
     }
     .menu_icon{
@@ -119,8 +155,3 @@
 }
    
 
-@media (max-width: 250px) {
-    .menu{
-        display: none;
-    }
-}

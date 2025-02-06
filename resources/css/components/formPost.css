@@ -1,9 +1,9 @@
 /* Styling for the post form section */
 #formPost {
-    background-color: #111; /* Dark background */
+    background-color: var(--bg-color); /* Dark background */
     padding: 2rem;
     border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 12px var(--bg-color);
     max-width: 500px;
     margin:  auto;
 }
@@ -14,10 +14,10 @@
     width: 100%;
     padding: 1rem;
     margin-bottom: 1rem;
-    border: 1px solid #444;
+    border-bottom: 1px solid var(--bg-color);
     border-radius: 8px;
-    background-color: #222;
-    color: #fff;
+    background-color: var(--bg-color);
+    color: var(--text-color);
     font-size: 1rem;
     resize: none;
 }
@@ -32,7 +32,7 @@
 
 /* Styling for each category checkbox */
 .categorie-label {
-    border: 1px solid #b50000;
+    border: 1px solid var(--secondary-color);
     padding: 10px;
     border-radius: 8px;
     display: flex;
@@ -43,20 +43,20 @@
 
 /* Checkbox hover effect */
 .categorie:hover .categorie-label,
-.categorie:hover input[type="checkbox"]:checked + .categorie-    {
-    background-color: #b50000;
-    color: white !important;
+.categorie:hover input[type="checkbox"]:checked     {
+    background-color: var(--primary-color);
+    color: var(--text-color) !important;
 }
 
 /* Change style when checkbox is checked */
 input[type="checkbox"]:checked + .categorie-label {
-    background-color: #b50000;
-    color: white;
+    background-color: var(--primary-color);
+    color: var(--text-color);
 }
 
 /* Label for category */
 .categorie-label {
-    color: #e60000; /* Red for labels */
+    color: var(--primary-color); /* Red for labels */
     font-size: 1rem;
     margin-left: 10px;
 }
@@ -65,20 +65,23 @@ input[type="checkbox"]:checked + .categorie-label {
 #formPost button {
     width: 100%;
     padding: 1rem;
-    background-color: #e60000; /* Red background */
-    color: white;
-    border: none;
+    background-color: var(--bg-color); /* Red background */
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
     border-radius: 8px;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
 #formPost button:hover {
-    background-color: #b50000; /* Darker red on hover */
+    background-color: var(--primary-color); /* Darker red on hover */
+    color: var(--text-color);
+
+    
 }
 
 .label{
-    color:white;
+    color:var(--text-color);
     font-size: medium;
 }
 

@@ -6,7 +6,7 @@
 }
 
 body {
-    background-color: #1c1c1c;
+    background-color: var(--bg-color);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -16,20 +16,20 @@ body {
 div {
     text-align: center;
     padding: 20px;
-    border: 2px solid red;
+    border: 2px solid var(--primary-color);
     border-radius: 10px;
-    background: rgba(255, 0, 0, 0.1); 
-    box-shadow: 0px 0px 15px rgba(255, 0, 0, 0.5);
+    background:var(--bg-color); 
+    box-shadow: 0px 0px 15px var(--secondary-color);
 }
 
 h1 {
-    color: red;
+    color: var(--primary-color);
     font-size: 50px;
     margin-bottom: 10px;
 }
 
 h2 {
-    color: red;
+    color: var(--primary-color);
     font-size: 30px;
     margin-bottom: 20px;
 }
@@ -41,8 +41,8 @@ a {
 .btn {
     display: inline-block;
     background-color: black;
-    color: #FF1212;
-    border: 2px solid #FF1212;
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
     padding: 10px 20px;
     border-radius: 8px;
     cursor: pointer;
@@ -51,7 +51,8 @@ a {
 }
 
 .btn:hover {
-    background-color: #b71c1c;
-    color: white;
-    border-color: white;
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    border-color: var(--text-color);
 }
+
