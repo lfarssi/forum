@@ -1,14 +1,14 @@
 .post {
     background-color: #2c2c2c;
     border-radius: 10px;
-    top: 10%;
+    margin-bottom: 0;
     padding: 1.5rem;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 8px var(--bg-color);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    margin-bottom: 2rem;
-    color: #f0f0f0;
+    margin-top: 3rem;
+    color: var(--text-color);
     max-width: 1200px;
-    overflow-x: auto;
+    word-break: break-all;
 }
 /* Flash Alert Styles */
 .flash-alert {
@@ -17,13 +17,13 @@
     top: 20px;
     left: 50%;
     transform: translateX(-50%);
-    background: #2c2c2c;
+    background: var(--second-bg-color);
     color: var(--text-color);
     padding: 15px 20px;
     font-size: 16px;
     font-family: 'Arial', sans-serif;
     border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 10px var(--bg-color);
     z-index: 99999;
     opacity: 0;
     overflow: hidden;
@@ -74,7 +74,7 @@
     border: none;
     background-color: transparent;
     font-size: 1.3em;
-    color: red;
+    color: var(--primary-color);
     margin-left: 5px;
     cursor: pointer;
 }
@@ -82,13 +82,16 @@
 .comment{
     padding: 15px;
     border-radius: 20px;
-    background-color: #444;
+    background-color: var(--second-bg-color);
 }
 
 .post .profile{
-    border: #444 solid  5px;
+    border: var(--second-bg-color) solid  5px;
     border-radius: 5px;
 }   
+/* .header{
+    display: flex;
+} */
 .username{
    color:var(--text-color) ;
     margin-left: 15px;
@@ -101,26 +104,26 @@
 
 .post .created-at {
     font-size: 0.9rem; 
-    color:#FD0101 ; 
+    color:var(--primary-color) ; 
     margin: 0; 
 }
 
 /* Hover Effect for Posts */
 .post:hover {
     transform: translateY(-4px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 8px 16px var(--bg-color);
 }
 .categories-d{
     margin: 0 0 8px 12px  ;
 }
 .post h1 {
     font-size: 2rem;
-    color: var(--text-color); /* Red for post titles */
+    color: var(--text-color); 
 }
 
 .post h2 {
     font-size: 1.2rem;
-    color: #bbb;
+    color: var(--text-color);
     margin-bottom: 1rem;
    display: flex;
     align-items: center;
@@ -130,12 +133,12 @@
 
 .post p {
     font-size: 1rem;
-    color: #ccc;
+    color: var(--text-color);
     overflow-wrap: break-word; /* Allows long words to break */
     margin-bottom: 1rem;
     
     max-height: 200px; /* Set a max height for the content */
-    overflow: auto; /* Enable vertical scrolling */
+    overflow: hidden; /* Enable vertical scrolling */
 }
 
 
@@ -208,7 +211,7 @@
 
 .comments p {
     font-size: 1rem;
-    color: #ccc;
+    color: var(--text-color);
     margin-bottom: 0.8rem;
 }
 
@@ -218,7 +221,7 @@
     gap: 0.5rem;
 }
 .nothing{
-    color: red;
+    color: var(--primary-color);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -231,18 +234,18 @@
 .comments form textarea {
     width: 100%;
     padding: 1rem;
-    background-color: #111;
-    color: #f0f0f0;
+    background-color: var(--bg-color);
+    color: var(--text-color);
     border-radius: 8px;
-    border: 1px solid #444;
+    border: 1px solid var(--second-bg-color);
     font-size: 1rem;
     resize: none;
 }
 
 .comments form button {
     padding: 1rem;
-    background-color: #444 ;
-    color: red;
+    background-color: var(--second-bg-color) ;
+    color: var(--primary-color);
     border: none;
     width: fit-content;
     border-radius: 8px;
@@ -252,7 +255,7 @@
 }
 
 .comments form button:hover {
-    background-color: #b50000; /* Darker red for button hover */
+    background-color: var(--secondary-color); /* Darker var(--primary-color) for button hover */
     color: var(--text-color);
 }
 
@@ -261,13 +264,13 @@
     .post {
         padding: 1rem;
         max-width: 600px;
-        overflow-x: auto;
+        /* overflow-x: auto; */
     }
 
     .post h1 {
         font-size: 1.6rem;
            max-width: 400px;
-        overflow-x: auto;
+        /* overflow-x: auto; */
     }
 
     .post h2 {
@@ -275,13 +278,12 @@
     }
     .post p {
         font-size: 1rem;
-        color: #ccc;
+        color: var(--text-color);
         overflow-wrap: break-word; /* Allows long words to break */
         margin-bottom: 1rem;
         max-width: 400px;
-        overflow-x: auto;
+        overflow: hidden;
         max-height: 200px; 
-        overflow-y: auto; 
     }
 
     .post .btn {
@@ -302,33 +304,40 @@
         width: fit-content;
         padding: 1rem;
         max-width: 400px;
-        overflow-x: auto;
+        /* overflow-x: auto; */
     }
 
     .post h1 {
         font-size: 1.6rem;
         max-width: 200px;
-        overflow-x: auto;
     }
-
+    .header{
+        display: flex;
+        flex-direction: column;
+    }
+    .post .created-at {
+        font-size: 0.7rem; 
+        color:var(--primary-color) ; 
+        margin: 0; 
+    }
     .post h2 {
         font-size: 1rem;
     }
     .post p {
         font-size: 1rem;
-        color: #ccc;
+        color: var(--text-color);
         overflow-wrap: break-word; /* Allows long words to break */
         margin-bottom: 1rem;
         max-width: 200px;
-        overflow-x: auto;
-        max-height: 200px; 
-        overflow-y: auto; 
+     
     }
 
     .post .btn {
+        
+        font-size: small;
         width: 20%;
     }
-
+    
     .comments {
         padding: 0.8rem;
     }

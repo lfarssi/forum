@@ -34,6 +34,7 @@ main {
 /* Posts Section */
 .posts {
   flex: 1; /* Adjusted to fill remaining space */
+  margin-top: 50vh;
   margin-left: 270px; /* Added margin to account for the menu's width */
   display: grid;
   gap: 2rem;

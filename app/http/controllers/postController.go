@@ -290,7 +290,7 @@ func CreatePosts(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Create the new post
-	idPost, err := models.CreatePost(title, content, category, userId)
+	idPost, err := models.CreatePost(title, content, category, userId )
 	if err != nil {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)

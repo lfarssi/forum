@@ -1,9 +1,10 @@
 /* Styling for the post form section */
 #formPost {
-    background-color: var(--bg-color); /* Dark background */
+    background-color: var(--second-bg-color); /* Dark background */
     padding: 2rem;
+    border: none;
     border-radius: 8px;
-    box-shadow: 0 4px 12px var(--bg-color);
+    box-shadow: 0 4px 12px var(--second-bg-color);
     max-width: 500px;
     margin:  auto;
 }
@@ -14,9 +15,10 @@
     width: 100%;
     padding: 1rem;
     margin-bottom: 1rem;
-    border-bottom: 1px solid var(--bg-color);
+    border: none;
+    border-bottom: 1px solid var(--text-color);
     border-radius: 8px;
-    background-color: var(--bg-color);
+    background-color: transparent;
     color: var(--text-color);
     font-size: 1rem;
     resize: none;
@@ -65,7 +67,7 @@ input[type="checkbox"]:checked + .categorie-label {
 #formPost button {
     width: 100%;
     padding: 1rem;
-    background-color: var(--bg-color); /* Red background */
+    background-color: var(--second-bg-color); /* Red background */
     color: var(--primary-color);
     border: 1px solid var(--primary-color);
     border-radius: 8px;
