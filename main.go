@@ -51,19 +51,24 @@ func main() {
 	defer models.CloseDatabase()
 	routes.WebRouter()
 	routes.ApiRouter()
+	cert, err := tls.LoadX509KeyPair(certFile, keyFile)
+	if err != nil {
+		log.Fatalf("Failed to load TLS certificate: %v", err)
+	}
 	server := &http.Server{
 		Addr:    ":8080",
 		Handler: nil,
 		TLSConfig: &tls.Config{
-			MinVersion:               tls.VersionTLS12, // Enforce TLS 1.2+
+			Certificates:             []tls.Certificate{cert}, // Explicitly set certificate
+			MinVersion:               tls.VersionTLS12,
 			PreferServerCipherSuites: true,
 			CurvePreferences:         []tls.CurveID{tls.CurveP256, tls.X25519},
 		},
 	}
 
-	log.Println("Starting HTTPS server on port 8080...")
-	log.Fatal(server.ListenAndServeTLS(certFile, keyFile))
+	fmt.Println("Server is running on https://localhost:8080")
+	// log.Println("Starting HTTPS server on port 8080...")
+	log.Fatal(server.ListenAndServeTLS("", ""))
 
-	fmt.Println("Server is running on https://localhost:8443")
 
 }

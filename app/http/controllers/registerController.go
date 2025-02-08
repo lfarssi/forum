@@ -110,6 +110,7 @@ func RegisterController(w http.ResponseWriter, r *http.Request) {
 		Value:    token.String(),
 		HttpOnly: true,
 		Expires:  time.Now().Add((24 * time.Hour)),
+		Secure: true,
 	})
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
