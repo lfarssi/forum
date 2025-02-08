@@ -140,3 +140,18 @@ openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -node
 CERT_FILE=cert.pem
 KEY_FILE=key.pem
 
+
+
+# certificat authority
+openssl genrsa -out myCA.key 4096
+openssl req -x509 -new -key myCA.key -out myCA.pem -days 365 -subj "/CN=MyLocalCA"
+# Generate a certificate signed by your CA
+openssl genrsa -out server.key 4096
+openssl req -new -key server.key -out server.csr -subj "/CN=localhost"
+openssl x509 -req -in server.csr -CA myCA.pem -CAkey myCA.key -CAcreateserial -out server.crt -days 365
+#  .env 
+CERT_FILE=server.crt
+KEY_FILE=server.key
+
+
+chmod 644 server.crt server.key
