@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -84,4 +85,38 @@ func GetRoleUser(user_id int) (string, error) {
 	}
 	return role, nil
 
+}
+
+func OAuthlogin(userName, email string) (int, error) {
+	query := "SELECT id FROM users WHERE username = ? And email = ?"
+	statement, err := Database.Prepare(query)
+	if err != nil {
+		return 0, err
+	}
+	defer statement.Close()
+	var id int
+	err = statement.QueryRow(userName, email).Scan(&id)
+	if err != nil {
+		return 0, err
+	}
+	return id, nil
+}
+
+func OAuthRegistration(user User) (int, error) {
+	fmt.Println(user)
+	query := "INSERT INTO users (username, email, role, password) VALUES (?, ?, ?, ?)"
+	stm, err := Database.Prepare(query)
+	if err != nil {
+		return 0, err
+	}
+	defer stm.Close()
+	res, err := stm.Exec(user.UserName, user.Email, "user", user.Password)
+	if err != nil {
+		return 0, err
+	}
+	id, err := res.LastInsertId()
+	if err != nil {
+		return 0, err
+	}
+	return int(id), nil
 }
