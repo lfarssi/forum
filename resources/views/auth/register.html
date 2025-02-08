@@ -59,6 +59,13 @@
       <button type="submit" class="btn-register" >Signup now</button>
       <p class="login-text">Already have an account? <a href="/login" class="login-link">Login</a></p>
     </form>
+    <p id="or">OR</p>
+      <form class="google" action="/redirect?service=github" method="post">
+        <button type="submit" class="btn-github">Login with Github</button>
+      </form>
+      <form class="google" action="/redirect?service=google" method="post">
+        <button type="submit" class="btn-github">Login with Google</button>
+      </form>
   </div>
   <script>
         const doc=document.getElementById("form").addEventListener("submit", async function (event) {
