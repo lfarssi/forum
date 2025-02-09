@@ -36,7 +36,7 @@ var Github = Auth{
 	RedirectURI:  "http://localhost:8080/callback",
 	AuthURL:      "https://github.com/login/oauth/authorize",
 	TokenURL:     "https://github.com/login/oauth/access_token",
-	Scope:        "user",
+	Scope:        "user:email read:user",
 	FetchURL:     "https://api.github.com/user",
 }
 
@@ -46,7 +46,7 @@ var Google = Auth{
 	RedirectURI:  "http://localhost:8080/callback",
 	AuthURL:      "https://accounts.google.com/o/oauth2/auth",
 	TokenURL:     "https://oauth2.googleapis.com/token",
-	Scope:        "https://www.googleapis.com/auth/userinfo.profile",
+	Scope:        "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile",
 	FetchURL:     "https://www.googleapis.com/oauth2/v2/userinfo",
 }
 
@@ -56,6 +56,7 @@ type GOOuser struct {
 	Username   string `json:"given_name"`
 	FamilyName string `json:"family_name"`
 	Picture    string `json:"picture"`
+	Email      string `json:"email"` // Ensure this is present
 }
 
 type GithubUser struct {
@@ -141,16 +142,16 @@ func HandleGoogleCallback(w http.ResponseWriter, r *http.Request) {
 	userInfo, _ := io.ReadAll(resp.Body)
 	if Service == Google {
 		if err = json.Unmarshal(userInfo, &UserInfo); err != nil {
-
 			ErrorController(w, r, http.StatusNotFound, "Page not found")
 			return
 		}
-		id, err := models.OAuthlogin(UserInfo.Username, UserInfo.Name)
+		fmt.Println(UserInfo)
+
+		// Use the email field directly
+		id, err := models.OAuthlogin(UserInfo.Username, UserInfo.Email)
 		if err != nil {
-			id, err1 := models.OAuthRegistration(models.User{UserName: UserInfo.Username, Email: UserInfo.Name, Password: UserInfo.ID})
+			id, err1 := models.OAuthRegistration(models.User{UserName: UserInfo.Username, Email: UserInfo.Email, Password: UserInfo.ID})
 			if err1 != nil {
-				fmt.Println("jjjjjj")
-				fmt.Println(err1)
 				ErrorController(w, r, http.StatusInternalServerError, "Internal Server Error")
 				return
 			}
@@ -188,25 +189,54 @@ func HandleGoogleCallback(w http.ResponseWriter, r *http.Request) {
 			Expires:  time.Now().Add((24 * time.Hour)),
 			HttpOnly: true,
 		})
-		http.Redirect(w, r, "/", http.StatusSeeOther)
-	} else {
+		http.Redirect(w, r, "/", http.StatusPermanentRedirect)
+	} else if Service == Github {
 		if err = json.Unmarshal(userInfo, &UserInfo1); err != nil {
-
 			ErrorController(w, r, http.StatusNotFound, "Page not found")
 			return
 		}
+
+		// Fetch private emails from /user/emails endpoint
+		emailReq, _ := http.NewRequest("GET", "https://api.github.com/user/emails", nil)
+		emailReq.Header.Set("Authorization", "Bearer "+accessToken)
+		client := &http.Client{}
+		emailResp, err := client.Do(emailReq)
+		if err != nil {
+			ErrorController(w, r, http.StatusInternalServerError, "Failed to fetch user emails")
+			return
+		}
+		defer emailResp.Body.Close()
+
+		var emails []map[string]interface{}
+		if err := json.NewDecoder(emailResp.Body).Decode(&emails); err != nil {
+			ErrorController(w, r, http.StatusInternalServerError, "Failed to decode email data")
+			return
+		}
+
+		// Find the primary email address
+		var primaryEmail string
+		for _, email := range emails {
+			if primary, ok := email["primary"].(bool); ok && primary {
+				primaryEmail = email["email"].(string)
+				break
+			}
+		}
+
+		// Use the primary email for further processing
+		UserInfo1.Email = primaryEmail
+		fmt.Println(UserInfo1)
+
+		// Continue with OAuth login/registration logic...
 		id, err := models.OAuthlogin(UserInfo1.UserName, UserInfo1.Email)
 		if err != nil {
 			Id := strconv.Itoa(UserInfo1.Id)
-			fmt.Println(Id)
 			id, err := models.OAuthRegistration(models.User{UserName: UserInfo1.UserName, Email: UserInfo1.Email, Password: Id})
 			if err != nil {
-				fmt.Println("suii")
-				fmt.Println(err)
 				ErrorController(w, r, http.StatusInternalServerError, "Internal Server Error")
 				return
-
 			}
+			// Create session and redirect...
+
 			token, err := uuid.NewV4()
 			if err != nil {
 				ErrorController(w, r, http.StatusInternalServerError, "Cannot Generate token")
@@ -241,6 +271,6 @@ func HandleGoogleCallback(w http.ResponseWriter, r *http.Request) {
 			Expires:  time.Now().Add((24 * time.Hour)),
 			HttpOnly: true,
 		})
-		http.Redirect(w, r, "/", http.StatusSeeOther)
+		http.Redirect(w, r, "/", http.StatusPermanentRedirect)
 	}
 }
