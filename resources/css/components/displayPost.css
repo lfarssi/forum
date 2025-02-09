@@ -258,11 +258,16 @@
     background-color: var(--secondary-color); /* Darker var(--primary-color) for button hover */
     color: var(--text-color);
 }
+.comments-btn i {
+    margin: 5px;
+ }
 
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
     .post {
         padding: 1rem;
+        margin-top: 3rem;
+
         max-width: 600px;
         /* overflow-x: auto; */
     }
@@ -286,22 +291,20 @@
         max-height: 200px; 
     }
 
-    .post .btn {
-        width: 20%;
-    }
+    
 
     .comments {
         padding: 0.8rem;
     }
-
-    .comments-btn {
-        width: 100%;
-    }
+    .comments-btn i {
+        margin: 5px;
+     }
 }
 
 @media (max-width: 480px) {
     .post {
         width: fit-content;
+        margin-top: 3rem;
         padding: 1rem;
         max-width: 400px;
         /* overflow-x: auto; */
@@ -333,16 +336,20 @@
     }
 
     .post .btn {
-        
-        font-size: small;
-        width: 20%;
+        padding: 0.7rem 0.8rem;
+        margin: 0.5rem 0.5rem;
+        font-size: 0.6rem;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
     }
+    
     
     .comments {
         padding: 0.8rem;
     }
 
-    .comments-btn {
-        width: 100%;
+    .comments-btn i {
+       margin: 5px;
     }
 }
