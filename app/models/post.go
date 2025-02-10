@@ -5,30 +5,31 @@ import (
 )
 
 type Posts struct {
-	ID            int `json:"id"`
-	UserID        int
+	ID            int       `json:"id"`
+	UserID        int       `json:"user_id"`
 	Title         string    `json:"title"`
 	Content       string    `json:"content"`
+	Image         string    `json:"image"`
 	Categories    []string  `json:"categories"`
 	Likes         int       `json:"likes"`
 	Dislikes      int       `json:"dislikes"`
 	CreatedAt     string    `json:"created_at"`
 	Comments      []Comment `json:"comments"`
-	CommentsCount int
-	Username      string `json:"username"`
-	IsLiked       bool
-	IsDisliked    bool
+	CommentsCount int       `json:"comments_count"`
+	Username      string    `json:"username"`
+	IsLiked       bool      `json:"is_liked"`
+	IsDisliked    bool      `json:"is_disliked"`
 }
 
-func CreatePost(title string, content string, categories []string, userId int) (int, error) {
-	query := "INSERT INTO posts ( title, user_id, content, creat_at) VALUES ( ?, ?, ?, ?)"
+func CreatePost(title string, content string, image string, categories []string, userId int) (int, error) {
+	query := "INSERT INTO posts ( title, user_id, content, image, creat_at) VALUES ( ?, ?, ?, ?, ?)"
 	stm1, err := Database.Prepare(query)
 	if err != nil {
 		return 0, err
 	}
 	defer stm1.Close()
 
-	res, err := stm1.Exec(title, userId, content, time.Now().Format("2006-01-02 15:04:05"))
+	res, err := stm1.Exec(title, userId, content, image, time.Now().Format("2006-01-02 15:04:05"))
 	if err != nil {
 		return 0, err
 	}
@@ -103,10 +104,9 @@ func CreatedPost(iduser int) ([]Posts, error) {
 	}
 	return createdPost, nil
 }
-
 func GetPosts() ([]Posts, error) {
 	query := `
-    SELECT p.id,p.user_id, p.title, p.content, GROUP_CONCAT(c.name) AS categories, p.creat_at, u.username
+    SELECT p.id, p.user_id, p.title, p.content, p.image, GROUP_CONCAT(c.name) AS categories, p.creat_at, u.username
     FROM posts p
     INNER JOIN users u ON p.user_id = u.id
     INNER JOIN post_categorie pc ON p.id = pc.post_id
@@ -123,14 +123,14 @@ func GetPosts() ([]Posts, error) {
 	var posts []Posts
 	for rows.Next() {
 		var post Posts
-		var CreatAt time.Time
+		var CreatedAt time.Time
 		var categorie string
-		err = rows.Scan(&post.ID, &post.UserID, &post.Title, &post.Content, &categorie, &CreatAt, &post.Username)
+		err = rows.Scan(&post.ID, &post.UserID, &post.Title, &post.Content, &post.Image, &categorie, &CreatedAt, &post.Username)
 		if err != nil {
 			return nil, err
 		}
 		post.Categories = append(post.Categories, categorie)
-		post.CreatedAt = CreatAt.Format("2006-01-02 15:04:05")
+		post.CreatedAt = CreatedAt.Format("2006-01-02 15:04:05")
 		posts = append(posts, post)
 	}
 	return posts, nil
@@ -167,7 +167,7 @@ func GetPostsByCategory(idCategorie int) ([]Posts, error) {
 
 			tempPosts[post.ID] = &post
 		}
-		
+
 	}
 	for _, post := range tempPosts {
 		posts = append(posts, *post)

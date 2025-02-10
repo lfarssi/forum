@@ -3,7 +3,9 @@ package controllers
 import (
 	"encoding/json"
 	"html"
+	"io"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
 
@@ -265,12 +267,35 @@ func LikedPostController(w http.ResponseWriter, r *http.Request) {
 // CreatePosts handles the creation of a new post
 func CreatePosts(w http.ResponseWriter, r *http.Request) {
 	// Get the post data from the form
+	err := r.ParseMultipartForm(20 << 20) // 20 MB limit
+	if err != nil {
+		ErrorController(w, r, http.StatusBadRequest, "image to big")
+		return
+	}
 	title := html.EscapeString(r.PostFormValue("title"))
 	category := r.PostForm["categories"]
 	content := html.EscapeString(r.PostFormValue("content"))
+	file, header, err := r.FormFile("image")
+	if err != nil {
+		ErrorController(w, r, http.StatusInternalServerError, "Cannot get the image")
+		return
+	}
+	defer file.Close()
+	filePath := "./uploads/" + header.Filename
+	dst, err := os.Create(filePath)
+	if err != nil {
+		ErrorController(w, r, http.StatusInternalServerError, "cannot creat filepath")
+		return
+	}
+	defer dst.Close()
+	_, err = io.Copy(dst, file)
+	if err != nil {
+		ErrorController(w, r, http.StatusInternalServerError, "error writing file")
+		return
+	}
 
 	// Validate the input fields
-	if strings.TrimSpace(title)  == "" || len(category) == 0 || strings.TrimSpace(content) == "" {
+	if strings.TrimSpace(title) == "" || len(category) == 0 || strings.TrimSpace(content) == "" {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode("Error:Title or Content field's  empty ")
@@ -290,7 +315,7 @@ func CreatePosts(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Create the new post
-	idPost, err := models.CreatePost(title, content, category, userId )
+	idPost, err := models.CreatePost(title, content, filePath, category, userId)
 	if err != nil {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
@@ -321,7 +346,7 @@ func CreatePosts(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
-func DeleteController(w http.ResponseWriter, r *http.Request)  {
+func DeleteController(w http.ResponseWriter, r *http.Request) {
 	query := `DELETE FROM posts`
 	_, err := models.Database.Exec(query)
 	if err != nil {
