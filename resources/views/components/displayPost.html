@@ -3,24 +3,33 @@
 {{range .Posts}}
 <div class="post" data-id="{{.ID}}">
     <div class="header">
-    <h2><img src="/resources/imgs/profile.png" alt="profile pictures"><span class="username">{{.Username}}</span></h2>
-    <p class="created-at">{{.CreatedAt}}</p>
+        <h2>
+            <img src="/resources/imgs/profile.png" alt="profile picture">
+            <span class="username">{{.Username}}</span>
+        </h2>
+        <p class="created-at">{{.CreatedAt}}</p>
     </div>
-    <h1>
-        {{.Title}}
 
-    </h1>
+    <h1>{{.Title}}</h1>
+
     <div class="categories-d">
         {{range .Categories}}
         <span class="category">{{.}}</span>
         {{end}}
     </div>
+
+    {{if .Image}}
+    <div class="post-image">
+        <img src="{{.Image}}" alt="Post image">
+    </div>
+    {{end}}
+
     <p class="content">{{.Content}}</p>
- 
+
     <button type="button" class="btn likepost {{if .IsLiked}} isReacted{{end}}">
         <span class="numlikepost">{{.Likes}}</span> <i class="fa-regular fa-thumbs-up"></i>
     </button>
-    
+
     <button type="button" class="btn dislikepost {{if .IsDisliked}} isReacted {{end}}">
         <span class="numdislikepost">{{.Dislikes}}</span> <i class="fa-regular fa-thumbs-down"></i>
     </button>
@@ -28,37 +37,38 @@
     <button type="button" class="btn comments-btn">
         {{.CommentsCount}}<i class="fa-regular fa-comment"></i>
     </button>
-    <div class="comments" >
+
+    <div class="comments">
         {{range .Comments}}
         <div class="comment" data-id="{{.ID}}">
-
-            <h2> <img src="/resources/imgs/profile.png" alt="profile pictures"><span class="username">{{.Username}}</span></h2>
+            <h2>
+                <img src="/resources/imgs/profile.png" alt="profile picture">
+                <span class="username">{{.Username}}</span>
+            </h2>
             <p>{{.Content}}</p>
-            <button  class="btn likecomment {{if .IsLiked}}isReacted {{end}}" type="button" >
+
+            <button class="btn likecomment {{if .IsLiked}} isReacted {{end}}" type="button">
                 <span class="numlikecomment">{{.Likes}}</span> <i class="fa-regular fa-thumbs-up"></i>
             </button>
-            <button class="btn dislikecomment {{if .IsDisliked}} isReacted {{end}}" type="button" >
-               <span class="numdislikecomment"> {{.Dislikes}}</span> <i class="fa-regular fa-thumbs-down"></i>
+
+            <button class="btn dislikecomment {{if .IsDisliked}} isReacted {{end}}" type="button">
+                <span class="numdislikecomment">{{.Dislikes}}</span> <i class="fa-regular fa-thumbs-down"></i>
             </button>
         </div>
-
         {{end}}
-        <div class="comment-form">
 
+        <div class="comment-form">
             <form action="/create_comment" method="post">
                 <input type="checkbox" checked value="{{.ID}}" name="post_id" hidden>
                 <textarea name="content" class="content-comment" placeholder="write something..."></textarea>
-                <button class=" btn-comment" type="submit">comment</button>
+                <button class="btn-comment" type="submit">Comment</button>
             </form>
         </div>
-              
     </div>
 </div>
-   
+
 {{else}}
-<h1 class="nothing">No Post Yet    <i class="fa-solid fa-skull-crossbones dead"></i></h1>
+<h1 class="nothing">No Post Yet <i class="fa-solid fa-skull-crossbones dead"></i></h1>
 {{end}}
-
-
 
 {{end}}
