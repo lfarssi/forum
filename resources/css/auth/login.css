@@ -5,7 +5,7 @@
  }
  #container {
     text-align: center;
-    height: 100vh;
+    height: 100%;
     width: 100vw;
     display: flex;
     flex-direction: row;
@@ -17,7 +17,7 @@
 }
 h1 {
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    margin-top: 10vh;
+    margin-top: 7vh;
     font-size: 10vh;
     margin-bottom: 5vh;
 }
@@ -46,8 +46,8 @@ input {
     padding: 10px;
 }
 button {
-    margin-top: 2vh;
-    margin-bottom: 2vh;
+    margin-top: 1vh;
+    margin-bottom: 1vh;
     width: 83%;
     padding: 10px;
     background-color:black;
