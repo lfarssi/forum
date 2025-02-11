@@ -129,8 +129,23 @@
     align-items: center;
 
 }
+.post-image {
+    width: 100%; /* Adjust this to control the width of the container */
+    height: 100%; /* Adjust this to control the height of the container */
+    border-radius: 8px; /* Optional: rounded corners for the container */
+    object-fit: cover; /* Make sure the image covers the container without distortion */
+    margin: auto; /* Centers the image container */
+}
+
+.post-image img {
+    width: 100%; /* Ensure the image fills the container width */
+    height: 100%; /* Ensure the image fills the container height */
+    object-fit: cover; /* Maintain aspect ratio while covering the area */
+    border-radius: 8px; /* Optional: rounded corners for the image itself */
+}
 
 
+    
 .post p {
     font-size: 1rem;
     color: var(--text-color);
