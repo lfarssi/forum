@@ -75,7 +75,7 @@ func LikedPost(userID int) ([]Posts, error) {
 
 func CreatedPost(iduser int) ([]Posts, error) {
 	query := `
-	SELECT p.id , p.title,p.content,p.creat_at ,u.username , GROUP_CONCAT(DISTINCT c.name) AS categories
+	SELECT p.id , p.title,p.content,p.image,p.creat_at ,u.username , GROUP_CONCAT(DISTINCT c.name) AS categories
 	FROM posts p 
 	INNER JOIN users u ON u.id=p.user_id
 	  INNER JOIN post_categorie pc ON p.id = pc.post_id
@@ -94,7 +94,7 @@ func CreatedPost(iduser int) ([]Posts, error) {
 		var post Posts
 		var categorie string
 		var CreatedAt time.Time
-		err = rows.Scan(&post.ID, &post.Title, &post.Content, &CreatedAt, &post.Username, &categorie)
+		err = rows.Scan(&post.ID, &post.Title, &post.Content,&post.Image, &CreatedAt, &post.Username, &categorie)
 		if err != nil {
 			return nil, err
 		}
@@ -138,7 +138,7 @@ func GetPosts() ([]Posts, error) {
 
 func GetPostsByCategory(idCategorie int) ([]Posts, error) {
 	query := `
-	SELECT   p.id, p.title, p.content, c.name, p.creat_at, u.username
+	SELECT   p.id, p.title, p.content,p.image, c.name, p.creat_at, u.username
 	FROM posts p
 	INNER JOIN users u ON p.user_id = u.id
 	INNER JOIN post_categorie pc ON p.id = pc.post_id
@@ -156,7 +156,7 @@ func GetPostsByCategory(idCategorie int) ([]Posts, error) {
 	for rows.Next() {
 		var post Posts
 		var categorie string
-		err = rows.Scan(&post.ID, &post.Title, &post.Content, &categorie, &post.CreatedAt, &post.Username)
+		err = rows.Scan(&post.ID, &post.Title, &post.Content,&post.Image, &categorie, &post.CreatedAt, &post.Username)
 		if err != nil {
 			return nil, err
 		}

@@ -2,12 +2,15 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	"html"
 	"io"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
+	"time"
 
 	"forum/app/models"
 	"forum/utils"
@@ -135,7 +138,7 @@ func PostByCategoriesController(w http.ResponseWriter, r *http.Request) {
 		posts[i].Comments = comment
 		posts[i].CommentsCount = len(comment)
 	}
-
+fmt.Println(posts)
 	// Prepare data for rendering the page
 	data := models.Data{
 		Category:   categoriess,
@@ -267,21 +270,31 @@ func LikedPostController(w http.ResponseWriter, r *http.Request) {
 // CreatePosts handles the creation of a new post
 func CreatePosts(w http.ResponseWriter, r *http.Request) {
 	// Get the post data from the form
-	err := r.ParseMultipartForm(20 << 20) // 20 MB limit
+	err := r.ParseMultipartForm(3000) // 3kb limit
 	if err != nil {
 		ErrorController(w, r, http.StatusBadRequest, "image to big")
 		return
 	}
+	
 	title := html.EscapeString(r.PostFormValue("title"))
 	category := r.PostForm["categories"]
 	content := html.EscapeString(r.PostFormValue("content"))
 	file, header, err := r.FormFile("image")
+	mimeType := header.Header.Get("Content-Type")
+	if !strings.HasPrefix(mimeType, "image/") {
+		ErrorController(w, r, http.StatusBadRequest, "Only images are allowed")
+		return
+	}
 	if err != nil {
 		ErrorController(w, r, http.StatusInternalServerError, "Cannot get the image")
 		return
 	}
 	defer file.Close()
-	filePath := "./uploads/" + header.Filename
+	filePath := filepath.Join("./resources/storage", time.Now().Format("2006-01-02_15-04-05") + "_" + header.Filename)
+	if err := os.MkdirAll("./resources/storage", os.ModePerm); err != nil {
+		ErrorController(w, r, http.StatusInternalServerError, "Failed to create upload directory")
+		return
+	}
 	dst, err := os.Create(filePath)
 	if err != nil {
 		ErrorController(w, r, http.StatusInternalServerError, "cannot creat filepath")
