@@ -88,7 +88,7 @@ func HandleGoogleLogin(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    // For GitHub, use HTML with JavaScript to ensure proper redirect
+  //  For GitHub, use HTML with JavaScript to ensure proper redirect
     if serviceName == "github" {
         w.Header().Set("Content-Type", "text/html")
         fmt.Fprintf(w, `
