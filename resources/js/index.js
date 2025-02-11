@@ -19,34 +19,31 @@ toggleComments(); // Call the toggleComments function to initialize the behavior
 // Function to toggle the visibility of comments when the comments button is clicked
 function toggleMenu() {
     const menu = document.querySelector(".menu_icon"); // Select the menu icon
-    const displaymenu = document.querySelector(".menu"); // Select the menu itself
-    const displayposts = document.querySelector(".posts")
-    
-    // Initially hide the menu with a smooth transition
-    displaymenu.style.transform = "translateY(-100%)"; // Move the menu out of view
-    displaymenu.style.transition = "transform 0.5s ease-in-out"; // Smooth transition effect
-    // displaymenu.style.display = "none"
-    displayposts.style.transform = "translateY(-18%)"
+    const displaymenu = document.querySelector(".menu-section"); // Select the menu itself
+    const displayposts = document.querySelector(".posts"); // Select the posts
+
+    // Initially hide the menu by positioning it off the screen (to the left)
+  
+
+        displaymenu.style.transform = "translateY(-100%)"; // Move the menu out of view from the left
+        displaymenu.style.transition = "transform 0.5s ease-in-out"; // Smooth transition effect
+        displayposts.style.transform = "translateY(-18%)"; // Move the posts up initially
+  
     menu.addEventListener('click', () => {
-        // displaymenu.style.display = "block"
+        // If the menu is hidden (moved off the screen)
         if (displaymenu.style.transform === "translateY(-100%)" || displaymenu.style.transform === "") {
-            displaymenu.style.transform = "translateY(15%)"; // Slide the menu into view
-            displayposts.style.transition = "transform 0.5s ease-in-out"; // Smooth transition effect
-
-             displayposts.style.transform = "translateY(0%)"
-
-
+            displaymenu.style.transform = "translateY(0%)"; // Slide the menu into view from the left
+            displayposts.style.transition = "transform 0.5s ease-in-out"; // Smooth transition for posts
+            displayposts.style.transform = "translateY(0%)"; // Reset posts position
         } else {
-            displaymenu.style.transform = "translateY(-100%)"; // Slide the menu out of view
-            displayposts.style.transform = "translateY(-18%)"
-
-    // displaymenu.style.display = "none"
-
+            // If the menu is open, slide it out of view to the left
+            displaymenu.style.transform = "translateY(-100%)";
+            displayposts.style.transform = "translateY(-18%)"; // Move posts back up when the menu is closed
         }
     });
 }
 
-toggleMenu(); // Initialize the toggleMenu function
+//toggleMenu(); // Initialize the toggleMenu function
 
 
 // Function to show flash alerts with custom messages
@@ -77,7 +74,6 @@ commentForm.forEach((form) => {
         data.append("post_id", postId);
         data.append("content", content.value); // Append the comment content to the FormData object
 
-        console.log(content);
 
         if (content.value.trim() == "") {
             showFlashAlert("Comment Is Empty"); // Show alert if the comment is empty
@@ -109,20 +105,9 @@ commentForm.forEach((form) => {
 const postForm = document.querySelector('#formPost');
 postForm.addEventListener("submit", async (e) => {
     e.preventDefault(); // Prevent page reload on form submission
-    // const title = postForm.querySelector(".title");
-    // const categories = postForm.querySelectorAll(".categories:checked"); // Get all checked categories
-    // const content = postForm.querySelector(".content");
-    // const image = postForm.querySelector("#image");
-    // const file = image.file[0]
+ 
     let data = new FormData(e.target);
-    // data.append("title", title.value);
-    // data.append("content", content.value);
-    // data.append("image",file)
-// alert(file);
-//     categories.forEach(category => {
-//         console.log(category.value); 
-//         data.append("categories", category.value); // Append selected categories to FormData
-//     });
+
 
     if (content.value.trim() == "" || title.value.trim() == "") {
         showFlashAlert("Post Info Is Empty"); // Show alert if any required field is empty
@@ -178,6 +163,8 @@ document.addEventListener("DOMContentLoaded", () => {
                         if (res.id == postId) {
                             numLike.textContent = res.likes;
                             numDislike.textContent = res.dislikes;
+                            console.log(res);
+                            
                             if (res.IsLiked) {
                                 btn.classList.add("isReacted");
                                 dislikeBtn.classList.remove("isReacted");

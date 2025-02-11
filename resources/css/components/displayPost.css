@@ -5,7 +5,6 @@
     padding: 1.5rem;
     box-shadow: 0 4px 8px var(--bg-color);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    margin-top: 3rem;
     height: fit-content;
     color: var(--text-color);
     max-width: 1200px;
@@ -283,7 +282,6 @@
     .post {
         padding: 1rem;
         margin-top: 3rem;
-
         max-width: 600px;
         /* overflow-x: auto; */
     }

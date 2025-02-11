@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="/resources/css/components/formPost.css">
     <link rel="stylesheet" href="/resources/css/index.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-    <link rel="icon" type="image/png" href="/resources/imgs/Z01.png">
+    <link rel="icon" type="image/png" href="/resources/imgs/Z01.jpg">
     <title>Jonon l3adama </title>
 
     
@@ -19,16 +19,17 @@
 <body>
    {{template "navbar" .}}
     <main> 
-        <section>
+        <section class="menu-section">
             {{template "menu" .}}
         </section>
-       <section class="post-formulaire">
-
-            {{template "postForm" .}}
-       </section>
+     
        <section class="posts">
         {{template "posts" .}}
        </section>
+       <section class="post-formulaire">
+
+        {{template "postForm" .}}
+   </section>
        <div id="flashAlert" class="flash-alert">
         <span id="flashMessage"></span><button type="button" class="close-btn">   <i class="fa-solid fa-xmark"> </i></button>
         <div class="timer-bar"></div>

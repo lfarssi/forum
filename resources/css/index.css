@@ -36,6 +36,7 @@ main {
 .posts {
   flex: 1; /* Adjusted to fill remaining space */
   margin-left: 270px; /* Added margin to account for the menu's width */
+
   display: grid;
   gap: 2rem;
   grid-template-columns: 1fr; /* One post per row */
@@ -51,11 +52,12 @@ main {
     width: 80%; /* Make the menu full width on mobile */
     position: relative; /* Remove the fixed positioning */
 
-    margin-bottom: 1rem;
+    /* margin-bottom: 1rem; */
   }
 
   .posts {
     width: 80%;
+    top: 10%;
     margin: auto; /* Remove left margin on mobile */
   }
 }

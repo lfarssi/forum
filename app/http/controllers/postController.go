@@ -277,43 +277,67 @@ func CreatePosts(w http.ResponseWriter, r *http.Request) {
 	}
 	
 	title := html.EscapeString(r.PostFormValue("title"))
+	
+
 	category := r.PostForm["categories"]
 	content := html.EscapeString(r.PostFormValue("content"))
 	file, header, err := r.FormFile("image")
-	mimeType := header.Header.Get("Content-Type")
-	if !strings.HasPrefix(mimeType, "image/") {
-		ErrorController(w, r, http.StatusBadRequest, "Only images are allowed")
-		return
+	var filePath string
+	if file != nil{
+		mimeType := header.Header.Get("Content-Type")
+
+		if !strings.HasPrefix(mimeType, "image/") {
+			fmt.Println("dossier")
+			ErrorController(w, r, http.StatusBadRequest, "Only images are allowed")
+			return
+		}
+		
+		if err != nil {
+			fmt.Println("get img")
+	
+			ErrorController(w, r, http.StatusInternalServerError, "Cannot get the image")
+			return
+		}
+		defer file.Close()
+		filePath = filepath.Join("./resources/storage", time.Now().Format("2006-01-02_15-04-05") + "_" + header.Filename)
+		if err := os.MkdirAll("./resources/storage", os.ModePerm); err != nil {
+			fmt.Println("mkdir")
+	
+			ErrorController(w, r, http.StatusInternalServerError, "Failed to create upload directory")
+			return
+		}
+		dst, err := os.Create(filePath)
+		if err != nil {
+			fmt.Println("create")
+	
+			ErrorController(w, r, http.StatusInternalServerError, "cannot creat filepath")
+			return
+		}
+		defer dst.Close()
+		_, err = io.Copy(dst, file)
+		if err != nil {
+			fmt.Println("write")
+			fmt.Println("write")
+	
+	
+	
+			ErrorController(w, r, http.StatusInternalServerError, "error writing file")
+			return
+		}
 	}
-	if err != nil {
-		ErrorController(w, r, http.StatusInternalServerError, "Cannot get the image")
-		return
-	}
-	defer file.Close()
-	filePath := filepath.Join("./resources/storage", time.Now().Format("2006-01-02_15-04-05") + "_" + header.Filename)
-	if err := os.MkdirAll("./resources/storage", os.ModePerm); err != nil {
-		ErrorController(w, r, http.StatusInternalServerError, "Failed to create upload directory")
-		return
-	}
-	dst, err := os.Create(filePath)
-	if err != nil {
-		ErrorController(w, r, http.StatusInternalServerError, "cannot creat filepath")
-		return
-	}
-	defer dst.Close()
-	_, err = io.Copy(dst, file)
-	if err != nil {
-		ErrorController(w, r, http.StatusInternalServerError, "error writing file")
-		return
-	}
+	
 
 	// Validate the input fields
-	if strings.TrimSpace(title) == "" || len(category) == 0 || strings.TrimSpace(content) == "" {
+	if strings.TrimSpace(title) == "" || len(category) == 0 || strings.TrimSpace(content) == "" || len(category) == 0  {
+		fmt.Println("empty")
+		
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode("Error:Title or Content field's  empty ")
+		json.NewEncoder(w).Encode("Error:Title or Content or Categorie field's  empty ")
 		return
 	} else if len(content) > 10000 || len(title) > 255 {
+		fmt.Println("large")
+
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusRequestEntityTooLarge)
 		json.NewEncoder(w).Encode("Error: Title or Content field's too large")
@@ -323,6 +347,8 @@ func CreatePosts(w http.ResponseWriter, r *http.Request) {
 	// Get the user ID
 	userId, err := models.GetUserId(r)
 	if err != nil {
+		fmt.Println("user")
+
 		LogoutController(w, r)
 		return
 	}
@@ -330,6 +356,7 @@ func CreatePosts(w http.ResponseWriter, r *http.Request) {
 	// Create the new post
 	idPost, err := models.CreatePost(title, content, filePath, category, userId)
 	if err != nil {
+
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode("Error: Cannot create post")

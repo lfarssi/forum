@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"time"
 )
 
@@ -17,24 +18,39 @@ type Posts struct {
 	Comments      []Comment `json:"comments"`
 	CommentsCount int       `json:"comments_count"`
 	Username      string    `json:"username"`
-	IsLiked       bool      `json:"is_liked"`
-	IsDisliked    bool      `json:"is_disliked"`
+	IsLiked       bool      `json:"IsLiked"`
+	IsDisliked    bool      `json:"IsDisliked"`
 }
 
 func CreatePost(title string, content string, image string, categories []string, userId int) (int, error) {
-	query := "INSERT INTO posts ( title, user_id, content, image, creat_at) VALUES ( ?, ?, ?, ?, ?)"
+
+	var query string
+	var args []interface{}
+	if image != "" {
+		query = "INSERT INTO posts ( title, user_id, content, image, creat_at) VALUES ( ?, ?, ?, ?, ?)"
+		args = append(args, title, userId, content, image, time.Now().Format("2006-01-02 15:04:05"))
+	} else {
+		query = "INSERT INTO posts (title, user_id, content,image, creat_at) VALUES (?, ?, ? , ?, ?)"
+		args = append(args, title, userId, content, "" ,  time.Now().Format("2006-01-02 15:04:05"))
+
+	}
 	stm1, err := Database.Prepare(query)
 	if err != nil {
+		fmt.Println("prepare",err)
 		return 0, err
 	}
 	defer stm1.Close()
 
-	res, err := stm1.Exec(title, userId, content, image, time.Now().Format("2006-01-02 15:04:05"))
+	res, err := stm1.Exec(args...)
 	if err != nil {
+		fmt.Println("execution",err)
+
 		return 0, err
 	}
 	id, err := res.LastInsertId()
 	if err != nil {
+		fmt.Println("id",err)
+
 		return 0, err
 	}
 	return int(id), nil
@@ -94,7 +110,7 @@ func CreatedPost(iduser int) ([]Posts, error) {
 		var post Posts
 		var categorie string
 		var CreatedAt time.Time
-		err = rows.Scan(&post.ID, &post.Title, &post.Content,&post.Image, &CreatedAt, &post.Username, &categorie)
+		err = rows.Scan(&post.ID, &post.Title, &post.Content, &post.Image, &CreatedAt, &post.Username, &categorie)
 		if err != nil {
 			return nil, err
 		}
@@ -156,7 +172,7 @@ func GetPostsByCategory(idCategorie int) ([]Posts, error) {
 	for rows.Next() {
 		var post Posts
 		var categorie string
-		err = rows.Scan(&post.ID, &post.Title, &post.Content,&post.Image, &categorie, &post.CreatedAt, &post.Username)
+		err = rows.Scan(&post.ID, &post.Title, &post.Content, &post.Image, &categorie, &post.CreatedAt, &post.Username)
 		if err != nil {
 			return nil, err
 		}

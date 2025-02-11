@@ -1,4 +1,5 @@
 .navbar{
+    animation: animate 1s ease-in-out;
     position: fixed;
     display: flex;
     top: 0%;
@@ -10,6 +11,17 @@
     color: var(--text-color);
     background-color: var(--primary-color);
     
+}
+@keyframes animate {  
+    
+      0%{ 
+        transform: translateY(-100px);
+        opacity: 0;
+    }
+    100%{ 
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
 .menu_icon{
     display: none;
