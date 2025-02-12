@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"time"
 
@@ -28,12 +27,10 @@ func RegisterController(w http.ResponseWriter, r *http.Request) {
 	user := models.User{}
 	err := json.NewDecoder(r.Body).Decode(&user)
 	if err != nil {
-		fmt.Println("decoding",err)
 		ErrorController(w, r, http.StatusInternalServerError, "")
 		return
 	}
 	if user.UserName == "" || user.Email == "" || user.Password == "" || user.ConfirmationPassword == "" {
-		fmt.Println("the fields empty")
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(map[string]interface{}{
@@ -43,14 +40,13 @@ func RegisterController(w http.ResponseWriter, r *http.Request) {
 			"confirmPassword": "Confirmation Password field are required",
 		})
 		return
-	} else if len(user.UserName) > 28 || len(user.Email) > 30 || len(user.Password ) >30  {
-		fmt.Println("the fields empty")
+	} else if len(user.UserName) > 28 || len(user.Email) > 30 || len(user.Password) > 30 {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(map[string]interface{}{
-			"username":        "Username field are too large",
-			"email":           "Email field are too large",
-			"password":        "Password field are too large",
+			"username": "Username field are too large",
+			"email":    "Email field are too large",
+			"password": "Password field are too large",
 		})
 		return
 	} else if !utils.IsValidUsername(user.UserName) {
@@ -81,10 +77,8 @@ func RegisterController(w http.ResponseWriter, r *http.Request) {
 
 	user.Password = utils.HashPassword(user.Password)
 	id, errInsertion := models.Register(user)
-	
+
 	if len(errInsertion) > 0 {
-		fmt.Println("errinsertion",errInsertion)
-		fmt.Println("len errinsertion",len(errInsertion))
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(map[string]interface{}{
@@ -113,4 +107,3 @@ func RegisterController(w http.ResponseWriter, r *http.Request) {
 	})
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
-

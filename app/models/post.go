@@ -1,7 +1,6 @@
 package models
 
 import (
-	"fmt"
 	"time"
 )
 
@@ -31,25 +30,22 @@ func CreatePost(title string, content string, image string, categories []string,
 		args = append(args, title, userId, content, image, time.Now().Format("2006-01-02 15:04:05"))
 	} else {
 		query = "INSERT INTO posts (title, user_id, content,image, creat_at) VALUES (?, ?, ? , ?, ?)"
-		args = append(args, title, userId, content, "" ,  time.Now().Format("2006-01-02 15:04:05"))
+		args = append(args, title, userId, content, "", time.Now().Format("2006-01-02 15:04:05"))
 
 	}
 	stm1, err := Database.Prepare(query)
 	if err != nil {
-		fmt.Println("prepare",err)
 		return 0, err
 	}
 	defer stm1.Close()
 
 	res, err := stm1.Exec(args...)
 	if err != nil {
-		fmt.Println("execution",err)
 
 		return 0, err
 	}
 	id, err := res.LastInsertId()
 	if err != nil {
-		fmt.Println("id",err)
 
 		return 0, err
 	}

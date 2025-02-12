@@ -1,7 +1,6 @@
 package models
 
 import (
-	"fmt"
 	"net/http"
 	"strings"
 
@@ -88,7 +87,7 @@ func GetRoleUser(user_id int) (string, error) {
 }
 
 func OAuthlogin(userName, email string) (int, error) {
-	query := "SELECT id FROM users WHERE username = ? And email = ?"
+	query := "SELECT id FROM users WHERE username = ? AND email = ?"
 	statement, err := Database.Prepare(query)
 	if err != nil {
 		return 0, err
@@ -103,14 +102,13 @@ func OAuthlogin(userName, email string) (int, error) {
 }
 
 func OAuthRegistration(user User) (int, error) {
-	fmt.Println(user)
-	query := "INSERT INTO users (username, email, role, password) VALUES (?, ?, ?, ?)"
+	query := "INSERT INTO users (username, email,  password) VALUES (?,  ?, ?)"
 	stm, err := Database.Prepare(query)
 	if err != nil {
 		return 0, err
 	}
 	defer stm.Close()
-	res, err := stm.Exec(user.UserName, user.Email, "user", user.Password)
+	res, err := stm.Exec(user.UserName, user.Email, user.Password)
 	if err != nil {
 		return 0, err
 	}

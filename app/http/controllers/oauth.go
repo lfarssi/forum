@@ -12,6 +12,7 @@ import (
 	"forum/app/models"
 
 	"github.com/gofrs/uuid"
+	"golang.org/x/crypto/bcrypt"
 )
 
 // AuthConfig holds OAuth configuration details.
@@ -124,19 +125,19 @@ func HandleGoogleCallback(w http.ResponseWriter, r *http.Request) {
 
 	accessToken, err := exchangeCodeForToken(code)
 	if err != nil {
-		ErrorController(w, r, http.StatusInternalServerError, fmt.Sprintf("Failed to exchange code: %v", err))
+		ErrorController(w, r, http.StatusInternalServerError,"")
 		return
 	}
 
 	email, username, err := fetchUserInfo(accessToken)
 	if err != nil {
-		ErrorController(w, r, http.StatusInternalServerError, fmt.Sprintf("Failed to fetch user info: %v", err))
+		ErrorController(w, r, http.StatusInternalServerError, "")
 		return
 	}
 
 	err = performOAuthLogin(w, username, email)
 	if err != nil {
-		ErrorController(w, r, http.StatusInternalServerError, fmt.Sprintf("OAuth login failed: %v", err))
+		ErrorController(w, r, http.StatusBadRequest,"Credential already exist")
 		return
 	}
 
@@ -322,8 +323,9 @@ func registerOAuthUser(username, email string) (int, error) {
 	// Generate a more suitable password.  Using 0 or the Github ID is not secure.
 	// Consider using a randomly generated string. For simplicity, I'm using a timestamp here, but this should be improved in a real application.
 	password := strconv.FormatInt(time.Now().UnixNano(), 10) // Generate password
-
-	user := models.User{UserName: username, Email: email, Password: password}
+	hashedPassword,_ := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	
+	user := models.User{UserName: username, Email: email, Password: string(hashedPassword)}
 	userID, err := models.OAuthRegistration(user)
 	if err != nil {
 		return 0, fmt.Errorf("failed to register user: %w", err)
