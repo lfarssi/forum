@@ -33,8 +33,20 @@ func LoadEnv(filename string) error {
 	}
 	return scanner.Err()
 }
+const dbPassword = "jononl3adama"
 
+func authenticate(password string) bool {
+	return password == dbPassword
+}
 func main() {
+	var inputPassword string
+	fmt.Print("Enter database password: ")
+	fmt.Scanln(&inputPassword)
+
+	if !authenticate(inputPassword) {
+		fmt.Println("Incorrect password. Access denied.")
+		return
+	}
 
 	if err := LoadEnv(".env"); err != nil {
 		log.Fatal("Error loading .env file:", err)
@@ -67,7 +79,7 @@ func main() {
 	}
 
 	fmt.Println("Server is running on https://localhost:8080")
-	// log.Println("Starting HTTPS server on port 8080...")
+
 	log.Fatal(server.ListenAndServeTLS("", ""))
 
 

@@ -155,3 +155,49 @@ KEY_FILE=server.key
 
 
 chmod 644 server.crt server.key
+
+
+
+# Generate CA key and certificate
+
+openssl genrsa -out rootCA.key 4096
+openssl req -x509 -new -nodes -key rootCA.key -sha256 -days 1024 -out rootCA.pem \
+    -subj "/C=US/ST=Local/L=Local/O=Development/CN=Local Development Root CA"
+
+
+    # Create configuration file for the server certificate
+cat > server.conf << EOF
+[req]
+default_bits = 2048
+prompt = no
+default_md = sha256
+distinguished_name = dn
+req_extensions = req_ext
+
+[dn]
+C = US
+ST = Local
+L = Local
+O = Development
+CN = localhost
+
+[req_ext]
+subjectAltName = @alt_names
+
+[alt_names]
+DNS.1 = localhost
+IP.1 = 127.0.0.1
+IP.2 = ::1
+EOF
+
+# Generate server key and CSR
+openssl genrsa -out server.key 2048
+openssl req -new -key server.key -out server.csr -config server.conf
+
+# Generate server certificate
+openssl x509 -req -in server.csr -CA rootCA.pem -CAkey rootCA.key -CAcreateserial \
+    -out server.crt -days 365 -sha256 -extfile server.conf -extensions req_ext
+
+ # More restrictive permissions for private keys
+chmod 600 server.key rootCA.key 
+chmod 644 server.crt rootCA.pem
