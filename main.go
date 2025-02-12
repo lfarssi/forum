@@ -63,6 +63,8 @@ func main() {
 	defer models.CloseDatabase()
 	routes.WebRouter()
 	routes.ApiRouter()
+
+	
 	 // Configure TLS
 	 tlsConfig := &tls.Config{
         MinVersion: tls.VersionTLS12,
