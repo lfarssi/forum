@@ -274,8 +274,8 @@ func fetchPrimaryEmailFromGithub(accessToken string) (string, error) {
 	}
 	emailReq.Header.Set("Authorization", "Bearer "+accessToken)
 
-	client := &http.Client{}
-	emailResp, err := client.Do(emailReq)
+	
+	emailResp, err := http.DefaultClient.Do (emailReq)
 	if err != nil {
 		return "", fmt.Errorf("failed to fetch user emails: %w", err)
 	}
