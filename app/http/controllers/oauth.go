@@ -8,9 +8,7 @@ import (
 	"net/url"
 	"strconv"
 	"time"
-
 	"forum/app/models"
-
 	"github.com/gofrs/uuid"
 	"golang.org/x/crypto/bcrypt"
 )
