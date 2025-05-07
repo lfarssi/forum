@@ -112,7 +112,7 @@
         color: var(--text-color);
         /* padding: 2rem; */
         position: fixed;
-        top: -50%;
+        top: -20%;
         /* left: 5%; */
         bottom: 0;
         margin: auto;
@@ -134,15 +134,16 @@
         background-color: var(--second-bg-color);
         color: var(--text-color);
         position: fixed;
-        top: -50%;
-        margin: auto;
+        /* top: -50%; */
+        /* margin: auto; */
         bottom: 0;
         z-index: 1000; /* Ensure it is above content */
         box-shadow: 4px 0 8px var(--bg-color);
         border-radius: 20px;
         /* margin: 20px 10px 10px 20px; */
-
         height: fit-content;
+        /* margin-top: 100px; */
+
     }
     .buttons{
         display: flex;
