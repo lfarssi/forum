@@ -48,7 +48,7 @@ var (
 	Github = AuthConfig{
 		ClientID:     "Ov23li3Any8hCic0eddy",
 		ClientSecret: "7f052daad89c01aae86dccaf3d90f8fdf82c2910",
-		RedirectURI:  "http://localhost:8080/callback",
+		RedirectURI:  "https://jonon-l3adama.up.railway.app/callback",
 		AuthURL:      "https://github.com/login/oauth/authorize",
 		TokenURL:     "https://github.com/login/oauth/access_token",
 		Scope:        "user:email read:user",
