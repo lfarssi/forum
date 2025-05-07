@@ -1,63 +1,121 @@
 :root {
-  --primary-color: #d84040;
-  --secondary-color: #8E1616;
-  --text-color :#EEEEEE;
-  --bg-color: #1D1616;
-  --second-bg-color: #333;
+  --primary-color: #007BFF;          /* Soft Blue - primary actions and highlights */
+  --secondary-color: #001b2c;        /* Light Gray - secondary text and backgrounds */
+  --accent-color: #FFA500;           /* Orange - accent for buttons and call-to-action */
+  --bg-color: #121212;               /* Dark Gray - primary background */
+  --text-color: #EDEDED;             /* Off-White - main text color */
+  --badge-color: #28A745;            /* Vibrant Green - notifications/badges */
 }
 
 /* General Reset */
 * {
   margin: 0;
   padding: 0;
-
   box-sizing: border-box;
 }
 
+/* Body Style */
 body {
   font-family: "Arial", sans-serif;
-  /* overflow-y: hidden; */
-  background-color: var(--bg-color); /* Dark background for better contrast */
-  color: var(--text-color); /* Light text for readability */
+  background-color: var(--bg-color);
+  color: var(--text-color);
   line-height: 1.6;
+  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition */
 }
 
 /* Main Layout */
 main {
   display: flex;
-  margin-top: 10vh;
-  gap: 2rem;
+  flex-direction: column;
+  align-items: center;
   padding: 2rem;
-  justify-content: flex-start;
-  width: 100%;
+  margin-top: 100px;
 }
 
 /* Posts Section */
 .posts {
-  flex: 1; /* Adjusted to fill remaining space */
-  margin-left: 270px; /* Added margin to account for the menu's width */
-
   display: grid;
   gap: 2rem;
-  grid-template-columns: 1fr; /* One post per row */
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Responsive grid */
+}
+
+/* Card Styles */
+.card {
+  background-color: var(--secondary-color); /* Light Gray background for cards */
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
+  transition: transform 0.3s, box-shadow 0.3s; /* Smooth transition */
+}
+
+.card:hover {
+  transform: translateY(-5px); /* Elevate card on hover */
+  box-shadow: 0 6px 40px rgba(0, 0, 0, 0.7); /* Enhanced shadow on hover */
+}
+
+/* Badge Styles */
+.badge {
+  background-color: var(--badge-color); /* Green background for badges */
+  color: var(--text-color); /* Off-white text for contrast */
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+/* Toggle Switch */
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.toggle-switch input {
+  opacity: 0; /* Hide the native checkbox */
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--secondary-color); /* Light Gray when inactive */
+  border-radius: 34px;
+  transition: background-color 0.4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: var(--primary-color); /* Soft Blue for the toggle knob */
+  border-radius: 50%;
+  transition: transform 0.4s;
+}
+
+/* Change background color when checked */
+input:checked + .slider {
+  background-color: var(--accent-color); /* Orange when toggled */
+}
+
+/* Move the toggle lever when checked */
+input:checked + .slider:before {
+  transform: translateX(26px); /* Move lever to complete toggle */
 }
 
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
   main {
-    flex-direction: column; /* Stack content on smaller screens */
-  }
-
-  .menu {
-    width: 80%; /* Make the menu full width on mobile */
-    position: relative; /* Remove the fixed positioning */
-
-    /* margin-bottom: 1rem; */
+      padding: 1rem; /* Reduced padding on mobile */
   }
 
   .posts {
-    width: 80%;
-    top: 10%;
-    margin: auto; /* Remove left margin on mobile */
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Smaller cards on mobile */
   }
 }

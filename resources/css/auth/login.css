@@ -22,7 +22,7 @@ h1 {
     margin-bottom: 5vh;
 }
 p {
-    color:red;
+    color:#007BFF;
     font-family: 'Courier New', Courier, monospace;
     font-size: large;
     margin-bottom: 6vh;
@@ -51,14 +51,14 @@ button {
     width: 83%;
     padding: 10px;
     background-color:black;
-    color: red;
+    color: #007BFF;
     border-radius: 5px ;
-    border: solid 1px red;
+    border: solid 1px #007BFF;
     cursor: pointer;
     font-size: 1.2em;
 }
 button:hover {
-    background-color:red;
+    background-color:#007BFF;
     color: white;
     transition: 0.4s;
 }
@@ -90,7 +90,7 @@ img {
 
 .icon-container {
     background-color: white;
-    color: red;
+    color: #007BFF;
     padding: 10px;
     display: flex;
     align-items: center;
