@@ -11,7 +11,10 @@ import (
 
 var Database *sql.DB
 
+
+
 func DatabaseExecution() {
+	
 	err := error(nil)
 	Database, err = sql.Open("sqlite3", "./database/database.db")
 	if err != nil {
