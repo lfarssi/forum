@@ -24,7 +24,7 @@ func LoadEnv(filename string) error {
 	for scanner.Scan() {
 		line := scanner.Text()
 		if strings.HasPrefix(line, "#") || !strings.Contains(line, "=") {
-			continue // Skip comments and invalid lines
+			continue 
 		}
 		parts := strings.SplitN(line, "=", 2)
 		if len(parts) == 2 {
@@ -65,7 +65,6 @@ func main() {
 	routes.ApiRouter()
 
 	
-	 // Configure TLS
 	 tlsConfig := &tls.Config{
         MinVersion: tls.VersionTLS12,
         CurvePreferences: []tls.CurveID{tls.X25519, tls.CurveP256},
@@ -74,12 +73,12 @@ func main() {
 
     server := &http.Server{
         Addr:      ":8080",
-        Handler:   http.DefaultServeMux,  // Use the default mux where routes are registered
+        Handler:   http.DefaultServeMux, 
         TLSConfig: tlsConfig,
     }
 
     fmt.Println("Server is running on https://localhost:8080")
-    log.Fatal(server.ListenAndServeTLS(certFile, keyFile))
+    server.ListenAndServeTLS(certFile, keyFile)
 
 
 }
