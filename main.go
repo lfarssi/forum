@@ -5,12 +5,13 @@ import (
 	"crypto/tls"
 	"fmt"
 	"log"
+	"net/http"
 	"os"
 	"strings"
+	"time"
 
 	"forum/app/models"
 	"forum/routes"
-	"net/http"
 )
 
 func LoadEnv(filename string) error {
@@ -24,7 +25,7 @@ func LoadEnv(filename string) error {
 	for scanner.Scan() {
 		line := scanner.Text()
 		if strings.HasPrefix(line, "#") || !strings.Contains(line, "=") {
-			continue 
+			continue
 		}
 		parts := strings.SplitN(line, "=", 2)
 		if len(parts) == 2 {
@@ -33,11 +34,13 @@ func LoadEnv(filename string) error {
 	}
 	return scanner.Err()
 }
+
 const dbPassword = "jononl3adama"
 
 func authenticate(password string) bool {
 	return password == dbPassword
 }
+
 func main() {
 	var inputPassword string
 	fmt.Print("Enter database password: ")
@@ -64,21 +67,21 @@ func main() {
 	routes.WebRouter()
 	routes.ApiRouter()
 
-	
-	 tlsConfig := &tls.Config{
-        MinVersion: tls.VersionTLS12,
-        CurvePreferences: []tls.CurveID{tls.X25519, tls.CurveP256},
-        PreferServerCipherSuites: true,
-    }
+	tlsConfig := &tls.Config{
+		MinVersion:               tls.VersionTLS12,
+		CurvePreferences:         []tls.CurveID{tls.X25519, tls.CurveP256},
+		PreferServerCipherSuites: true,
+	}
 
-    server := &http.Server{
-        Addr:      ":8080",
-        Handler:   http.DefaultServeMux, 
-        TLSConfig: tlsConfig,
-    }
+	server := &http.Server{
+		Addr:         ":8080",
+		Handler:      http.DefaultServeMux,
+		TLSConfig:    tlsConfig,
+		ReadTimeout:  10 * time.Second,
+		WriteTimeout: 10 * time.Second,
+		IdleTimeout:  120 * time.Second,
+	}
 
-    fmt.Println("Server is running on https://localhost:8080")
-    server.ListenAndServeTLS(certFile, keyFile)
-
-
+	fmt.Println("Server is running on https://localhost:8080")
+	server.ListenAndServeTLS(certFile, keyFile)
 }
