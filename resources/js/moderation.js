@@ -1,6 +1,6 @@
 function RequestMod(){
-    const formReq=document.querySelector(".form-requestmod")
-    const reason=document.querySelector("#reason")
+    const formReq=document.getElementById("form-requestmod")
+    const reason=document.getElementById("reason")
     formReq.addEventListener("submit",async(e)=>{
         e.preventDefault()
          let data = new FormData();
