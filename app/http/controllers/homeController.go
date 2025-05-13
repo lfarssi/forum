@@ -137,6 +137,7 @@ func HomeController(w http.ResponseWriter, r *http.Request) {
 		IsLoggedIn: logedIn,
 		Category:   categories,
 		Posts:      posts,
+		Role:user.Role,
 	}
 	
 	// Check if the request method is GET and the URL path is the homepage

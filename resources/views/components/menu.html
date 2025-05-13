@@ -49,6 +49,29 @@
         </div>
       </div>
     </div>
+    {{if .Role=="user"}}
+    <div class="modrequest">
+       <button class="btn-modrequest" popovertarget="modrequest">
+        request Moderation Role
+      </button>
+       <div id="modrequest"  popover>
+        <div class="modrequest-checkbox ">
+          <form action="/requestmoderole" method="post">
+           
+            <div class="input">
+              <input type="checkbox" id="filter-{{.Name}}"  name="categories" value="{{.ID}}" hidden>
+
+              <label for="filter-{{.Name}}" class="categorie-label">{{.Name}}</label>
+            </div>
+            
+            <button type="submit" class="btn-filter ">
+              Filter
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+    {{end}}
   </div>
 </div>
 {{end}}
