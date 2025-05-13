@@ -77,7 +77,7 @@ commentForm.forEach((form) => {
         data.append("post_id", postId);
         data.append("content", content.value); // Append the comment content to the FormData object
 
-        console.log(content);
+
 
         if (content.value.trim() == "") {
             showFlashAlert("Comment Is Empty"); // Show alert if the comment is empty

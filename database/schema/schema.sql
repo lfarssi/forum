@@ -107,23 +107,11 @@ CREATE TABLE IF NOT EXISTS moderator_requests (
   user_id INTEGER NOT NULL,
   request_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   status VARCHAR(20) DEFAULT "pending", -- "pending", "approved", "rejected"
-  reviewed_by INTEGER,
   review_date TIMESTAMP,
   reason TEXT, 
-  FOREIGN KEY (user_id) REFERENCES users(id),
-  FOREIGN KEY (reviewed_by) REFERENCES users(id)
+  FOREIGN KEY (user_id) REFERENCES users(id)
 );
-CREATE TABLE IF NOT EXISTS role_changes (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  user_id INTEGER NOT NULL, 
-  old_role VARCHAR(20) NOT NULL,
-  new_role VARCHAR(20) NOT NULL,
-  changed_by INTEGER NOT NULL, 
-  change_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  reason TEXT,
-  FOREIGN KEY (user_id) REFERENCES users(id),
-  FOREIGN KEY (changed_by) REFERENCES users(id)
-);
+
 
 INSERT INTO categories (name) 
 VALUES ('Sport'), ('Music'), ('Movies'), ('Science'), ('Politics'), ('Culture'), ('Technology')

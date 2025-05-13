@@ -35,13 +35,13 @@ func HomeController(w http.ResponseWriter, r *http.Request) {
 			LogoutController(w, r) // Log out if there is an error getting user ID
 			return
 		}
-		user.Role , err = models.GetRoleUser(iduser)
+		user.Role, err = models.GetRoleUser(iduser)
 		if err != nil {
 			LogoutController(w, r) // Log out if there is an error getting user ID
 			return
 		}
 	}
-	
+
 	// Get posts from the database
 	posts, err := models.GetPosts()
 	if err != nil {
@@ -137,9 +137,9 @@ func HomeController(w http.ResponseWriter, r *http.Request) {
 		IsLoggedIn: logedIn,
 		Category:   categories,
 		Posts:      posts,
-		Role:user.Role,
+		Role:       user.Role,
 	}
-	
+
 	// Check if the request method is GET and the URL path is the homepage
 	if r.Method == "GET" {
 		if r.URL.Path != "/" {
@@ -148,24 +148,25 @@ func HomeController(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		if user.Role == "user" {
+
 			ParseFileController(w, r, "users/index", data)
 
 		} else if user.Role == "moderator" {
-			categorie_report , err := models.GetCategorieReport()
-			if err!=nil{
-				ErrorController(w,r,http.StatusInternalServerError,"Cannot Fetch the Categorie Report")
+			categorie_report, err := models.GetCategorieReport()
+			if err != nil {
+				ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch the Categorie Report")
 			}
-			data= models.Data{
+			data = models.Data{
 				CategoryReport: categorie_report,
 			}
 			ParseFileController(w, r, "moderator/index", data)
 
 		} else if user.Role == "admin" {
-			categorie_report , err := models.GetCategorieReport()
-			if err!=nil{
-				ErrorController(w,r,http.StatusInternalServerError,"Cannot Fetch the Categorie Report")
+			categorie_report, err := models.GetCategorieReport()
+			if err != nil {
+				ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch the Categorie Report")
 			}
-			data= models.Data{
+			data = models.Data{
 				CategoryReport: categorie_report,
 			}
 			ParseFileController(w, r, "admin/index", data)
