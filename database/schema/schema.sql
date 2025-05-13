@@ -14,9 +14,14 @@ CREATE TABLE IF NOT EXISTS posts (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   title VARCHAR(255) NOT NULL,
   content TEXT NOT NULL,
+  is_approved BOOLEAN DEFAULT FALSE,
+  approved_by INTEGER,
+  approval_date TIMESTAMP,
+  visibility VARCHAR(20) DEFAULT "pending",
   user_id INTEGER NOT NULL,
   creat_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (user_id) REFERENCES users(id)
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (approved_by) REFERENCES users(id)
 );
 
 CREATE TABLE IF NOT EXISTS comments (
@@ -25,8 +30,13 @@ CREATE TABLE IF NOT EXISTS comments (
   user_id INTEGER NOT NULL,
   date_creation TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   post_id INTEGER NOT NULL,
+   is_approved BOOLEAN DEFAULT FALSE,
+  approved_by INTEGER, 
+  approval_date TIMESTAMP,
+  visibility VARCHAR(20) DEFAULT "pending",
   FOREIGN KEY (user_id) REFERENCES users(id),
-  FOREIGN KEY (post_id) REFERENCES posts(id)
+  FOREIGN KEY (post_id) REFERENCES posts(id),
+   FOREIGN KEY (approved_by) REFERENCES users(id)
 );
 CREATE TABLE IF NOT EXISTS categorie_report (
   id INTEGER PRIMARY KEY AUTOINCREMENT, 
@@ -36,12 +46,24 @@ CREATE TABLE IF NOT EXISTS categorie_report (
 
 CREATE TABLE IF NOT EXISTS report(
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  user_id INTEGER NOT NULL,
+ 
+  reporter_id INTEGER NOT NULL,
    post_id INTEGER NOT NULL,
-   id_categorie_report INTEGER NOT NULL ,
-   FOREIGN KEY(user_id) REFERENCES users(id),
-   FOREIGN KEY(post_id) REFERENCES posts(id),
-   FOREIGN KEY(id_categorie_report) REFERENCES categorie_report(id)
+   comment_id INTEGER,
+   report_category_id INTEGER NOT NULL ,
+   report_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  details TEXT, 
+  status VARCHAR(20) DEFAULT "pending", -- "pending", "reviewed", "rejected", "accepted"
+  reviewed_by INTEGER, 
+  review_date TIMESTAMP,
+  admin_response TEXT, 
+  admin_response_date TIMESTAMP,
+   FOREIGN KEY (reporter_id) REFERENCES users(id),
+  FOREIGN KEY (post_id) REFERENCES posts(id),
+  FOREIGN KEY (comment_id) REFERENCES comments(id),
+  FOREIGN KEY (report_category_id) REFERENCES report_categories(id),
+  FOREIGN KEY (reviewed_by) REFERENCES users(id),
+  CHECK ((post_id IS NULL AND comment_id IS NOT NULL) OR (post_id IS NOT NULL AND comment_id IS NULL))
 );
 
 CREATE TABLE IF NOT EXISTS reactPost(
@@ -80,6 +102,28 @@ CREATE TABLE IF NOT EXISTS post_categorie (
   FOREIGN KEY (categorie_id) REFERENCES categories(id),
   PRIMARY KEY (post_id, categorie_id)
 );
+CREATE TABLE IF NOT EXISTS moderator_requests (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL,
+  request_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  status VARCHAR(20) DEFAULT "pending", -- "pending", "approved", "rejected"
+  reviewed_by INTEGER,
+  review_date TIMESTAMP,
+  reason TEXT, 
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (reviewed_by) REFERENCES users(id)
+);
+CREATE TABLE IF NOT EXISTS role_changes (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL, 
+  old_role VARCHAR(20) NOT NULL,
+  new_role VARCHAR(20) NOT NULL,
+  changed_by INTEGER NOT NULL, 
+  change_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  reason TEXT,
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (changed_by) REFERENCES users(id)
+);
 
 INSERT INTO categories (name) 
 VALUES ('Sport'), ('Music'), ('Movies'), ('Science'), ('Politics'), ('Culture'), ('Technology')
@@ -88,3 +132,7 @@ ON CONFLICT (name) DO NOTHING;
 INSERT INTO categorie_report (name) 
 VALUES ('Irrelevant'), ('Obscene'), ('Illegal'), ('Insulting')
 ON CONFLICT (name) DO NOTHING;
+
+INSERT INTO users (username, email, role, password)
+VALUES ('admin', 'admin@gmail.com', 'admin', 'admin12345')
+ON CONFLICT (username) DO NOTHING;
