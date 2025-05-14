@@ -14,7 +14,6 @@ import { showFlashAlert } from "./index.js";
              showFlashAlert("reason Is too shoort");
         return 
         }
-console.log(data);
 
        try {
             const response = await fetch("/reqmod", {

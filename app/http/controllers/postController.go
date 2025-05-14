@@ -712,3 +712,33 @@ func ReportPostController(w http.ResponseWriter, r *http.Request) {
 
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
+
+func DeletePostHandler(w http.ResponseWriter, r *http.Request) {
+    if r.Method != "POST" {
+        ErrorController(w, r, http.StatusMethodNotAllowed, "Method not allowed")
+        return
+    }
+
+    postID := r.FormValue("post_id")
+    if postID == "" {
+        ErrorController(w, r, http.StatusBadRequest, "Post ID is required")
+        return
+    }
+
+    // Convert postID to int
+    postIDInt, err := strconv.Atoi(postID)
+    if err != nil {
+        ErrorController(w, r, http.StatusBadRequest, "Invalid Post ID")
+        return
+    }
+
+    err = models.DeletePost(postIDInt)
+    if err != nil {
+        ErrorController(w, r, http.StatusInternalServerError, "Failed to delete post")
+        return
+    }
+
+    // Redirect to moderator dashboard after deletion
+    http.Redirect(w, r, "/moderator/dashboard", http.StatusSeeOther)
+}
+

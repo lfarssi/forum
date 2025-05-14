@@ -117,6 +117,41 @@
       </table>
     </div>
 {{ end }}
+{{ if eq .Role "moderator" }}
+  <!-- Button to trigger the popup for reported posts -->
+  <div class="modRequestAdmin">
+    <button class="btn-menu" id="viewReportsBtn">
+      View Post Reports
+    </button>
+  </div>
+
+  <!-- Popup (initially hidden) to display reported posts -->
+  <div id="adminModRequests" class="popup">
+    <div class="popup-content">
+      <h1>Reported Posts</h1>
+      <table id="reportedPostsTable">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Category</th>
+            <th>Report Date</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Fetched posts will be inserted here -->
+        </tbody>
+      </table>
+      <button id="closePopupBtn">Close</button>
+    </div>
+  </div>
+
+  <script src="path_to_your_script.js"></script>
+{{ end }}
+
+
+
 
 
   </div>

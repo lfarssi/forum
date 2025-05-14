@@ -168,12 +168,20 @@ func HomeController(w http.ResponseWriter, r *http.Request) {
 				ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch the Categorie Report")
 				return
 			}
+			reportedPosts, err := models.GetReportedPosts()
+			if err != nil {
+				ErrorController(w, r, http.StatusInternalServerError, "Cannot fetch reported posts")
+				return
+			}
+
+			
 			data := models.Data{
 				IsLoggedIn:     logedIn,
 				Category:       categories,
 				Posts:          posts,
 				Role:           user.Role,
 				CategoryReport: categorie_report,
+				ReportedPosts:reportedPosts,
 			}
 
 			ParseFileController(w, r, "moderator/index", data)

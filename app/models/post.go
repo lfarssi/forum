@@ -18,6 +18,9 @@ type Posts struct {
 	Username      string `json:"username"`
 	IsLiked       bool
 	IsDisliked    bool
+	Status        string    `json:"status"`         
+	ReportDate    string    `json:"report_date"`   
+	Category      string    `json:"category"` 
 }
 
 func CreatePost(title string, content string, categories []string, userId int) (int, error) {
@@ -181,5 +184,54 @@ func ReportPost(postID, userID, categoryID int) error {
 		INSERT INTO report (post_id, user_id, report_category_id, comment_id)
 		VALUES (?, ?, ?, NULL)
 	`, postID, userID, categoryID)
+	return err
+}
+func GetReportedPosts() ([]Posts, error) {
+    query := `
+        SELECT p.id, p.title, p.content, r.status, r.report_date, c.name as category
+        FROM posts p
+        JOIN report r ON p.id = r.post_id
+        JOIN categorie_report c ON r.report_category_id = c.id
+        WHERE r.status = 'pending' OR r.status = 'reviewed'
+    `
+    rows, err := Database.Query(query)
+    if err != nil {
+        return nil, err
+    }
+    defer rows.Close()
+
+    var posts []Posts
+    for rows.Next() {
+        var post Posts
+        if err := rows.Scan(&post.ID, &post.Title, &post.Content, &post.Status, &post.ReportDate, &post.Category); err != nil {
+            return nil, err
+        }
+        posts = append(posts, post)
+    }
+
+    return posts, nil
+}
+// Delete a report
+func DeleteReport(reportID int) error {
+	_, err := Database.Exec(`
+        DELETE FROM report WHERE id = ?
+    `, reportID)
+	return err
+}
+
+// Delete a post (after deleting associated reports)
+func DeletePost(postID int) error {
+	// First, delete all reports for the post
+	_, err := Database.Exec(`
+        DELETE FROM report WHERE post_id = ?
+    `, postID)
+	if err != nil {
+		return err
+	}
+
+	// Then delete the post
+	_, err = Database.Exec(`
+        DELETE FROM posts WHERE id = ?
+    `, postID)
 	return err
 }
