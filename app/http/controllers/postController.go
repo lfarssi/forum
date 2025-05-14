@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	"html"
 	"net/http"
 	"strconv"
@@ -666,9 +667,11 @@ func ReportPostController(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Get form values
 	postIDStr := r.FormValue("post_id")
 	categoryIDStr := r.FormValue("category_report_id")
 
+	// Validate input
 	if postIDStr == "" || categoryIDStr == "" {
 		ErrorController(w, r, http.StatusBadRequest, "Post ID and Category are required")
 		return
@@ -692,8 +695,10 @@ func ReportPostController(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Save the report to the database
 	err = models.ReportPost(postID, userID, categoryID)
 	if err != nil {
+		fmt.Println(err)
 		ErrorController(w, r, http.StatusInternalServerError, "Failed to report post")
 		return
 	}

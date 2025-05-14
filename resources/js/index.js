@@ -365,32 +365,31 @@ document.addEventListener("DOMContentLoaded", () => {
             const categorySelect = form.querySelector("select[name='category_report_id']");
             const categoryId = categorySelect.value;
 
+            // Validation
             if (!categoryId) {
                 alert("Please select a report reason before submitting.");
                 categorySelect.focus();
                 return;
             }
 
+            const formData = new FormData();
+            formData.append("post_id", postId);
+            formData.append("category_report_id", categoryId);
+
             try {
                 const response = await fetch("/report_post", {
                     method: "POST",
-                    headers: {
-                        "Content-Type": "application/x-www-form-urlencoded"
-                    },
-                    body: new URLSearchParams({
-                        post_id: postId,
-                        category_report_id: categoryId
-                    })
+                    body: formData,  // sending the FormData object directly
                 });
 
-                if (response.redirected) {
-                    window.location.href ="/"
-                } else if (response.ok) {
+                if (response.ok) {
                     alert("Report submitted successfully!");
                     categorySelect.selectedIndex = 0; // Reset
+                    window.location.href = "/"; // Redirect after successful submission
                 } else {
                     const errorText = await response.text();
-                    alert("Failed to report post: " + errorText);
+                   console.log(errorText);
+                   
                 }
 
             } catch (err) {
