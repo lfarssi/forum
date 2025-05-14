@@ -18,7 +18,7 @@ func PostByCategoriesController(w http.ResponseWriter, r *http.Request) {
 		ErrorController(w, r, http.StatusMethodNotAllowed, "")
 		return
 	}
-	
+
 	var logedIn bool
 	var user models.User
 	var userID int
@@ -147,20 +147,25 @@ func PostByCategoriesController(w http.ResponseWriter, r *http.Request) {
 		posts[i].CommentsCount = len(comment)
 	}
 
-	
-
 	if user.Role == "user" {
 		reqmod, erro := models.GetRequestInfo(userID)
 		if erro != nil {
 			ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch the Request info")
 			return
 		}
+
+		categorie_report, err := models.GetCategorieReport()
+		if err != nil {
+			ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch the Categorie Report")
+			return
+		}
 		datas := models.Data{
-			IsLoggedIn: logedIn,
-			Category:   categoriess,
-			Posts:      posts,
-			Role:       user.Role,
-			StatusReq:  reqmod,
+			IsLoggedIn:     logedIn,
+			Category:       categoriess,
+			Posts:          posts,
+			Role:           user.Role,
+			StatusReq:      reqmod,
+			CategoryReport: categorie_report,
 		}
 		ParseFileController(w, r, "users/index", datas)
 
@@ -170,26 +175,35 @@ func PostByCategoriesController(w http.ResponseWriter, r *http.Request) {
 			ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch the Categorie Report")
 			return
 		}
+
 		data := models.Data{
-			IsLoggedIn:    logedIn,
-			Category:      categoriess,
-			Posts:         posts,
-			Role:          user.Role,
+			IsLoggedIn:     logedIn,
+			Category:       categoriess,
+			Posts:          posts,
+			Role:           user.Role,
 			CategoryReport: categorie_report,
 		}
 		ParseFileController(w, r, "moderator/index", data)
 
 	} else if user.Role == "admin" {
 		// You can fetch and pass additional admin data here
+
+		categorie_report, err := models.GetCategorieReport()
+		if err != nil {
+			ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch the Categorie Report")
+			return
+		}
 		data := models.Data{
-			IsLoggedIn: logedIn,
-			Category:   categoriess,
-			Posts:      posts,
-			Role:       user.Role,
+			IsLoggedIn:     logedIn,
+			Category:       categoriess,
+			Posts:          posts,
+			Role:           user.Role,
+			CategoryReport: categorie_report,
 		}
 		ParseFileController(w, r, "admin/index", data)
 
 	} else {
+
 		// Guest view
 		data := models.Data{
 			IsLoggedIn: logedIn,
@@ -319,21 +333,25 @@ func LikedPostController(w http.ResponseWriter, r *http.Request) {
 		likedpost[i].CommentsCount = len(comment)
 	}
 
-
-
-
 	if user.Role == "user" {
 		reqmod, erro := models.GetRequestInfo(userID)
 		if erro != nil {
 			ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch the Request info")
 			return
 		}
+		categorie_report, err := models.GetCategorieReport()
+		if err != nil {
+			ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch the Categorie Report")
+			return
+		}
+
 		datas := models.Data{
-			IsLoggedIn: logedIn,
-			Category:   categories,
-		
-			Role:       user.Role,
-			StatusReq:  reqmod,
+			IsLoggedIn:     logedIn,
+			Category:       categories,
+			Posts:          likedpost,
+			Role:           user.Role,
+			StatusReq:      reqmod,
+			CategoryReport: categorie_report,
 		}
 		ParseFileController(w, r, "users/index", datas)
 
@@ -344,21 +362,34 @@ func LikedPostController(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		data := models.Data{
-			IsLoggedIn:    logedIn,
-			Category:      categories,
-			
-			Role:          user.Role,
+			IsLoggedIn:     logedIn,
+			Category:       categories,
+			Posts:          likedpost,
+			Role:           user.Role,
 			CategoryReport: categorie_report,
 		}
 		ParseFileController(w, r, "moderator/index", data)
 
 	} else if user.Role == "admin" {
-		// You can fetch and pass additional admin data here
+
+		modRequests, err := models.GetAllModRequests()
+		if err != nil {
+			ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch moderator requests")
+			return
+		}
+		categorie_report, err := models.GetCategorieReport()
+		if err != nil {
+			ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch the Categorie Report")
+			return
+		}
+
 		data := models.Data{
-			IsLoggedIn: logedIn,
-			Category:   categories,
-		
-			Role:       user.Role,
+			IsLoggedIn:     logedIn,
+			Category:       categories,
+			Posts:          likedpost,
+			Role:           user.Role,
+			ModRequests:    modRequests,
+			CategoryReport: categorie_report,
 		}
 		ParseFileController(w, r, "admin/index", data)
 
@@ -367,7 +398,7 @@ func LikedPostController(w http.ResponseWriter, r *http.Request) {
 		data := models.Data{
 			IsLoggedIn: logedIn,
 			Category:   categories,
-			
+			Posts:      likedpost,
 			Role:       "guest",
 		}
 		ParseFileController(w, r, "guests/index", data)
@@ -376,13 +407,14 @@ func LikedPostController(w http.ResponseWriter, r *http.Request) {
 
 // CreatePosts handles the creation of a new post
 func CreatePosts(w http.ResponseWriter, r *http.Request) {
+
 	// Get the post data from the form
 	title := html.EscapeString(r.PostFormValue("title"))
 	category := r.PostForm["categories"]
 	content := html.EscapeString(r.PostFormValue("content"))
 
 	// Validate the input fields
-	if strings.TrimSpace(title)  == "" || len(category) == 0 || strings.TrimSpace(content) == "" {
+	if strings.TrimSpace(title) == "" || len(category) == 0 || strings.TrimSpace(content) == "" {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode("Error:Title or Content field's  empty ")
@@ -402,7 +434,7 @@ func CreatePosts(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Create the new post
-	idPost, err := models.CreatePost(title, content, category, userId )
+	idPost, err := models.CreatePost(title, content, category, userId)
 	if err != nil {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
@@ -433,7 +465,7 @@ func CreatePosts(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
-func DeleteController(w http.ResponseWriter, r *http.Request)  {
+func DeleteController(w http.ResponseWriter, r *http.Request) {
 	query := `DELETE FROM posts`
 	_, err := models.Database.Exec(query)
 	if err != nil {
@@ -558,15 +590,120 @@ func CreatedPostController(w http.ResponseWriter, r *http.Request) {
 		createdPost[i].CommentsCount = len(comment)
 	}
 
-	// Prepare data for rendering the created posts page
-	data := models.Data{
-		Category:   categories,
-		Posts:      createdPost,
-		IsLoggedIn: logedIn,
-		Role:       user.Role,
-	}
-	
+	if user.Role == "user" {
+		reqmod, erro := models.GetRequestInfo(userID)
+		if erro != nil {
+			ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch the Request info")
+			return
+		}
+		categorie_report, err := models.GetCategorieReport()
+		if err != nil {
+			ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch the Categorie Report")
+			return
+		}
+		datas := models.Data{
+			IsLoggedIn:     logedIn,
+			Category:       categories,
+			Posts:          createdPost,
+			Role:           user.Role,
+			StatusReq:      reqmod,
+			CategoryReport: categorie_report,
+		}
+		ParseFileController(w, r, "users/index", datas)
 
-	// Render the created posts page
-	ParseFileController(w, r, "users/index", data)
+	} else if user.Role == "moderator" {
+		categorie_report, err := models.GetCategorieReport()
+		if err != nil {
+			ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch the Categorie Report")
+			return
+		}
+
+		data := models.Data{
+			IsLoggedIn:     logedIn,
+			Category:       categories,
+			Posts:          createdPost,
+			Role:           user.Role,
+			CategoryReport: categorie_report,
+		}
+		ParseFileController(w, r, "moderator/index", data)
+
+	} else if user.Role == "admin" {
+
+		modRequests, err := models.GetAllModRequests()
+		if err != nil {
+			ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch moderator requests")
+			return
+		}
+		categorie_report, err := models.GetCategorieReport()
+		if err != nil {
+			ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch the Categorie Report")
+			return
+		}
+		data := models.Data{
+			IsLoggedIn:     logedIn,
+			Category:       categories,
+			Posts:          createdPost,
+			Role:           user.Role,
+			ModRequests:    modRequests,
+			CategoryReport: categorie_report,
+		}
+		ParseFileController(w, r, "admin/index", data)
+
+	} else {
+		// Guest view
+		data := models.Data{
+			IsLoggedIn: logedIn,
+			Category:   categories,
+			Role:       "guest",
+		}
+		ParseFileController(w, r, "guests/index", data)
+	}
+}
+
+func ReportPostController(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "POST" {
+		ErrorController(w, r, http.StatusMethodNotAllowed, "Method Not Allowed")
+		return
+	}
+
+	postIDStr := r.FormValue("post_id")
+	categoryIDStr := r.FormValue("category_report_id")
+
+	if postIDStr == "" || categoryIDStr == "" {
+		ErrorController(w, r, http.StatusBadRequest, "Post ID and Category are required")
+		return
+	}
+
+	postID, err := strconv.Atoi(postIDStr)
+	if err != nil {
+		ErrorController(w, r, http.StatusBadRequest, "Invalid Post ID")
+		return
+	}
+
+	categoryID, err := strconv.Atoi(categoryIDStr)
+	if err != nil {
+		ErrorController(w, r, http.StatusBadRequest, "Invalid Category ID")
+		return
+	}
+
+	userID, err := models.GetUserId(r)
+	if err != nil {
+		ErrorController(w, r, http.StatusUnauthorized, "Unauthorized")
+		return
+	}
+
+	err = models.ReportPost(postID, userID, categoryID)
+	if err != nil {
+		ErrorController(w, r, http.StatusInternalServerError, "Failed to report post")
+		return
+	}
+
+	// If it's a fetch (JS), return OK. Otherwise redirect.
+	if r.Header.Get("X-Requested-With") == "XMLHttpRequest" {
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("Reported successfully"))
+		return
+	}
+
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }

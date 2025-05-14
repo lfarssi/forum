@@ -47,22 +47,17 @@ CREATE TABLE IF NOT EXISTS categorie_report (
 CREATE TABLE IF NOT EXISTS report(
   id INTEGER PRIMARY KEY AUTOINCREMENT,
  
-  reporter_id INTEGER NOT NULL,
+  user_id INTEGER NOT NULL,
    post_id INTEGER NOT NULL,
    comment_id INTEGER,
    report_category_id INTEGER NOT NULL ,
-   report_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  details TEXT, 
+   report_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, 
   status VARCHAR(20) DEFAULT "pending", -- "pending", "reviewed", "rejected", "accepted"
-  reviewed_by INTEGER, 
-  review_date TIMESTAMP,
-  admin_response TEXT, 
-  admin_response_date TIMESTAMP,
-   FOREIGN KEY (reporter_id) REFERENCES users(id),
+  FOREIGN KEY (user_id) REFERENCES users(id),
   FOREIGN KEY (post_id) REFERENCES posts(id),
   FOREIGN KEY (comment_id) REFERENCES comments(id),
   FOREIGN KEY (report_category_id) REFERENCES report_categories(id),
-  FOREIGN KEY (reviewed_by) REFERENCES users(id),
+
   CHECK ((post_id IS NULL AND comment_id IS NOT NULL) OR (post_id IS NOT NULL AND comment_id IS NULL))
 );
 

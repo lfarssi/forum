@@ -12,7 +12,7 @@ func HandleModRequest(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err := r.ParseMultipartForm(10 << 20) 
+	err := r.ParseMultipartForm(10 << 20)
 	if err != nil {
 		ErrorController(w, r, http.StatusBadRequest, "Invalid Form Data")
 		return

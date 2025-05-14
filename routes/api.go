@@ -16,6 +16,8 @@ func ApiRouter() {
 	http.HandleFunc("/react",middleware.AuthMiddleware(middleware.RateLimitMiddleware( controllers.ReactPostController)))
 	http.HandleFunc("/create_comment",middleware.AuthMiddleware(middleware.RateLimitMiddleware( controllers.CreateCommentController)))
 	http.HandleFunc("/reqmod",middleware.AuthMiddleware(middleware.RateLimitMiddleware( controllers.RequestModeration)))
+	http.HandleFunc("/report_post",middleware.AuthMiddleware(middleware.RateLimitMiddleware( controllers.ReportPostController)))
+
 
 	http.HandleFunc("/resources/", controllers.CssJsController)
 	

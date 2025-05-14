@@ -167,11 +167,19 @@ func GetPostsByCategory(idCategorie int) ([]Posts, error) {
 
 			tempPosts[post.ID] = &post
 		}
-		
+
 	}
 	for _, post := range tempPosts {
 		posts = append(posts, *post)
 	}
 	return posts, nil
 
+}
+
+func ReportPost(postID, userID, categoryID int) error {
+	_, err := Database.Exec(`
+		INSERT INTO report (post_id, user_id, report_category_id, comment_id)
+		VALUES (?, ?, ?, NULL)
+	`, postID, userID, categoryID)
+	return err
 }

@@ -350,3 +350,53 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 });
+
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    const reportForms = document.querySelectorAll(".report-form");
+
+    reportForms.forEach(form => {
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const postId = form.querySelector("input[name='post_id']").value;
+            const categorySelect = form.querySelector("select[name='category_report_id']");
+            const categoryId = categorySelect.value;
+
+            if (!categoryId) {
+                alert("Please select a report reason before submitting.");
+                categorySelect.focus();
+                return;
+            }
+
+            try {
+                const response = await fetch("/report_post", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    body: new URLSearchParams({
+                        post_id: postId,
+                        category_report_id: categoryId
+                    })
+                });
+
+                if (response.redirected) {
+                    window.location.href ="/"
+                } else if (response.ok) {
+                    alert("Report submitted successfully!");
+                    categorySelect.selectedIndex = 0; // Reset
+                } else {
+                    const errorText = await response.text();
+                    alert("Failed to report post: " + errorText);
+                }
+
+            } catch (err) {
+                console.error("Error reporting post:", err);
+                alert("An error occurred. Please try again.");
+            }
+        });
+    });
+});

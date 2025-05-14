@@ -132,13 +132,6 @@ func HomeController(w http.ResponseWriter, r *http.Request) {
 		posts[i].CommentsCount = len(comment)
 	}
 
-	data := models.Data{
-		IsLoggedIn: logedIn,
-		Category:   categories,
-		Posts:      posts,
-		Role:       user.Role,
-	}
-
 	// Check if the request method is GET and the URL path is the homepage
 	if r.Method == "GET" {
 		if r.URL.Path != "/" {
@@ -146,6 +139,7 @@ func HomeController(w http.ResponseWriter, r *http.Request) {
 			ErrorController(w, r, http.StatusNotFound, http.StatusText(http.StatusNotFound))
 			return
 		}
+
 		if user.Role == "user" {
 
 			reqmod, erro := models.GetRequestInfo(iduser)
@@ -153,12 +147,18 @@ func HomeController(w http.ResponseWriter, r *http.Request) {
 				ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch the Request info")
 				return
 			}
+			categorie_report, err := models.GetCategorieReport()
+			if err != nil {
+				ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch the Categorie Report")
+				return
+			}
 			datas := models.Data{
-				IsLoggedIn: logedIn,
-				Category:   categories,
-				Posts:      posts,
-				Role:       user.Role,
-				StatusReq:  reqmod,
+				IsLoggedIn:     logedIn,
+				Category:       categories,
+				Posts:          posts,
+				Role:           user.Role,
+				StatusReq:      reqmod,
+				CategoryReport: categorie_report,
 			}
 			ParseFileController(w, r, "users/index", datas)
 
@@ -168,37 +168,59 @@ func HomeController(w http.ResponseWriter, r *http.Request) {
 				ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch the Categorie Report")
 				return
 			}
-			data = models.Data{
+			data := models.Data{
+				IsLoggedIn:     logedIn,
+				Category:       categories,
+				Posts:          posts,
+				Role:           user.Role,
 				CategoryReport: categorie_report,
 			}
+
 			ParseFileController(w, r, "moderator/index", data)
 
 		} else if user.Role == "admin" {
-			// categorie_report, err := models.GetCategorieReport()
-			// if err != nil {
-			// 	ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch the Categorie Report")
-			// 	return
-			// }
-			// data = models.Data{
-			// 	CategoryReport: categorie_report,
-			// }
+			categorie_report, err := models.GetCategorieReport()
+			if err != nil {
+				ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch the Categorie Report")
+				return
+			}
 
 			modRequests, err := models.GetAllModRequests()
 			if err != nil {
 				ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch moderator requests")
 				return
 			}
-			data.ModRequests = modRequests
+
+			data := models.Data{
+				IsLoggedIn:     logedIn,
+				Category:       categories,
+				Posts:          posts,
+				Role:           user.Role,
+				ModRequests:    modRequests,
+				CategoryReport: categorie_report,
+			}
 
 			ParseFileController(w, r, "admin/index", data)
 		} else {
+			categorie_report, err := models.GetCategorieReport()
+			if err != nil {
+				ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch the Categorie Report")
+				return
+			}
+			data := models.Data{
+				IsLoggedIn:     logedIn,
+				Category:       categories,
+				Posts:          posts,
+				Role:           user.Role,
+				CategoryReport: categorie_report,
+			}
 			ParseFileController(w, r, "guests/index", data)
 
 		}
 		// Parse and render the homepage template with the data
 	} else {
 		// Handle method not allowed error for non-GET requests
-		ErrorController(w, r, http.StatusMethodNotAllowed, "")
+		ErrorController(w, r, http.StatusMethodNotAllowed, "methode no")
 		return
 	}
 }
