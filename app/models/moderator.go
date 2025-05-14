@@ -1,6 +1,9 @@
 package models
 
-import "time"
+import (
+	"database/sql"
+	"time"
+)
 
 type ModReq struct {
 	UserID       string `json:"user_id"`
@@ -23,4 +26,23 @@ func AddModRequest(reason string, userId int) error {
 		return err
 	}
 	return nil
+}
+
+func GetRequestInfo(userID int) (string, error) {
+	query := `
+	SELECT status  
+	FROM moderator_requests 
+	WHERE user_id = ?
+	ORDER BY request_date DESC
+	LIMIT 1
+	`
+	var status string
+	err := Database.QueryRow(query, userID).Scan(&status)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return "No Request", nil
+		}
+		return "", err 
+	}
+	return status, nil
 }

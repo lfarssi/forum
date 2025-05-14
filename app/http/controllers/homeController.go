@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 
 	"forum/app/models"
@@ -132,7 +133,6 @@ func HomeController(w http.ResponseWriter, r *http.Request) {
 		posts[i].CommentsCount = len(comment)
 	}
 
-	// Prepare the data to be passed to the template
 	data := models.Data{
 		IsLoggedIn: logedIn,
 		Category:   categories,
@@ -149,12 +149,26 @@ func HomeController(w http.ResponseWriter, r *http.Request) {
 		}
 		if user.Role == "user" {
 
-			ParseFileController(w, r, "users/index", data)
+			reqmod, erro := models.GetRequestInfo(iduser)
+			if erro != nil {
+				ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch the Request info")
+				return
+			}
+			datas := models.Data{
+				IsLoggedIn: logedIn,
+				Category:   categories,
+				Posts:      posts,
+				Role:       user.Role,
+				StatusReq:  reqmod,
+			}
+			fmt.Println(reqmod)
+			ParseFileController(w, r, "users/index", datas)
 
 		} else if user.Role == "moderator" {
 			categorie_report, err := models.GetCategorieReport()
 			if err != nil {
 				ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch the Categorie Report")
+				return
 			}
 			data = models.Data{
 				CategoryReport: categorie_report,
@@ -165,6 +179,7 @@ func HomeController(w http.ResponseWriter, r *http.Request) {
 			categorie_report, err := models.GetCategorieReport()
 			if err != nil {
 				ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch the Categorie Report")
+				return
 			}
 			data = models.Data{
 				CategoryReport: categorie_report,

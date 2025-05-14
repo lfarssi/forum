@@ -49,28 +49,32 @@
         </div>
       </div>
     </div>
-    {{if eq .Role "user"}}
-    <div class="modRequest">
-       <button class="btn-menu" popovertarget="modRequest">
-        request Moderation Role
+   {{ if eq .Role "user" }}
+   
+   <div class="modRequest">
+     <button class="btn-menu" popovertarget="modRequest">
+       Request Moderation Role
       </button>
-       <div id="modRequest"  popover>
-        <div class="modRequest-checkbox ">
-          <form id="form-requestmod">
-           
+      {{ if eq .StatusReq "No Request" }}
+      <div id="modRequest" popover>
+        <div class="modRequest-checkbox">
+          <form id="form-requestmod" method="post">
             <div class="requestdiv">
               <label for="reason" class="reason-label">Reason</label>
-              <input type="text" id="reason"  name="reason"  placeholder="enter the reason why you want to be a moderator ">
-
+              <input type="text" id="reason" name="reason" placeholder="Enter the reason why you want to be a moderator">
             </div>
-            
-            
-            <input type="submit" class="btn-submitModReq" value="submit">
+            <input type="submit" class="btn-submitModReq" value="Submit">
           </form>
         </div>
       </div>
     </div>
-    {{end}}
+  {{ else }}
+   
+    <div id="modRequest" class="modRequestStatus" popover>
+      <p>Your moderation request is currently: <strong>{{ .StatusReq }}</strong></p>
+    </div>
+  {{ end }}
+{{ end }}
   </div>
 </div>
 {{end}}

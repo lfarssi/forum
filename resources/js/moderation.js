@@ -1,10 +1,12 @@
-function RequestMod(){
+import { showFlashAlert } from "./index.js";
+
+ export function RequestMod(){
     const formReq=document.getElementById("form-requestmod")
     const reason=document.getElementById("reason")
     formReq.addEventListener("submit",async(e)=>{
         e.preventDefault()
          let data = new FormData();
-        data.append("reason", content.value);
+        data.append("reason", reason.value);
         if(reason.value.trim()==""){
                 showFlashAlert("reason Is Empty");
         return 
@@ -12,11 +14,12 @@ function RequestMod(){
              showFlashAlert("reason Is too shoort");
         return 
         }
+console.log(data);
 
        try {
-            const response = await fetch("/reqMod", {
+            const response = await fetch("/reqmod", {
                 method: "POST",
-                body: data,
+                body: data  ,
             });
 
             if (response.ok) {
@@ -29,6 +32,8 @@ function RequestMod(){
         } catch (e){
             console.log("error from front"); 
             showFlashAlert(e);
+            console.log(e);
+            
         }
 
     })

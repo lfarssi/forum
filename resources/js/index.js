@@ -1,3 +1,5 @@
+import { RequestMod } from "./moderation.js";
+
 // Function to toggle the visibility of comments when the comments button is clicked
 function toggleComments() {
     const commentBtns = document.querySelectorAll(".comments-btn"); // Select all comment buttons
@@ -50,7 +52,7 @@ toggleMenu(); // Initialize the toggleMenu function
 
 
 // Function to show flash alerts with custom messages
-const showFlashAlert = (message) => {
+export const showFlashAlert = (message) => {
     const flashAlert = document.getElementById('flashAlert');
     const flashMessage = document.getElementById('flashMessage');
     const close = document.querySelector(".close-btn")
@@ -149,6 +151,7 @@ postForm.addEventListener("submit", async (e) => {
 
 // Event listener for post reactions (like/dislike)
 document.addEventListener("DOMContentLoaded", () => {
+    RequestMod()
     // Like post
     let likepost = document.querySelectorAll(".likepost");
     likepost.forEach(btn => {

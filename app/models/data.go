@@ -7,4 +7,5 @@ type Data struct {
 	CategoryReport []Category
 	IsLoggedIn bool
 	Role string
+	StatusReq string
 }
