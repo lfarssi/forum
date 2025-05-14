@@ -8,4 +8,5 @@ type Data struct {
 	IsLoggedIn bool
 	Role string
 	StatusReq string
+	ModRequests []ModReq
 }

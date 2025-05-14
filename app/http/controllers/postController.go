@@ -18,13 +18,26 @@ func PostByCategoriesController(w http.ResponseWriter, r *http.Request) {
 		ErrorController(w, r, http.StatusMethodNotAllowed, "")
 		return
 	}
-
+	
 	var logedIn bool
-	// Check if the user is logged in
-	if !utils.IsLoggedIn(r) {
-		logedIn = false
-	} else {
+	var user models.User
+	var userID int
+	var err error
+
+	if utils.IsLoggedIn(r) {
 		logedIn = true
+		userID, err = models.GetUserId(r)
+		if err != nil {
+			LogoutController(w, r)
+			return
+		}
+		user.Role, err = models.GetRoleUser(userID)
+		if err != nil {
+			LogoutController(w, r)
+			return
+		}
+	} else {
+		logedIn = false
 	}
 
 	// Fetch categories from the database
@@ -134,26 +147,81 @@ func PostByCategoriesController(w http.ResponseWriter, r *http.Request) {
 		posts[i].CommentsCount = len(comment)
 	}
 
-	// Prepare data for rendering the page
-	data := models.Data{
-		Category:   categoriess,
-		Posts:      posts,
-		IsLoggedIn: logedIn,
-	}
+	
 
-	// Render the posts filtered by categories
-	ParseFileController(w, r, "users/index", data)
+	if user.Role == "user" {
+		reqmod, erro := models.GetRequestInfo(userID)
+		if erro != nil {
+			ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch the Request info")
+			return
+		}
+		datas := models.Data{
+			IsLoggedIn: logedIn,
+			Category:   categoriess,
+			Posts:      posts,
+			Role:       user.Role,
+			StatusReq:  reqmod,
+		}
+		ParseFileController(w, r, "users/index", datas)
+
+	} else if user.Role == "moderator" {
+		categorie_report, err := models.GetCategorieReport()
+		if err != nil {
+			ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch the Categorie Report")
+			return
+		}
+		data := models.Data{
+			IsLoggedIn:    logedIn,
+			Category:      categoriess,
+			Posts:         posts,
+			Role:          user.Role,
+			CategoryReport: categorie_report,
+		}
+		ParseFileController(w, r, "moderator/index", data)
+
+	} else if user.Role == "admin" {
+		// You can fetch and pass additional admin data here
+		data := models.Data{
+			IsLoggedIn: logedIn,
+			Category:   categoriess,
+			Posts:      posts,
+			Role:       user.Role,
+		}
+		ParseFileController(w, r, "admin/index", data)
+
+	} else {
+		// Guest view
+		data := models.Data{
+			IsLoggedIn: logedIn,
+			Category:   categoriess,
+			Posts:      posts,
+			Role:       "guest",
+		}
+		ParseFileController(w, r, "guests/index", data)
+	}
 }
 
 // LikedPostController handles the request for posts liked by the logged-in user
 func LikedPostController(w http.ResponseWriter, r *http.Request) {
 	var logedIn bool
+	var user models.User
+	var userID int
+	var err error
 
-	// Check if the user is logged in
-	if !utils.IsLoggedIn(r) {
-		logedIn = false
-	} else {
+	if utils.IsLoggedIn(r) {
 		logedIn = true
+		userID, err = models.GetUserId(r)
+		if err != nil {
+			LogoutController(w, r)
+			return
+		}
+		user.Role, err = models.GetRoleUser(userID)
+		if err != nil {
+			LogoutController(w, r)
+			return
+		}
+	} else {
+		logedIn = false
 	}
 
 	// Fetch categories from the database
@@ -251,15 +319,59 @@ func LikedPostController(w http.ResponseWriter, r *http.Request) {
 		likedpost[i].CommentsCount = len(comment)
 	}
 
-	// Prepare data for rendering the liked posts page
-	data := models.Data{
-		Category:   categories,
-		Posts:      likedpost,
-		IsLoggedIn: logedIn,
-	}
 
-	// Render the liked posts page
-	ParseFileController(w, r, "users/index", data)
+
+
+	if user.Role == "user" {
+		reqmod, erro := models.GetRequestInfo(userID)
+		if erro != nil {
+			ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch the Request info")
+			return
+		}
+		datas := models.Data{
+			IsLoggedIn: logedIn,
+			Category:   categories,
+		
+			Role:       user.Role,
+			StatusReq:  reqmod,
+		}
+		ParseFileController(w, r, "users/index", datas)
+
+	} else if user.Role == "moderator" {
+		categorie_report, err := models.GetCategorieReport()
+		if err != nil {
+			ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch the Categorie Report")
+			return
+		}
+		data := models.Data{
+			IsLoggedIn:    logedIn,
+			Category:      categories,
+			
+			Role:          user.Role,
+			CategoryReport: categorie_report,
+		}
+		ParseFileController(w, r, "moderator/index", data)
+
+	} else if user.Role == "admin" {
+		// You can fetch and pass additional admin data here
+		data := models.Data{
+			IsLoggedIn: logedIn,
+			Category:   categories,
+		
+			Role:       user.Role,
+		}
+		ParseFileController(w, r, "admin/index", data)
+
+	} else {
+		// Guest view
+		data := models.Data{
+			IsLoggedIn: logedIn,
+			Category:   categories,
+			
+			Role:       "guest",
+		}
+		ParseFileController(w, r, "guests/index", data)
+	}
 }
 
 // CreatePosts handles the creation of a new post
@@ -332,12 +444,24 @@ func DeleteController(w http.ResponseWriter, r *http.Request)  {
 // CreatedPostController handles the display of posts created by the logged-in user
 func CreatedPostController(w http.ResponseWriter, r *http.Request) {
 	var logedIn bool
+	var user models.User
+	var userID int
+	var err error
 
-	// Check if the user is logged in
-	if !utils.IsLoggedIn(r) {
-		logedIn = false
-	} else {
+	if utils.IsLoggedIn(r) {
 		logedIn = true
+		userID, err = models.GetUserId(r)
+		if err != nil {
+			LogoutController(w, r)
+			return
+		}
+		user.Role, err = models.GetRoleUser(userID)
+		if err != nil {
+			LogoutController(w, r)
+			return
+		}
+	} else {
+		logedIn = false
 	}
 
 	// Fetch categories from the database
@@ -439,7 +563,9 @@ func CreatedPostController(w http.ResponseWriter, r *http.Request) {
 		Category:   categories,
 		Posts:      createdPost,
 		IsLoggedIn: logedIn,
+		Role:       user.Role,
 	}
+	
 
 	// Render the created posts page
 	ParseFileController(w, r, "users/index", data)

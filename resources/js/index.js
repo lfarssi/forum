@@ -1,4 +1,4 @@
-import { RequestMod } from "./moderation.js";
+
 
 // Function to toggle the visibility of comments when the comments button is clicked
 function toggleComments() {
@@ -151,7 +151,7 @@ postForm.addEventListener("submit", async (e) => {
 
 // Event listener for post reactions (like/dislike)
 document.addEventListener("DOMContentLoaded", () => {
-    RequestMod()
+    
     // Like post
     let likepost = document.querySelectorAll(".likepost");
     likepost.forEach(btn => {

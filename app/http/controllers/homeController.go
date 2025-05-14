@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 
 	"forum/app/models"
@@ -161,7 +160,6 @@ func HomeController(w http.ResponseWriter, r *http.Request) {
 				Role:       user.Role,
 				StatusReq:  reqmod,
 			}
-			fmt.Println(reqmod)
 			ParseFileController(w, r, "users/index", datas)
 
 		} else if user.Role == "moderator" {
@@ -176,16 +174,23 @@ func HomeController(w http.ResponseWriter, r *http.Request) {
 			ParseFileController(w, r, "moderator/index", data)
 
 		} else if user.Role == "admin" {
-			categorie_report, err := models.GetCategorieReport()
+			// categorie_report, err := models.GetCategorieReport()
+			// if err != nil {
+			// 	ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch the Categorie Report")
+			// 	return
+			// }
+			// data = models.Data{
+			// 	CategoryReport: categorie_report,
+			// }
+
+			modRequests, err := models.GetAllModRequests()
 			if err != nil {
-				ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch the Categorie Report")
+				ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch moderator requests")
 				return
 			}
-			data = models.Data{
-				CategoryReport: categorie_report,
-			}
-			ParseFileController(w, r, "admin/index", data)
+			data.ModRequests = modRequests
 
+			ParseFileController(w, r, "admin/index", data)
 		} else {
 			ParseFileController(w, r, "guests/index", data)
 

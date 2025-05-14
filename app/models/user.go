@@ -85,3 +85,15 @@ func GetRoleUser(user_id int) (string, error) {
 	return role, nil
 
 }
+
+
+func UpdateUserRole(userID int, role string) error {
+	_, err := Database.Exec("UPDATE users SET role = ? WHERE id = ?", role, userID)
+	return err
+}
+
+
+func DeleteModRequest(userID int) error {
+	_, err := Database.Exec("DELETE FROM moderator_requests WHERE user_id = ?", userID)
+	return err
+}

@@ -46,7 +46,7 @@
     margin-bottom: 1.5rem;
     text-align: center;
 }
-#categories, #modRequest {
+#categories, #modRequest ,#adminModRequests {
     background-color: var(--second-bg-color);
     border: none;
     margin:auto;

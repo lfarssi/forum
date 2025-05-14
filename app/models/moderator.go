@@ -42,7 +42,32 @@ func GetRequestInfo(userID int) (string, error) {
 		if err == sql.ErrNoRows {
 			return "No Request", nil
 		}
-		return "", err 
+		return "", err
 	}
 	return status, nil
+}
+
+func GetAllModRequests() ([]ModReq, error) {
+	query := `
+	SELECT user_id, reason, request_date, status
+	FROM moderator_requests
+	WHERE status = 'pending'
+	ORDER BY request_date DESC
+	`
+	rows, err := Database.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var requests []ModReq
+	for rows.Next() {
+		var req ModReq
+		err := rows.Scan(&req.UserID, &req.Reason, &req.Request_date, &req.Status)
+		if err != nil {
+			return nil, err
+		}
+		requests = append(requests, req)
+	}
+	return requests, nil
 }
