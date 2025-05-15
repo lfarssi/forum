@@ -5,9 +5,8 @@ import (
 	"strings"
 	"time"
 )
-
 type Posts struct {
-	ID            int `json:"id"`
+	ID            int       `json:"id"`
 	UserID        int
 	Title         string    `json:"title"`
 	Content       string    `json:"content"`
@@ -20,6 +19,8 @@ type Posts struct {
 	Username      string `json:"username"`
 	IsLiked       bool
 	IsDisliked    bool
+	ReportID      int    `json:"report_id"`
+	ReportReason  string `json:"report_reason"`
 	Status        string `json:"status"`
 	ReportDate    string `json:"report_date"`
 	Category      string `json:"category"`
@@ -189,17 +190,7 @@ func ReportPost(postID, userID, categoryID int) error {
 	return err
 }
 
-type ReportedPost struct {
-	Posts
-	ReportID     int       `json:"report_id"`     // Report ID
-	PostID       int       `json:"post_id"`       // Post ID (separate from Posts.ID for clarity)
-	ReportReason string    `json:"report_reason"` // Reason for report
-	ReportDate   time.Time `json:"report_date"`   // When the report was made
-	Status       string    `json:"status"`        // Report status (pending, reviewed, etc.)
-	CategoryName string    `json:"category_name"` // Category name
-}
 
-// GetReportedPosts fetches all reported posts from the database
 func GetReportedPosts() ([]Posts, error) {
 	rows, err := Database.Query(`
 		SELECT 
@@ -221,7 +212,7 @@ func GetReportedPosts() ([]Posts, error) {
 		LEFT JOIN categories c ON pc.categorie_id = c.id
 		WHERE r.comment_id IS NULL
 		GROUP BY r.id
-		ORDER BY r.report_date DESC
+		ORDER BY r.report_date DESC;
 	`)
 	if err != nil {
 		return nil, err
@@ -238,8 +229,8 @@ func GetReportedPosts() ([]Posts, error) {
 		var createdAt string
 
 		err := rows.Scan(
-			&reportID,
-			&r.ID, // post_id goes into Posts.ID
+			&reportID,    // r.id AS report_id
+			&r.ID,        // r.post_id -> Posts.ID
 			&r.Title,
 			&r.Content,
 			&r.Username,
@@ -253,28 +244,26 @@ func GetReportedPosts() ([]Posts, error) {
 			return nil, err
 		}
 
-		// Set report date
+		// Set additional fields
+		r.ReportID = reportID
+		r.ReportReason = reportReason
 		r.ReportDate = reportDate
-
-		// Set created date
 		r.CreatedAt = createdAt
 
-		// Set category name
-		if categories.Valid {
+		// Parse categories string into slice
+		if categories.Valid && categories.String != "" {
 			r.Category = categories.String
-
-			// Also split into categories slice for the Posts struct
-			categorySlice := strings.Split(categories.String, ",")
-			r.Categories = make([]string, len(categorySlice))
-			for i, cat := range categorySlice {
-				r.Categories[i] = strings.TrimSpace(cat)
+			cats := strings.Split(categories.String, ",")
+			r.Categories = make([]string, len(cats))
+			for i, c := range cats {
+				r.Categories[i] = strings.TrimSpace(c)
 			}
 		} else {
 			r.Category = "Uncategorized"
 			r.Categories = []string{"Uncategorized"}
 		}
 
-		// Initialize empty Comments slice
+		// Initialize Comments slice if needed
 		r.Comments = []Comment{}
 
 		reports = append(reports, r)
@@ -287,108 +276,78 @@ func GetReportedPosts() ([]Posts, error) {
 	return reports, nil
 }
 
-// GetReportedPostsJSON is an alternative version that returns a custom struct for JSON output
-func GetReportedPostsJSON() ([]map[string]interface{}, error) {
-	posts, err := GetReportedPosts()
-	if err != nil {
-		return nil, err
-	}
-
-	result := make([]map[string]interface{}, len(posts))
-	for i, post := range posts {
-		result[i] = map[string]interface{}{
-			"id":          post.ID,
-			"title":       post.Title,
-			"category":    post.Category,
-			"report_date": post.ReportDate,
-			"status":      post.Status,
-			"username":    post.Username,
-			"content":     post.Content,
-		}
-	}
-
-	return result, nil
-}
 func DeleteReport(reportID int) error {
 	_, err := Database.Exec(`
-		DELETE FROM report WHERE id = ?
+		DELETE FROM report WHERE post_id = ?
 	`, reportID)
 	return err
 }
 
-// DeletePost removes a post and its associated reports, comments, reactions, etc.
 func DeletePost(postID int) error {
-	// Start a transaction for deleting the post and all related data
-	tx, err := Database.Begin()
-	if err != nil {
-		return err
-	}
-	defer func() {
-		if err != nil {
-			tx.Rollback()
-		}
-	}()
+    // Start a transaction
+    tx, err := Database.Begin()
+    if err != nil {
+        return err
+    }
 
-	// Delete reports for the post
-	_, err = tx.Exec(`
-		DELETE FROM report WHERE post_id = ?
-	`, postID)
-	if err != nil {
-		return err
-	}
+    // Use defer rollback in case of error before commit
+    defer func() {
+        if err != nil {
+            tx.Rollback()
+        }
+    }()
 
-	// Delete reactions to the post
-	_, err = tx.Exec(`
-		DELETE FROM reactPost WHERE post_id = ?
-	`, postID)
-	if err != nil {
-		return err
-	}
+    // Delete reports for the post
+    _, err = tx.Exec(`DELETE FROM report WHERE post_id = ?`, postID)
+    if err != nil {
+        return err
+    }
 
-	// Delete comment reactions for comments on this post
-	_, err = tx.Exec(`
-		DELETE FROM reactComment WHERE comment_id IN (
-			SELECT id FROM comments WHERE post_id = ?
-		)
-	`, postID)
-	if err != nil {
-		return err
-	}
+    // Delete reactions to the post
+    _, err = tx.Exec(`DELETE FROM reactPost WHERE post_id = ?`, postID)
+    if err != nil {
+        return err
+    }
 
-	// Delete reports for comments on this post
-	_, err = tx.Exec(`
-		DELETE FROM report WHERE comment_id IN (
-			SELECT id FROM comments WHERE post_id = ?
-		)
-	`, postID)
-	if err != nil {
-		return err
-	}
+    // Delete comment reactions for comments on this post
+    _, err = tx.Exec(`
+        DELETE FROM reactComment WHERE comment_id IN (
+            SELECT id FROM comments WHERE post_id = ?
+        )
+    `, postID)
+    if err != nil {
+        return err
+    }
 
-	// Delete comments for the post
-	_, err = tx.Exec(`
-		DELETE FROM comments WHERE post_id = ?
-	`, postID)
-	if err != nil {
-		return err
-	}
+    // Delete reports for comments on this post
+    _, err = tx.Exec(`
+        DELETE FROM report WHERE comment_id IN (
+            SELECT id FROM comments WHERE post_id = ?
+        )
+    `, postID)
+    if err != nil {
+        return err
+    }
 
-	// Delete post categories relationships
-	_, err = tx.Exec(`
-		DELETE FROM post_categorie WHERE post_id = ?
-	`, postID)
-	if err != nil {
-		return err
-	}
+    // Delete comments for the post
+    _, err = tx.Exec(`DELETE FROM comments WHERE post_id = ?`, postID)
+    if err != nil {
+        return err
+    }
 
-	// Finally, delete the post itself
-	_, err = tx.Exec(`
-		DELETE FROM posts WHERE id = ?
-	`, postID)
-	if err != nil {
-		return err
-	}
+    // Delete post categories relationships
+    _, err = tx.Exec(`DELETE FROM post_categorie WHERE post_id = ?`, postID)
+    if err != nil {
+        return err
+    }
 
-	// Commit the transaction
-	return tx.Commit()
+    // Finally, delete the post itself
+    _, err = tx.Exec(`DELETE FROM posts WHERE id = ?`, postID)
+    if err != nil {
+        return err
+    }
+
+    // Commit the transaction
+    err = tx.Commit()
+    return err
 }

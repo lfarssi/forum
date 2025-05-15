@@ -249,32 +249,35 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // Add event delegation for form submissions
-    document.addEventListener('submit', function(event) {
-      const target = event.target;
-      
-      // Check if the form is one of our delete forms
-      if (target.action.includes('/delete_report') || target.action.includes('/delete_post')) {
-        event.preventDefault();
-        
-        // Get the form data
-        const formData = new FormData(target);
-        
-        // Send the form data via fetch
-        fetch(target.action, {
-          method: 'POST',
-          body: formData
-        })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          // Refresh the reports table
-          fetchReportedPosts();
-        })
-        .catch(error => {
-          console.error('Error submitting form:', error);
-          alert('An error occurred while processing your request. Please try again.');
-        });
+   document.addEventListener('submit', function(event) {
+  const target = event.target;
+
+  if (target.action.includes('/delete_report') || target.action.includes('/delete_post')) {
+    event.preventDefault();
+
+    console.log('Submitting form:', target.action);
+
+    const formData = new FormData(target);
+
+    // Disable the button to prevent double submission
+    const submitButton = target.querySelector('button[type="submit"]');
+    if (submitButton) submitButton.disabled = true;
+    console.log(formData);
+    
+    fetch(target.action, {
+      method: 'POST',
+      body: formData
+    })  
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
       }
+      fetchReportedPosts(); // refresh
+    })
+    .catch(error => {
+      console.error('Error submitting form:', error);
+      alert('An error occurred while processing your request. Please try again.');
     });
+  }
+});
   });

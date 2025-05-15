@@ -2,6 +2,8 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
+
 	"forum/app/models"
 	"net/http"
 	"strconv"
@@ -14,6 +16,7 @@ func DeleteReportHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	reportID := r.FormValue("report_id")
+
 	if reportID == "" {
 		ErrorController(w, r, http.StatusBadRequest, "Report ID is required")
 		return
@@ -21,6 +24,7 @@ func DeleteReportHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Convert reportID to int
 	reportIDInt, err := strconv.Atoi(reportID)
+
 	if err != nil {
 		ErrorController(w, r, http.StatusBadRequest, "Invalid Report ID")
 		return
@@ -33,7 +37,7 @@ func DeleteReportHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Redirect to moderator dashboard after deletion
-	http.Redirect(w, r, "/moderator/dashboard", http.StatusSeeOther)
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 func GetReportedPostsHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "GET" {
@@ -47,7 +51,7 @@ func GetReportedPostsHandler(w http.ResponseWriter, r *http.Request) {
 		ErrorController(w, r, http.StatusInternalServerError, "Failed to fetch reported posts")
 		return
 	}
-
+	fmt.Println(reportedPosts)
 	// Return the posts as JSON
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(reportedPosts)
