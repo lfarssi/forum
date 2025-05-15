@@ -9,5 +9,5 @@ type Data struct {
 	Role string
 	StatusReq string
 	ModRequests []ModReq
-	ReportedPosts []Posts
+	ReportedPosts  []ReportedPost
 }
