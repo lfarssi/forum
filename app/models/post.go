@@ -1,6 +1,8 @@
 package models
 
 import (
+	"database/sql"
+	"strings"
 	"time"
 )
 
@@ -18,9 +20,9 @@ type Posts struct {
 	Username      string `json:"username"`
 	IsLiked       bool
 	IsDisliked    bool
-	Status        string    `json:"status"`         
-	ReportDate    string    `json:"report_date"`   
-	Category      string    `json:"category"` 
+	Status        string `json:"status"`
+	ReportDate    string `json:"report_date"`
+	Category      string `json:"category"`
 }
 
 func CreatePost(title string, content string, categories []string, userId int) (int, error) {
@@ -186,52 +188,207 @@ func ReportPost(postID, userID, categoryID int) error {
 	`, postID, userID, categoryID)
 	return err
 }
-func GetReportedPosts() ([]Posts, error) {
-    query := `
-        SELECT p.id, p.title, p.content, r.status, r.report_date, c.name as category
-        FROM posts p
-        JOIN report r ON p.id = r.post_id
-        JOIN categorie_report c ON r.report_category_id = c.id
-        WHERE r.status = 'pending' OR r.status = 'reviewed'
-    `
-    rows, err := Database.Query(query)
-    if err != nil {
-        return nil, err
-    }
-    defer rows.Close()
 
-    var posts []Posts
-    for rows.Next() {
-        var post Posts
-        if err := rows.Scan(&post.ID, &post.Title, &post.Content, &post.Status, &post.ReportDate, &post.Category); err != nil {
-            return nil, err
-        }
-        posts = append(posts, post)
-    }
-
-    return posts, nil
+type ReportedPost struct {
+	Posts
+	ReportID     int       `json:"report_id"`     // Report ID
+	PostID       int       `json:"post_id"`       // Post ID (separate from Posts.ID for clarity)
+	ReportReason string    `json:"report_reason"` // Reason for report
+	ReportDate   time.Time `json:"report_date"`   // When the report was made
+	Status       string    `json:"status"`        // Report status (pending, reviewed, etc.)
+	CategoryName string    `json:"category_name"` // Category name
 }
-// Delete a report
+
+// GetReportedPosts fetches all reported posts from the database
+func GetReportedPosts() ([]Posts, error) {
+	rows, err := Database.Query(`
+		SELECT 
+			r.id AS report_id,
+			r.post_id,
+			p.title,
+			p.content,
+			u.username,
+			cr.name AS report_reason,
+			GROUP_CONCAT(c.name) AS categories,
+			r.report_date,
+			r.status,
+			p.creat_at
+		FROM report r
+		JOIN posts p ON r.post_id = p.id
+		JOIN users u ON p.user_id = u.id
+		JOIN categorie_report cr ON r.report_category_id = cr.id
+		LEFT JOIN post_categorie pc ON p.id = pc.post_id
+		LEFT JOIN categories c ON pc.categorie_id = c.id
+		WHERE r.comment_id IS NULL
+		GROUP BY r.id
+		ORDER BY r.report_date DESC
+	`)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var reports []Posts
+	for rows.Next() {
+		var r Posts
+		var reportID int
+		var reportReason string
+		var reportDate string
+		var categories sql.NullString
+		var createdAt string
+
+		err := rows.Scan(
+			&reportID,
+			&r.ID, // post_id goes into Posts.ID
+			&r.Title,
+			&r.Content,
+			&r.Username,
+			&reportReason,
+			&categories,
+			&reportDate,
+			&r.Status,
+			&createdAt,
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		// Set report date
+		r.ReportDate = reportDate
+
+		// Set created date
+		r.CreatedAt = createdAt
+
+		// Set category name
+		if categories.Valid {
+			r.Category = categories.String
+
+			// Also split into categories slice for the Posts struct
+			categorySlice := strings.Split(categories.String, ",")
+			r.Categories = make([]string, len(categorySlice))
+			for i, cat := range categorySlice {
+				r.Categories[i] = strings.TrimSpace(cat)
+			}
+		} else {
+			r.Category = "Uncategorized"
+			r.Categories = []string{"Uncategorized"}
+		}
+
+		// Initialize empty Comments slice
+		r.Comments = []Comment{}
+
+		reports = append(reports, r)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return reports, nil
+}
+
+// GetReportedPostsJSON is an alternative version that returns a custom struct for JSON output
+func GetReportedPostsJSON() ([]map[string]interface{}, error) {
+	posts, err := GetReportedPosts()
+	if err != nil {
+		return nil, err
+	}
+
+	result := make([]map[string]interface{}, len(posts))
+	for i, post := range posts {
+		result[i] = map[string]interface{}{
+			"id":          post.ID,
+			"title":       post.Title,
+			"category":    post.Category,
+			"report_date": post.ReportDate,
+			"status":      post.Status,
+			"username":    post.Username,
+			"content":     post.Content,
+		}
+	}
+
+	return result, nil
+}
 func DeleteReport(reportID int) error {
 	_, err := Database.Exec(`
-        DELETE FROM report WHERE id = ?
-    `, reportID)
+		DELETE FROM report WHERE id = ?
+	`, reportID)
 	return err
 }
 
-// Delete a post (after deleting associated reports)
+// DeletePost removes a post and its associated reports, comments, reactions, etc.
 func DeletePost(postID int) error {
-	// First, delete all reports for the post
-	_, err := Database.Exec(`
-        DELETE FROM report WHERE post_id = ?
-    `, postID)
+	// Start a transaction for deleting the post and all related data
+	tx, err := Database.Begin()
+	if err != nil {
+		return err
+	}
+	defer func() {
+		if err != nil {
+			tx.Rollback()
+		}
+	}()
+
+	// Delete reports for the post
+	_, err = tx.Exec(`
+		DELETE FROM report WHERE post_id = ?
+	`, postID)
 	if err != nil {
 		return err
 	}
 
-	// Then delete the post
-	_, err = Database.Exec(`
-        DELETE FROM posts WHERE id = ?
-    `, postID)
-	return err
+	// Delete reactions to the post
+	_, err = tx.Exec(`
+		DELETE FROM reactPost WHERE post_id = ?
+	`, postID)
+	if err != nil {
+		return err
+	}
+
+	// Delete comment reactions for comments on this post
+	_, err = tx.Exec(`
+		DELETE FROM reactComment WHERE comment_id IN (
+			SELECT id FROM comments WHERE post_id = ?
+		)
+	`, postID)
+	if err != nil {
+		return err
+	}
+
+	// Delete reports for comments on this post
+	_, err = tx.Exec(`
+		DELETE FROM report WHERE comment_id IN (
+			SELECT id FROM comments WHERE post_id = ?
+		)
+	`, postID)
+	if err != nil {
+		return err
+	}
+
+	// Delete comments for the post
+	_, err = tx.Exec(`
+		DELETE FROM comments WHERE post_id = ?
+	`, postID)
+	if err != nil {
+		return err
+	}
+
+	// Delete post categories relationships
+	_, err = tx.Exec(`
+		DELETE FROM post_categorie WHERE post_id = ?
+	`, postID)
+	if err != nil {
+		return err
+	}
+
+	// Finally, delete the post itself
+	_, err = tx.Exec(`
+		DELETE FROM posts WHERE id = ?
+	`, postID)
+	if err != nil {
+		return err
+	}
+
+	// Commit the transaction
+	return tx.Commit()
 }

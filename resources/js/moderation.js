@@ -130,3 +130,151 @@ if (!table || !closePopupBtn || !adminModRequestsPopup || !viewReportsBtn) {
       });
   }
 });
+
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    const reportedPostsPopover = document.getElementById('reportedPostsPopover');
+    const reportedPostsTable = document.getElementById('reportedPostsTable').getElementsByTagName('tbody')[0];
+    
+    // Add CSS for the popover if it's shown programmatically
+    const style = document.createElement('style');
+    style.textContent = `
+      #reportedPostsPopover {
+        padding: 20px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        max-width: 90%;
+        max-height: 80vh;
+        overflow-y: auto;
+      }
+      
+      #reportedPostsTable {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      
+      #reportedPostsTable th, #reportedPostsTable td {
+        padding: 8px;
+        border: 1px solid #ddd;
+        text-align: left;
+      }
+      
+      #reportedPostsTable th {
+        background-color: #f2f2f2;
+      }
+      
+      .action-buttons {
+        display: flex;
+        gap: 5px;
+      }
+      
+      .action-buttons button {
+        padding: 5px 10px;
+        cursor: pointer;
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Event listener for the popover showing
+    reportedPostsPopover.addEventListener('beforetoggle', function(event) {
+      if (event.newState === "open") {
+        fetchReportedPosts();
+      }
+    });
+
+    // Function to fetch reported posts and populate the table
+    function fetchReportedPosts() {
+      fetch('/get_reported_posts')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(posts => {
+          // Clear the table body
+          reportedPostsTable.innerHTML = '';
+
+          if (posts.length === 0) {
+            const row = reportedPostsTable.insertRow();
+            const cell = row.insertCell(0);
+            cell.colSpan = 5;
+            cell.textContent = "No reported posts found.";
+            cell.style.textAlign = "center";
+            return;
+          }
+
+          // Loop through the posts and add them to the table
+          posts.forEach(post => {
+            const row = reportedPostsTable.insertRow();
+
+            const titleCell = row.insertCell(0);
+            titleCell.textContent = post.title;
+
+            const categoryCell = row.insertCell(1);
+            categoryCell.textContent = post.category_name;
+
+            const reportDateCell = row.insertCell(2);
+            reportDateCell.textContent = new Date(post.report_date).toLocaleString();
+
+            const statusCell = row.insertCell(3);
+            statusCell.textContent = post.status;
+
+            const actionsCell = row.insertCell(4);
+            actionsCell.innerHTML = `
+              <div class="action-buttons">
+                <form action="/delete_report" method="POST">
+                  <input type="hidden" name="report_id" value="${post.id}">
+                  <button type="submit">Delete Report</button>
+                </form>
+                <form action="/delete_post" method="POST">
+                  <input type="hidden" name="post_id" value="${post.post_id}">
+                  <button type="submit">Delete Post</button>
+                </form>
+              </div>
+            `;
+          });
+        })
+        .catch(error => {
+          console.error('Error fetching reported posts:', error);
+          reportedPostsTable.innerHTML = '';
+          const row = reportedPostsTable.insertRow();
+          const cell = row.insertCell(0);
+          cell.colSpan = 5;
+          cell.textContent = "Error loading reported posts. Please try again.";
+          cell.style.textAlign = "center";
+        });
+    }
+
+    // Add event delegation for form submissions
+    document.addEventListener('submit', function(event) {
+      const target = event.target;
+      
+      // Check if the form is one of our delete forms
+      if (target.action.includes('/delete_report') || target.action.includes('/delete_post')) {
+        event.preventDefault();
+        
+        // Get the form data
+        const formData = new FormData(target);
+        
+        // Send the form data via fetch
+        fetch(target.action, {
+          method: 'POST',
+          body: formData
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          // Refresh the reports table
+          fetchReportedPosts();
+        })
+        .catch(error => {
+          console.error('Error submitting form:', error);
+          alert('An error occurred while processing your request. Please try again.');
+        });
+      }
+    });
+  });

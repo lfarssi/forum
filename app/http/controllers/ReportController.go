@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"encoding/json"
 	"forum/app/models"
 	"net/http"
 	"strconv"
@@ -33,4 +34,21 @@ func DeleteReportHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Redirect to moderator dashboard after deletion
 	http.Redirect(w, r, "/moderator/dashboard", http.StatusSeeOther)
+}
+func GetReportedPostsHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "GET" {
+		ErrorController(w, r, http.StatusMethodNotAllowed, "Method not allowed")
+		return
+	}
+
+	// Get reported posts from the database
+	reportedPosts, err := models.GetReportedPosts()
+	if err != nil {
+		ErrorController(w, r, http.StatusInternalServerError, "Failed to fetch reported posts")
+		return
+	}
+
+	// Return the posts as JSON
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(reportedPosts)
 }

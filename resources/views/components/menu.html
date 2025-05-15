@@ -117,18 +117,18 @@
       </table>
     </div>
 {{ end }}
-{{ if eq .Role "moderator" }}
+{{if eq .Role "moderator"}}
   <!-- Button to trigger the popup for reported posts -->
   <div class="modRequestAdmin">
-    <button class="btn-menu" id="viewReportsBtn">
+    <button class="btn-menu" popovertarget="reportedPostsPopover">
       View Post Reports
     </button>
   </div>
 
-  <!-- Popup (initially hidden) to display reported posts -->
-  <div id="adminModRequests" class="popup">
-    <div class="popup-content">
-      <h1>Reported Posts</h1>
+  <!-- Popover to display reported posts -->
+  <div id="reportedPostsPopover" popover>
+    <div class="reported-posts-container">
+      <h3>Reported Posts</h3>
       <table id="reportedPostsTable">
         <thead>
           <tr>
@@ -140,14 +140,11 @@
           </tr>
         </thead>
         <tbody>
-          <!-- Fetched posts will be inserted here -->
+          <!-- Fetched posts will be inserted here via JavaScript -->
         </tbody>
       </table>
-      <button id="closePopupBtn">Close</button>
     </div>
   </div>
-
-  <script src="path_to_your_script.js"></script>
 {{ end }}
 
 
