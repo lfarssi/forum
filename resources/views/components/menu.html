@@ -76,47 +76,46 @@
   {{ end }}
 {{ end }}
 
- {{ if eq .Role "admin" }}
+{{ if eq .Role "admin" }}
   <div class="modRequestAdmin">
     <button class="btn-menu" popovertarget="adminModRequests">
       View Moderator Requests
     </button>
   </div>
 
-
   <div id="adminModRequests" popover>
-      <table class="admin-req-table">
-        <thead>
-          <tr>
-            <th>User ID</th>
-            <th>Reason</th>
-            <th>Request Date</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {{range .ModRequests}}
-          <tr>
-            <td>{{.UserID}}</td>
-            <td>{{.Reason}}</td>
-            <td>{{.Request_date}}</td>
-            <td>
-            <form class="mod-request-form" style="display:inline;">
-  <input type="hidden" name="user_id" value="{{ .UserID }}">
-  <input type="hidden" name="action" value="accept">
-  <button type="submit">Accept</button>
-</form>
-<form class="mod-request-form" style="display:inline;">
-  <input type="hidden" name="user_id" value="{{ .UserID }}">
-  <input type="hidden" name="action" value="refuse">
-  <button type="submit">Refuse</button>
-</form>
-          </tr>
-          {{end}}
-        </tbody>
-      </table>
-    </div>
+    <table class="admin-req-table">
+      <thead>
+        <tr>
+          <th>User ID</th>
+          <th>Reason</th>
+          <th>Request Date</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{ range .ModRequests }}
+        <tr>
+          <td>{{ .UserID }}</td>
+          <td>{{ .Reason }}</td>
+          <td>{{ .Request_date }}</td>
+          <td>
+            <form class="mod-request-form" method="POST" action="/handleRequest">
+              <input type="hidden" name="user_id" value="{{ .UserID }}">
+              <select name="role">
+                <option value="user">Refuse</option>
+                <option value="moderator">Accept as Moderator</option>
+              </select>
+              <button type="submit">Submit</button>
+            </form>
+          </td>
+        </tr>
+        {{ end }}
+      </tbody>
+    </table>
+  </div>
 {{ end }}
+
 
 
 {{if eq .Role "moderator"}}

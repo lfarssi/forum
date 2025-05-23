@@ -6,9 +6,11 @@ import (
 	"strconv"
 )
 
+
+
 func HandleModRequest(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
-		ErrorController(w, r, http.StatusMethodNotAllowed, "Method Not Allowed sss")
+		ErrorController(w, r, http.StatusMethodNotAllowed, "Method Not Allowed")
 		return
 	}
 
@@ -19,28 +21,34 @@ func HandleModRequest(w http.ResponseWriter, r *http.Request) {
 	}
 
 	userIDStr := r.FormValue("user_id")
-	action := r.FormValue("action")
+	role := r.FormValue("role")
 	userID, err := strconv.Atoi(userIDStr)
 
-	if err != nil {
-		ErrorController(w, r, http.StatusBadRequest, "Invalid User ID")
+	if err != nil || (role != "user" && role != "moderator") {
+		ErrorController(w, r, http.StatusBadRequest, "Invalid Data")
 		return
 	}
 
-	if action == "accept" {
-		err = models.UpdateUserRole(userID, "moderator")
-		if err != nil {
-			ErrorController(w, r, http.StatusInternalServerError, "Failed to Promote User")
-			return
-		}
+	err = models.UpdateUserRole(userID, role)
+	if err != nil {
+		ErrorController(w, r, http.StatusInternalServerError, "Failed to Change User Role")
+		return
+	}
+	err = models.UpdateModRequestStatus(userID, "accepted")
+	if err != nil {
+		http.Error(w, "Could not update request status", http.StatusInternalServerError)
+		return
 	}
 
-	// In both accept and refuse: delete the request
+	// Only delete the mod request if the role is "user" (i.e., request refused)
+	if role == "user" {
 	err = models.DeleteModRequest(userID)
 	if err != nil {
-		ErrorController(w, r, http.StatusInternalServerError, "Failed to Delete Request")
+		ErrorController(w, r, http.StatusInternalServerError, "Failed to Delete Mod Request")
 		return
 	}
-
-	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
+
+	w.WriteHeader(http.StatusOK)
+}
+

@@ -91,7 +91,10 @@ func UpdateUserRole(userID int, role string) error {
 	_, err := Database.Exec("UPDATE users SET role = ? WHERE id = ?", role, userID)
 	return err
 }
-
+func UpdateModRequestStatus(userID int, status string) error {
+	_, err := Database.Exec("UPDATE moderator_requests SET status = ? WHERE user_id = ?", status, userID)
+	return err
+}
 
 func DeleteModRequest(userID int) error {
 	_, err := Database.Exec("DELETE FROM moderator_requests WHERE user_id = ?", userID)

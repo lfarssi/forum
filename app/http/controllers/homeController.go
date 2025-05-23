@@ -198,7 +198,7 @@ func HomeController(w http.ResponseWriter, r *http.Request) {
 				ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch moderator requests")
 				return
 			}
-
+			
 			data := models.Data{
 				IsLoggedIn:     logedIn,
 				Category:       categories,
@@ -206,6 +206,7 @@ func HomeController(w http.ResponseWriter, r *http.Request) {
 				Role:           user.Role,
 				ModRequests:    modRequests,
 				CategoryReport: categorie_report,
+				
 			}
 
 			ParseFileController(w, r, "admin/index", data)
