@@ -205,6 +205,7 @@ func ReportPost(postID, userID, categoryID int) error {
 	`, postID, userID, categoryID)
 	return err
 }
+
 func GetReportedPosts() ([]ReportedPost, error) {
 	rows, err := Database.Query(`
 		SELECT 
@@ -279,7 +280,7 @@ func GetReportedPosts() ([]ReportedPost, error) {
 }
 func DeleteReport(reportID int) error {
 	_, err := Database.Exec(`
-		DELETE FROM report WHERE post_id = ?
+		DELETE FROM report WHERE id = ?
 	`, reportID)
 	return err
 }

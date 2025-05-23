@@ -103,8 +103,8 @@ if (!table || !closePopupBtn || !adminModRequestsPopup || !viewReportsBtn) {
           const titleCell = row.insertCell(0);
           titleCell.textContent = post.title;
 
-          const categoryCell = row.insertCell(1);
-          categoryCell.textContent = post.category;
+          // const categoryCell = row.insertCell(1);
+          // categoryCell.textContent = post.category;
 
           const reportDateCell = row.insertCell(2);
           reportDateCell.textContent = post.report_date;
@@ -197,7 +197,8 @@ document.addEventListener("DOMContentLoaded", function() {
           // Clear the table body
           reportedPostsTable.innerHTML = '';
 
-          if (posts.length === 0) {
+          console.log(posts);
+          if (posts==null) {
             const row = reportedPostsTable.insertRow();
             const cell = row.insertCell(0);
             cell.colSpan = 5;
@@ -205,6 +206,7 @@ document.addEventListener("DOMContentLoaded", function() {
             cell.style.textAlign = "center";
             return;
           }
+          
 
           // Loop through the posts and add them to the table
           posts.forEach(post => {
@@ -214,19 +216,21 @@ document.addEventListener("DOMContentLoaded", function() {
             titleCell.textContent = post.title;
 
             const categoryCell = row.insertCell(1);
-            categoryCell.textContent = post.category_name;
+            categoryCell.textContent = post.category;
+            const reason = row.insertCell(2);
+            reason.textContent = post.report_reason;
 
-            const reportDateCell = row.insertCell(2);
+            const reportDateCell = row.insertCell(3);
             reportDateCell.textContent = new Date(post.report_date).toLocaleString();
 
-            const statusCell = row.insertCell(3);
+            const statusCell = row.insertCell(4);
             statusCell.textContent = post.status;
 
-            const actionsCell = row.insertCell(4);
+            const actionsCell = row.insertCell(5);
             actionsCell.innerHTML = `
               <div class="action-buttons">
                 <form action="/delete_report" method="POST">
-                  <input type="hidden" name="report_id" value="${post.id}">
+                  <input type="hidden" name="report_id" value="${post.report_id}">
                   <button type="submit">Delete Report</button>
                 </form>
                 <form action="/delete_post" method="POST">
@@ -258,7 +262,10 @@ document.addEventListener("DOMContentLoaded", function() {
     console.log('Submitting form:', target.action);
 
     const formData = new FormData(target);
-
+console.log('Form data contents:');
+    for (let [key, value] of formData.entries()) {
+      console.log(key, value);
+    }
     // Disable the button to prevent double submission
     const submitButton = target.querySelector('button[type="submit"]');
     if (submitButton) submitButton.disabled = true;
@@ -272,7 +279,9 @@ document.addEventListener("DOMContentLoaded", function() {
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-      fetchReportedPosts(); // refresh
+     setTimeout(() => {
+        fetchReportedPosts();
+      }, 1500);
     })
     .catch(error => {
       console.error('Error submitting form:', error);
