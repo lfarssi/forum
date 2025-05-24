@@ -76,79 +76,100 @@
   {{ end }}
 {{ end }}
 
-{{ if eq .Role "admin" }}
-  <div class="modRequestAdmin">
-    <button class="btn-menu" popovertarget="adminModRequests">
-      View Moderator Requests
-    </button>
-  </div>
+ {{ if eq .Role "admin" }}
+    <div class="modRequestAdmin">
+      <button class="btn-menu" popovertarget="adminModRequests">View Moderator Requests</button>
+    </div>
 
-  <div id="adminModRequests" popover>
-    <table class="admin-req-table">
-      <thead>
-        <tr>
-          <th>User ID</th>
-          <th>Reason</th>
-          <th>Request Date</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        {{ range .ModRequests }}
-        <tr>
-          <td>{{ .UserID }}</td>
-          <td>{{ .Reason }}</td>
-          <td>{{ .Request_date }}</td>
-          <td>
-            <form class="mod-request-form" method="POST" action="/handleRequest">
-              <input type="hidden" name="user_id" value="{{ .UserID }}">
-              <select name="role">
-                <option value="user">Refuse</option>
-                <option value="moderator">Accept as Moderator</option>
-              </select>
-              <button type="submit">Submit</button>
-            </form>
-          </td>
-        </tr>
-        {{ end }}
-      </tbody>
-    </table>
-  </div>
-{{ end }}
+    <!-- NEW: Admin Report Management -->
+    <div class="reportManagement">
+      <button class="btn-menu" popovertarget="adminReportRequests">Manage Report Actions</button>
+    </div>
 
-
-
-{{if eq .Role "moderator"}}
-  <!-- Button to trigger the popup for reported posts -->
-  <div class="modRequestAdmin">
-    <button class="btn-menu" popovertarget="reportedPostsPopover">
-      View Post Reports
-    </button>
-  </div>
-
-  <!-- Popover to display reported posts -->
-  <div id="reportedPostsPopover" popover>
-    <div class="reported-posts-container">
-      <h3>Reported Posts</h3>
-      <table id="reportedPostsTable">
+    <!-- Moderator Requests Popover -->
+    <div id="adminModRequests" popover>
+      <table class="admin-req-table">
         <thead>
           <tr>
-            <th>Title</th>
-            <th>Category</th>
-            <th>Report Reason</th>
-
-            <th>Report Date</th>
-            <th>Status</th>
-            <th>Actions</th>
+            <th>User ID</th>
+            <th>Reason</th>
+            <th>Request Date</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
-          <!-- Fetched posts will be inserted here via JavaScript -->
+          {{ range .ModRequests }}
+          <tr>
+            <td>{{ .UserID }}</td>
+            <td>{{ .Reason }}</td>
+            <td>{{ .Request_date }}</td>
+            <td>
+              <form class="mod-request-form" method="POST" action="/handleRequest">
+                <input type="hidden" name="user_id" value="{{ .UserID }}">
+                <select name="role">
+                  <option value="user">Refuse</option>
+                  <option value="moderator">Accept as Moderator</option>
+                </select>
+                <button type="submit">Submit</button>
+              </form>
+            </td>
+          </tr>
+          {{ end }}
         </tbody>
       </table>
     </div>
-  </div>
-{{ end }}
+
+    <!-- NEW: Admin Report Approval Popover -->
+    <div id="adminReportRequests" popover>
+      <div class="admin-reports-container">
+        <h3>Report Action Requests</h3>
+        <table id="adminReportsTable">
+          <thead>
+            <tr>
+              <th>Post Title</th>
+              <th>Report Reason</th>
+              <th>Reporter</th>
+              <th>Report Date</th>
+              <th>Requested Action</th>
+              <th>Admin Decision</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Reports will be populated via JavaScript -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {{ end }}
+
+    <!-- Moderator Controls -->
+    {{if eq .Role "moderator"}}
+    <div class="modRequestAdmin">
+      <button class="btn-menu" popovertarget="reportedPostsPopover">View Post Reports</button>
+    </div>
+
+    <!-- Updated Moderator Reports Popover -->
+    <div id="reportedPostsPopover" popover>
+      <div class="reported-posts-container">
+        <h3>Reported Posts</h3>
+        <table id="reportedPostsTable">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Category</th>
+              <th>Report Reason</th>
+              <th>Report Date</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Posts will be populated via JavaScript -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {{ end }}
 
 
 
