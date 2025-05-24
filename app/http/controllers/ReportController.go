@@ -56,3 +56,34 @@ func GetReportedPostsHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(reportedPosts)
 }
+
+func HandleModeratorReport(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		ErrorController(w, r, http.StatusMethodNotAllowed, "Method not allowed")
+		return
+	}
+
+	// Parse form values
+	if err := r.ParseForm(); err != nil {
+		ErrorController(w, r, http.StatusBadRequest, "Invalid form data")
+		return
+	}
+
+	reportID := r.FormValue("report_id")
+	decision := r.FormValue("decision")
+
+	if reportID == "" || (decision != "accepted" && decision != "refused") {
+		ErrorController(w, r, http.StatusBadRequest, "Invalid input")
+		return
+	}
+
+	// Update the report status
+	err := models.UpdateReportStatus(reportID, decision)
+	if err != nil {
+		ErrorController(w, r, http.StatusInternalServerError, "Failed to update report status")
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("Report updated successfully"))
+}

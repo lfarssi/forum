@@ -353,3 +353,14 @@ func DeletePost(postID int) error {
 	err = tx.Commit()
 	return err
 }
+
+func UpdateReportStatus(reportID string, status string) error {
+	stmt, err := Database.Prepare("UPDATE report SET status = ? WHERE id = ?")
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(status, reportID)
+	return err
+}

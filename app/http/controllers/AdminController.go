@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"encoding/json"
 	"forum/app/models"
 	"net/http"
 	"strconv"

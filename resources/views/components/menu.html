@@ -76,71 +76,70 @@
   {{ end }}
 {{ end }}
 
- {{ if eq .Role "admin" }}
-    <div class="modRequestAdmin">
-      <button class="btn-menu" popovertarget="adminModRequests">View Moderator Requests</button>
-    </div>
+{{ if eq .Role "admin" }}
+  <div class="modRequestAdmin">
+    <button class="btn-menu" popovertarget="adminModRequests">View Moderator Requests</button>
+  </div>
 
-    <!-- NEW: Admin Report Management -->
-    <div class="reportManagement">
-      <button class="btn-menu" popovertarget="adminReportRequests">Manage Report Actions</button>
-    </div>
+  <div class="reportManagement">
+    <button class="btn-menu" popovertarget="adminReportRequests">Manage Report Actions</button>
+  </div>
 
-    <!-- Moderator Requests Popover -->
-    <div id="adminModRequests" popover>
-      <table class="admin-req-table">
+  <!-- Moderator Requests -->
+  <div id="adminModRequests" popover>
+    <table class="admin-req-table">
+      <thead>
+        <tr>
+          <th>User ID</th>
+          <th>Reason</th>
+          <th>Request Date</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{ range .ModRequests }}
+        <tr>
+          <td>{{ .UserID }}</td>
+          <td>{{ .Reason }}</td>
+          <td>{{ .Request_date }}</td>
+          <td>
+            <form class="mod-request-form" method="POST" action="/handleRequest">
+              <input type="hidden" name="user_id" value="{{ .UserID }}">
+              <select name="role">
+                <option value="user">Refuse</option>
+                <option value="moderator">Accept as Moderator</option>
+              </select>
+              <button type="submit">Submit</button>
+            </form>
+          </td>
+        </tr>
+        {{ end }}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Report Management -->
+  <div id="adminReportRequests" popover>
+    <div class="admin-reports-container">
+      <h3>Report Action Requests</h3>
+      <table id="adminReportsTable">
         <thead>
           <tr>
-            <th>User ID</th>
-            <th>Reason</th>
-            <th>Request Date</th>
-            <th>Action</th>
+            <th>Post Title</th>
+            <th>Report Reason</th>
+            <th>Reporter</th>
+            <th>Report Date</th>
+            <th>Requested Action</th>
+            <th>Admin Decision</th>
           </tr>
         </thead>
         <tbody>
-          {{ range .ModRequests }}
-          <tr>
-            <td>{{ .UserID }}</td>
-            <td>{{ .Reason }}</td>
-            <td>{{ .Request_date }}</td>
-            <td>
-              <form class="mod-request-form" method="POST" action="/handleRequest">
-                <input type="hidden" name="user_id" value="{{ .UserID }}">
-                <select name="role">
-                  <option value="user">Refuse</option>
-                  <option value="moderator">Accept as Moderator</option>
-                </select>
-                <button type="submit">Submit</button>
-              </form>
-            </td>
-          </tr>
-          {{ end }}
+        
         </tbody>
       </table>
     </div>
-
-    <!-- NEW: Admin Report Approval Popover -->
-    <div id="adminReportRequests" popover>
-      <div class="admin-reports-container">
-        <h3>Report Action Requests</h3>
-        <table id="adminReportsTable">
-          <thead>
-            <tr>
-              <th>Post Title</th>
-              <th>Report Reason</th>
-              <th>Reporter</th>
-              <th>Report Date</th>
-              <th>Requested Action</th>
-              <th>Admin Decision</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- Reports will be populated via JavaScript -->
-          </tbody>
-        </table>
-      </div>
-    </div>
-    {{ end }}
+  </div>
+{{ end }}
 
     <!-- Moderator Controls -->
     {{if eq .Role "moderator"}}
