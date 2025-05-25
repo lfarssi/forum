@@ -20,6 +20,7 @@
             const row = form.closest('tr');
             if (row) row.remove();
           }
+          alert("request sent succ")
         } else {
           const errorText = await res.text();
           console.error(errorText);

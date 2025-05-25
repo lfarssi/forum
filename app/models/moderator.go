@@ -51,7 +51,6 @@ func GetAllModRequests() ([]ModReq, error) {
 	query := `
 	SELECT user_id, reason, request_date, status
 	FROM moderator_requests
-	WHERE status = 'pending'
 	ORDER BY request_date DESC
 	`
 	rows, err := Database.Query(query)

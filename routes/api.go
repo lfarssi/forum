@@ -21,6 +21,7 @@ func ApiRouter() {
 	http.HandleFunc("/delete_post",middleware.AuthMiddleware(middleware.RateLimitMiddleware( controllers.DeletePostHandler)))
 	http.HandleFunc("/get_reported_posts",middleware.AuthMiddleware(middleware.RateLimitMiddleware( controllers.GetReportedPostsHandler)))
 	http.HandleFunc("/moderator/handle_report", middleware.AuthMiddleware(controllers.HandleModeratorReport))
+	http.HandleFunc("/handleRequest",middleware.AuthMiddleware( controllers.HandleModRequest))
 
 
 

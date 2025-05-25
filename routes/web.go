@@ -13,7 +13,6 @@ func WebRouter() {
 	http.HandleFunc("/PostByCategories", controllers.PostByCategoriesController)
 	http.HandleFunc("/createdPost",middleware.AuthMiddleware(  controllers.CreatedPostController))
 	http.HandleFunc("/myliked",middleware.AuthMiddleware( controllers.LikedPostController))
-	http.HandleFunc("/handleRequest",middleware.AuthMiddleware( controllers.HandleModRequest))
 
 
 
