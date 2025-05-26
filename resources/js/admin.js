@@ -36,8 +36,10 @@
 
 
 
-    document.querySelectorAll('report-post-admin').forEach(form => {
+    document.querySelectorAll('.report-post-admin').forEach(form => {
     form.addEventListener('submit', async function (e) {
+      console.log(e);
+      
       e.preventDefault();
       const formData = new FormData(form);
 
@@ -46,7 +48,7 @@
           method: 'POST',
           body: formData
         });
-        alert("dddddd")
+       
         
         if (res.ok) {
           const selectedRole = formData.get("role");

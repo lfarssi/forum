@@ -259,9 +259,9 @@ if (!table ) {
               actionsCell.innerHTML = `
               <div class="action-buttons">
                 <form action="/delete_post" method="POST">
-            //       <input type="hidden" name="post_id" value="${post.post_id}">
-            //       <button type="submit">Delete Post</button>
-            //     </form>
+                  <input type="hidden" name="post_id" value="${post.post_id}">
+                   <button type="submit">Delete Post</button>
+                 </form>
               </div>
             `;
             }
