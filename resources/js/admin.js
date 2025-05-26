@@ -37,12 +37,21 @@
 
 
     document.querySelectorAll('.report-post-admin').forEach(form => {
+      const select = form.querySelector('select[name="desicion"]');
+  const submitButton = form.querySelector('button[type="submit"]');
+  submitButton.disabled = true;
+
+  select.addEventListener('change', () => {
+    if (select.value !== "") {
+      submitButton.disabled = false;
+    }
+  });
     form.addEventListener('submit', async function (e) {
-      console.log(e);
+
       
       e.preventDefault();
       const formData = new FormData(form);
-
+submitButton.disabled = true;
       try {
         const res = await fetch('/repot-post-responce', {
           method: 'POST',
@@ -60,6 +69,7 @@
           }
           alert("request sent succ")
         } else {
+          submitButton.disabled = false;
           const errorText = await res.text();
           console.error(errorText);
         }

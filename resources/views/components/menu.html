@@ -123,6 +123,7 @@
   <div id="reportedPostsPopover-admin" popover>
     <div class="admin-reports-container">
       <h3>Report Action Requests</h3>
+      {{ if .ReportedPosts }}
       <table id="reportedPostsTable-admin">
         <thead>
           <tr>
@@ -135,27 +136,29 @@
         </thead>
         <tbody>
         {{ range .ReportedPosts }}
-        <tr>
-          <td>{{ .Title }}</td>
-          <td>{{ .ReportReason }}</td>
-          <td>{{ .Content }}</td>
-          <td>{{ .ReportDate }}</td>
-          <td>
-            <form class="report-post-admin" >
-              <input type="hidden" name="report-id" value="{{ .ReportID }}">
-              <select name="desicion">
-                <option value="" selected disabled>option</option>
-
-                <option value="rejected">Refuse report</option>
-                <option value="accepted">Accept reporte</option>
-              </select>
-              <button type="submit">Submit</button>
-            </form>
-          </td>
-        </tr>
+          <tr>
+            <td>{{ .Title }}</td>
+            <td>{{ .ReportReason }}</td>
+            <td>{{ .Content }}</td>
+            <td>{{ .ReportDate }}</td>
+            <td>
+              <form class="report-post-admin">
+                <input type="hidden" name="report-id" value="{{ .ReportID }}">
+                <select name="desicion">
+                  <option value="" selected disabled>option</option>
+                  <option value="rejected">Refuse report</option>
+                  <option value="accepted">Accept report</option>
+                </select>
+                <button type="submit">Submit</button>
+              </form>
+            </td>
+          </tr>
         {{ end }}
         </tbody>
       </table>
+    {{ else }}
+      <p>No reports yet.</p>
+    {{ end }}
     </div>
   </div>
 {{ end }}
