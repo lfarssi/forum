@@ -5,16 +5,16 @@ import (
 )
 
 type Comment struct {
-	ID        int       `json:"id"`
-	PostID    int       `json:"post_id"`
-	UserID    int       `json:"user_id"`
-	Content   string    `json:"content"`
-	CreatedAt time.Time `json:"created_at"`
-	Username  string    `json:"username"`
-	Likes     int       `json:"likes"`
-	Dislikes  int       `json:"dislikes"`
-	IsLiked 	bool 
-	IsDisliked	bool
+	ID         int       `json:"id"`
+	PostID     int       `json:"post_id"`
+	UserID     int       `json:"user_id"`
+	Content    string    `json:"content"`
+	CreatedAt  time.Time `json:"created_at"`
+	Username   string    `json:"username"`
+	Likes      int       `json:"likes"`
+	Dislikes   int       `json:"dislikes"`
+	IsLiked    bool
+	IsDisliked bool
 }
 
 func CreateComment(comment Comment) error {
@@ -58,4 +58,15 @@ func GetComments(postid int) ([]Comment, error) {
 		return nil, err
 	}
 	return comments, nil
+}
+
+func CommentExists(id int) (bool, error) {
+	var exists bool
+	err := Database.QueryRow("SELECT EXISTS(SELECT 1 FROM comments WHERE id = ?)", id).Scan(&exists)
+	return exists, err
+}
+
+func DeleteComment(id int) error {
+	_, err := Database.Exec("DELETE FROM comments WHERE id = ?", id)
+	return err
 }

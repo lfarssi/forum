@@ -81,6 +81,8 @@
 
 .comment{
     padding: 15px;
+     border: 1px solid rgb(88, 88, 88) !important;
+
     border-radius: 20px;
     background-color: var(--second-bg-color);
 }
@@ -352,4 +354,15 @@
     .comments-btn i {
        margin: 5px;
     }
+}
+
+
+.btn-delete-comment {
+  background: #ff4d4d;
+  color: white;
+  border: 1px solid rgb(88, 88, 88) !important;
+  padding: 4px 10px;
+  margin-top: 4px;
+  border-radius: 4px;
+  cursor: pointer;
 }

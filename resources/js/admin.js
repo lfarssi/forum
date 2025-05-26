@@ -1,6 +1,5 @@
 
 
-
   document.querySelectorAll('.mod-request-form').forEach(form => {
     form.addEventListener('submit', async function (e) {
       e.preventDefault();

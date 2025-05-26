@@ -51,6 +51,41 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
+document.addEventListener('submit', function (event) {
+  const target = event.target;
+
+  if (target.classList.contains('delete-post-form')) {
+    event.preventDefault();
+
+    
+    const formData = new FormData(target);
+
+ 
+    const submitButton = target.querySelector('button[type="submit"]');
+    if (submitButton) submitButton.disabled = true;
+
+    fetch('/delete_post', {
+      method: 'POST',
+      body: formData
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Failed to delete post');
+      }
+      
+      alert("post deleted succ")
+      const postElement = target.closest('.post');
+      if (postElement) {
+        postElement.remove();
+      }
+    })
+    .catch(error => {
+      console.error('Error deleting post:', error);
+      alert('An error occurred while deleting the post.');
+      if (submitButton) submitButton.disabled = false;
+    });
+  }
+});
 
 
 document.addEventListener("DOMContentLoaded", function() {
