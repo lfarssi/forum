@@ -2,6 +2,7 @@
 
 {{range .Posts}}
 <div class="post" data-id="{{.ID}}">
+ {{if or (eq $.Role "admin") (eq $.Role "moderator")}}
    <div class="report-post-form">
    <form class="report-form" data-post-id="{{.ID}}">
        <input type="hidden" name="post_id" value="{{.ID}}">
@@ -15,6 +16,7 @@
        <button type="submit" class="btn-report">Report</button>
    </form>
 </div>
+{{end}}
 
     <div class="header">
     <h2><img src="/resources/imgs/profile.png" alt="profile pictures"><span class="username">{{.Username}}</span></h2>

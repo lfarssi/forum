@@ -147,18 +147,13 @@ func HomeController(w http.ResponseWriter, r *http.Request) {
 				ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch the Request info")
 				return
 			}
-			categorie_report, err := models.GetCategorieReport()
-			if err != nil {
-				ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch the Categorie Report")
-				return
-			}
 			datas := models.Data{
 				IsLoggedIn:     logedIn,
 				Category:       categories,
 				Posts:          posts,
 				Role:           user.Role,
 				StatusReq:      reqmod,
-				CategoryReport: categorie_report,
+				
 			}
 			ParseFileController(w, r, "users/index", datas)
 
