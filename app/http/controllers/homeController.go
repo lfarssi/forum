@@ -198,7 +198,11 @@ func HomeController(w http.ResponseWriter, r *http.Request) {
 				ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch moderator requests")
 				return
 			}
-			
+			reportedposts, err := models.GetReportedPosts()
+			if err != nil {
+				ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch reported posts")
+				return
+			}
 			data := models.Data{
 				IsLoggedIn:     logedIn,
 				Category:       categories,
@@ -206,6 +210,7 @@ func HomeController(w http.ResponseWriter, r *http.Request) {
 				Role:           user.Role,
 				ModRequests:    modRequests,
 				CategoryReport: categorie_report,
+				ReportedPosts: reportedposts,
 				
 			}
 

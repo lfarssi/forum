@@ -95,6 +95,11 @@ func UpdateModRequestStatus(userID int, status string) error {
 	_, err := Database.Exec("UPDATE moderator_requests SET status = ? WHERE user_id = ?", status, userID)
 	return err
 }
+func UpdateReportPostStatus(reportid int, status string) error {
+	_, err := Database.Exec("UPDATE report SET status = ? WHERE id = ?", status, reportid)
+	return err
+}
+
 
 func DeleteModRequest(userID int) error {
 	_, err := Database.Exec("DELETE FROM moderator_requests WHERE user_id = ?", userID)

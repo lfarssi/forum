@@ -82,7 +82,7 @@
   </div>
 
   <div class="reportManagement">
-    <button class="btn-menu" popovertarget="adminReportRequests">Manage Report Actions</button>
+    <button class="btn-menu" popovertarget="reportedPostsPopover-admin">Manage Report Actions</button>
   </div>
 
   <!-- Moderator Requests -->
@@ -103,9 +103,10 @@
           <td>{{ .Reason }}</td>
           <td>{{ .Request_date }}</td>
           <td>
-            <form class="mod-request-form" method="POST" action="/handleRequest">
+            <form class="mod-request-form" >
               <input type="hidden" name="user_id" value="{{ .UserID }}">
               <select name="role">
+                <option value="" selected  disabled>option</option>
                 <option value="user">Refuse</option>
                 <option value="moderator">Accept as Moderator</option>
               </select>
@@ -119,22 +120,40 @@
   </div>
 
   <!-- Report Management -->
-  <div id="adminReportRequests" popover>
+  <div id="reportedPostsPopover-admin" popover>
     <div class="admin-reports-container">
       <h3>Report Action Requests</h3>
-      <table id="adminReportsTable">
+      <table id="reportedPostsTable-admin">
         <thead>
           <tr>
             <th>Post Title</th>
             <th>Report Reason</th>
-            <th>Reporter</th>
+            <th>Post Content</th>
             <th>Report Date</th>
-            <th>Requested Action</th>
             <th>Admin Decision</th>
           </tr>
         </thead>
         <tbody>
-        
+        {{ range .ReportedPosts }}
+        <tr>
+          <td>{{ .Title }}</td>
+          <td>{{ .ReportReason }}</td>
+          <td>{{ .Content }}</td>
+          <td>{{ .ReportDate }}</td>
+          <td>
+            <form class="report-post-admin" >
+              <input type="hidden" name="report-id" value="{{ .ReportID }}">
+              <select name="desicion">
+                <option value="" selected disabled>option</option>
+
+                <option value="rejected">Refuse report</option>
+                <option value="accepted">Accept reporte</option>
+              </select>
+              <button type="submit">Submit</button>
+            </form>
+          </td>
+        </tr>
+        {{ end }}
         </tbody>
       </table>
     </div>

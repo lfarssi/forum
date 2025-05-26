@@ -135,8 +135,25 @@ if (!table || !closePopupBtn || !adminModRequestsPopup || !viewReportsBtn) {
 
 document.addEventListener("DOMContentLoaded", function() {
     const reportedPostsPopover = document.getElementById('reportedPostsPopover');
-    const reportedPostsTable = document.getElementById('reportedPostsTable').getElementsByTagName('tbody')[0];
-    
+  //   const reportedPostsTable = document.getElementById('reportedPostsTable').getElementsByTagName('tbody')[0];
+  //    if (!reportedPostsTable) {
+  //   console.warn("Tbody not found inside reportedPostsTable.");
+  //   return;
+  // }
+
+
+ const table = document.getElementById('reportedPostsTable');
+if (!table ) {
+    console.warn("Some elements are missing from the DOM.");
+    return;
+  }
+
+  const reportedPostsTable = table.getElementsByTagName('tbody')[0];
+  if (!reportedPostsTable) {
+    console.warn("Tbody not found inside reportedPostsTable.");
+    return;
+  }
+
     // Add CSS for the popover if it's shown programmatically
     const style = document.createElement('style');
     style.textContent = `
@@ -197,7 +214,6 @@ document.addEventListener("DOMContentLoaded", function() {
           // Clear the table body
           reportedPostsTable.innerHTML = '';
 
-          console.log(posts);
           if (posts==null) {
             const row = reportedPostsTable.insertRow();
             const cell = row.insertCell(0);
@@ -210,6 +226,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
           // Loop through the posts and add them to the table
           posts.forEach(post => {
+          console.log(post.status);
+
             const row = reportedPostsTable.insertRow();
 
             const titleCell = row.insertCell(0);
@@ -225,20 +243,28 @@ document.addEventListener("DOMContentLoaded", function() {
 
             const statusCell = row.insertCell(4);
             statusCell.textContent = post.status;
-
             const actionsCell = row.insertCell(5);
-            actionsCell.innerHTML = `
+            if(post.status=="pending"){
+              actionsCell.innerHTML="no responce from admin"
+            }else if(post.status=="rejected"){
+              actionsCell.innerHTML = `
               <div class="action-buttons">
                 <form action="/delete_report" method="POST">
                   <input type="hidden" name="report_id" value="${post.report_id}">
                   <button type="submit">Delete Report</button>
                 </form>
-                <form action="/delete_post" method="POST">
-                  <input type="hidden" name="post_id" value="${post.post_id}">
-                  <button type="submit">Delete Post</button>
-                </form>
               </div>
             `;
+            }else if(post.status=="accepted"){
+              actionsCell.innerHTML = `
+              <div class="action-buttons">
+                <form action="/delete_post" method="POST">
+            //       <input type="hidden" name="post_id" value="${post.post_id}">
+            //       <button type="submit">Delete Post</button>
+            //     </form>
+              </div>
+            `;
+            }
           });
         })
         .catch(error => {

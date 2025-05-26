@@ -22,6 +22,7 @@ func ApiRouter() {
 	http.HandleFunc("/get_reported_posts",middleware.AuthMiddleware(middleware.RateLimitMiddleware( controllers.GetReportedPostsHandler)))
 	http.HandleFunc("/moderator/handle_report", middleware.AuthMiddleware(controllers.HandleModeratorReport))
 	http.HandleFunc("/handleRequest",middleware.AuthMiddleware( controllers.HandleModRequest))
+	http.HandleFunc("/repot-post-responce",middleware.AuthMiddleware( controllers.HandleRepostPost))
 
 
 
