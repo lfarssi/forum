@@ -101,7 +101,6 @@ if (!table ) {
     return;
   }
 
-    // Add CSS for the popover if it's shown programmatically
     const style = document.createElement('style');
     style.textContent = `
       #reportedPostsPopover-admin {
@@ -148,7 +147,6 @@ if (!table ) {
       }
     });
 
-    // Function to fetch reported posts and populate the table
     function fetchReportedPosts() {
       fetch('/get_reported_posts')
         .then(response => {
