@@ -25,6 +25,9 @@ func ApiRouter() {
 	http.HandleFunc("/moderator/handle_report", middleware.AuthMiddleware(controllers.HandleModeratorReport))
 	http.HandleFunc("/handleRequest",middleware.AuthMiddleware( controllers.HandleModRequest))
 	http.HandleFunc("/repot-post-responce",middleware.AuthMiddleware( controllers.HandleRepostPost))
+	http.HandleFunc("/add-categorie-report",middleware.AuthMiddleware( controllers.CategoryReportController))
+	http.HandleFunc("/delete-categorie-report",middleware.AuthMiddleware( controllers.CategoryDeleteReportController))
+
 
 
 

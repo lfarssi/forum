@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"forum/app/models"
+	"html"
 	"net/http"
 	"strconv"
 )
@@ -9,12 +10,6 @@ import (
 func HandleModRequest(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		ErrorController(w, r, http.StatusMethodNotAllowed, "Method Not Allowed")
-		return
-	}
-
-	err := r.ParseMultipartForm(10 << 20)
-	if err != nil {
-		ErrorController(w, r, http.StatusBadRequest, "Invalid Form Data")
 		return
 	}
 
@@ -50,7 +45,44 @@ func HandleModRequest(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
+func CategoryReportController(w http.ResponseWriter, r *http.Request)  {
+	if r.Method != http.MethodPost {
+		ErrorController(w, r, http.StatusMethodNotAllowed, "Method Not Allowed")
+		return
+	}
+	categorie:= r.FormValue("category_name")
+	categorie= html.EscapeString(categorie)
+	if categorie == "" {
+		ErrorController(w, r, http.StatusBadRequest, "Category Name is required")
+		return
+	}
+	err := models.AddReportCategory(categorie)
+	if err != nil {
+		ErrorController(w, r, http.StatusInternalServerError, "Failed to Add Category")
+		return
+	}
+	w.WriteHeader(http.StatusOK)
 
+}
+func CategoryDeleteReportController(w http.ResponseWriter, r *http.Request)  {
+	if r.Method != http.MethodPost {
+		ErrorController(w, r, http.StatusMethodNotAllowed, "Method Not Allowed")
+		return
+	}
+	reportId:= r.FormValue("category_id")
+	id, err:= strconv.Atoi(reportId)
+	if err != nil || reportId == "" {
+		ErrorController(w, r, http.StatusBadRequest, "Invalid Report ID")
+		return
+	}
+	err = models.DeleteCategory(id)
+	if err != nil {
+		ErrorController(w, r, http.StatusInternalServerError, "Failed to Delete Category")
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+
+}
 
 func HandleRepostPost(w http.ResponseWriter, r *http.Request){
 if r.Method != http.MethodPost {

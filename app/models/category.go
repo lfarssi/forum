@@ -74,3 +74,22 @@ func GetCategorieReport() ([]Category , error) {
 	}
 	return categories,nil 
 }
+
+func AddReportCategory(category string) error {
+	query := "INSERT INTO categorie_report (name) VALUES (?)"
+	_, err := Database.Exec(query, category)
+	if err != nil {
+		return err
+	}
+	return nil
+	
+}
+func DeleteCategory(id int) error {
+	query := "DELETE FROM categorie_report WHERE id = ?"
+	_, err := Database.Exec(query, id)
+	if err != nil {
+		return err
+	}
+	return nil
+	
+}

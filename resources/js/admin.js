@@ -34,50 +34,120 @@
 
 
 
+document.addEventListener('submit', async function (e) {
+  
+  const form = e.target.closest('.report-post-admin');
+  if (!form) return; 
 
-    document.querySelectorAll('.report-post-admin').forEach(form => {
-      const select = form.querySelector('select[name="desicion"]');
+  e.preventDefault(); 
+
+  const formData = new FormData(form);
+  console.log([...formData.entries()]); 
+
   const submitButton = form.querySelector('button[type="submit"]');
-  submitButton.disabled = true;
+  if (submitButton) submitButton.disabled = true; 
 
-  select.addEventListener('change', () => {
-    if (select.value !== "") {
-      submitButton.disabled = false;
-    }
-  });
-    form.addEventListener('submit', async function (e) {
-
-      
-      e.preventDefault();
-      const formData = new FormData(form);
-submitButton.disabled = true;
-      try {
-        const res = await fetch('/repot-post-responce', {
-          method: 'POST',
-          body: formData
-        });
-       
-        
-        if (res.ok) {
-          const selectedRole = formData.get("role");
-          
-          
-          if (selectedRole === "user") {
-            const row = form.closest('tr');
-            if (row) row.remove();
-          }
-          alert("request sent succ")
-        } else {
-          submitButton.disabled = false;
-          const errorText = await res.text();
-          console.error(errorText);
-        }
-      } catch (err) {
-        console.error('Fetch error:', err);
-        alert('Request failed. Please try again.');
-      }
+  try {
+    const res = await fetch('/repot-post-responce', {
+      method: 'POST',
+      body: formData
     });
-  });
+
+    if (res.ok) {
+      const selectedRole = formData.get("role");
+      if (selectedRole === "user") {
+        const row = form.closest('tr');
+        if (row) row.remove();
+      }
+      alert("Request sent successfully");
+    } else {
+      if (submitButton) submitButton.disabled = false; 
+      const errorText = await res.text();
+      console.error(errorText);
+    }
+  } catch (err) {
+    console.error('Fetch error:', err);
+    alert('Request failed. Please try again.');
+    if (submitButton) submitButton.disabled = false; 
+  }
+});
+
+
+
+
+
+
+
+document.addEventListener('submit', async function (e) {
+  
+  const form = e.target.closest('.addCategoryForm');
+  if (!form) return; 
+
+  e.preventDefault(); 
+
+  const formData = new FormData(form);
+  console.log([...formData.entries()]); 
+
+  const submitButton = form.querySelector('button[type="submit"]');
+  if (submitButton) submitButton.disabled = true; 
+
+  try {
+    const res = await fetch('/add-categorie-report', {
+      method: 'POST',
+      body: formData
+    });
+
+    if (res.ok) {
+      const selectedRole = formData.get("role");
+      if (selectedRole === "user") {
+        const row = form.closest('tr');
+        if (row) row.remove();
+      }
+      alert("Request sent successfully");
+    } else {
+      if (submitButton) submitButton.disabled = false; 
+      const errorText = await res.text();
+      console.error(errorText);
+    }
+  } catch (err) {
+    console.error('Fetch error:', err);
+    alert('Request failed. Please try again.');
+    if (submitButton) submitButton.disabled = false; 
+  }
+});
+
+document.addEventListener('submit', async function (e) {
+  
+  const form = e.target.closest('.delete-category-form');
+  if (!form) return; 
+
+  e.preventDefault(); 
+
+  const formData = new FormData(form);
+  console.log([...formData.entries()]); 
+
+  const submitButton = form.querySelector('button[type="submit"]');
+  if (submitButton) submitButton.disabled = true; 
+
+  try {
+    const res = await fetch('/delete-categorie-report', {
+      method: 'POST',
+      body: formData
+    });
+
+    if (res.ok) {
+      alert("Request sent successfully");
+    } else {
+      if (submitButton) submitButton.disabled = false; 
+      const errorText = await res.text();
+      console.error(errorText);
+    }
+  } catch (err) {
+    console.error('Fetch error:', err);
+    alert('Request failed. Please try again.');
+    if (submitButton) submitButton.disabled = false; 
+  }
+});
 
 
 
@@ -86,8 +156,6 @@ submitButton.disabled = true;
 
 document.addEventListener("DOMContentLoaded", function() {
     const reportedPostsPopover = document.getElementById('reportedPostsPopover-admin');
-
-
 
  const table = document.getElementById('reportedPostsTable-admin');
 if (!table ) {
