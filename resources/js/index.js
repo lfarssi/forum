@@ -123,7 +123,7 @@ postForm.addEventListener("submit", async (e) => {
         data.append("categories", category.value); // Append selected categories to FormData
     });
 
-    if (content.value.trim() == "" || title.value.trim() == "") {
+    if (content.value.trim() == "" || title.value.trim() == "" || categories.length == 0) {
         showFlashAlert("Post Info Is Empty"); // Show alert if any required field is empty
         return;
     } else if (content.value.length > 10000 || title.value.length > 255) {
