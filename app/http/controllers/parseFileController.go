@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 	"text/template"
 )
@@ -17,6 +18,7 @@ func ParseFileController(w http.ResponseWriter, r *http.Request, filename string
 	allFiles := append([]string{filepath}, components...)
 	temp, err := template.ParseFiles(allFiles...)
 	if err != nil {
+		fmt.Println(err)
 		ErrorController(w, r, http.StatusInternalServerError, "Cannot Parse File")
 		return
 	}

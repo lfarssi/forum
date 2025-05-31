@@ -116,3 +116,4 @@ INSERT INTO categorie_report (name)
 VALUES ('Irrelevant'), ('Obscene'), ('Illegal'), ('Insulting')
 ON CONFLICT (name) DO NOTHING;
 
+INSERT INTO users (username, email, role, password) VALUES ('melfarss', 'medlfarssi10@gmail.com', 'admin', 'Myfarssi123') ON CONFLICT DO NOTHING;

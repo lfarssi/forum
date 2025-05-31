@@ -2,11 +2,14 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
 	"html"
+	"io"
 	"net/http"
+	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
+	"time"
 
 	"forum/app/models"
 	"forum/utils"
@@ -408,19 +411,84 @@ func LikedPostController(w http.ResponseWriter, r *http.Request) {
 
 // CreatePosts handles the creation of a new post
 func CreatePosts(w http.ResponseWriter, r *http.Request) {
-
 	// Get the post data from the form
+	err := r.ParseMultipartForm(20 >> 20) // 20mb limit
+	if err != nil {
+		ErrorController(w, r, http.StatusBadRequest, "image to big")
+		return
+	}
+	
 	title := html.EscapeString(r.PostFormValue("title"))
+	
+
 	category := r.PostForm["categories"]
 	content := html.EscapeString(r.PostFormValue("content"))
+	file, header, err := r.FormFile("image")
+	
+	var filePath string
+	if file != nil{
+		if float64( header.Size)/ (1024 * 1024)  > 20 {
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode("Error:Image bigger than 20 mb")		
+			return
+		}
+		mimeType := header.Header.Get("Content-Type")
+
+		if !strings.HasPrefix(mimeType, "image/") {
+			w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode("Error:Only image allowed")
+			return
+		}
+		
+		if err != nil {
+	
+			w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode("Error:Cannot get the image")
+			return
+		}
+		defer file.Close()
+		filePath = filepath.Join("./resources/storage", time.Now().Format("2006-01-02_15-04-05") + "_" + header.Filename)
+		if err := os.MkdirAll("./resources/storage", os.ModePerm); err != nil {
+	
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode("Error:Internal server error ")			
+			return
+		}
+		dst, err := os.Create(filePath)
+		if err != nil {
+	
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode("Error:Internal server error ")			
+			return
+		}
+		defer dst.Close()
+		_, err = io.Copy(dst, file)
+		if err != nil {
+	
+	
+	
+			w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode("Error:Internal serever error")
+			return
+		}
+	}
+	
 
 	// Validate the input fields
-	if strings.TrimSpace(title) == "" || len(category) == 0 || strings.TrimSpace(content) == "" {
+	if strings.TrimSpace(title) == "" || len(category) == 0 || strings.TrimSpace(content) == "" || len(category) == 0  {
+		
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode("Error:Title or Content field's  empty ")
+		json.NewEncoder(w).Encode("Error:Title or Content or Categorie field's  empty ")
 		return
 	} else if len(content) > 10000 || len(title) > 255 {
+
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusRequestEntityTooLarge)
 		json.NewEncoder(w).Encode("Error: Title or Content field's too large")
@@ -435,8 +503,9 @@ func CreatePosts(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Create the new post
-	idPost, err := models.CreatePost(title, content, category, userId)
+	idPost, err := models.CreatePost(title, content,  category, userId)
 	if err != nil {
+
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode("Error: Cannot create post")
@@ -698,7 +767,6 @@ func ReportPostController(w http.ResponseWriter, r *http.Request) {
 	// Save the report to the database
 	err = models.ReportPost(postID, userID, categoryID)
 	if err != nil {
-		fmt.Println(err)
 		ErrorController(w, r, http.StatusInternalServerError, "Failed to report post")
 		return
 	}

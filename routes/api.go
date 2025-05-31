@@ -27,12 +27,12 @@ func ApiRouter() {
 	http.HandleFunc("/repot-post-responce",middleware.AuthMiddleware( controllers.HandleRepostPost))
 	http.HandleFunc("/add-categorie-report",middleware.AuthMiddleware( controllers.CategoryReportController))
 	http.HandleFunc("/delete-categorie-report",middleware.AuthMiddleware( controllers.CategoryDeleteReportController))
-
+	http.HandleFunc("/redirect", middleware.AlreadyLoggedIn(controllers.HandleGoogleLogin)) // Redirect to Google
+	http.HandleFunc("/callback", controllers.HandleGoogleCallback) // Handle Google OAuth callback
 
 
 
 
 	http.HandleFunc("/resources/", controllers.CssJsController)
 	
-
 }

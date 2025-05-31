@@ -48,11 +48,11 @@ function toggleMenu() {
     });
 }
 
-toggleMenu(); // Initialize the toggleMenu function
+//toggleMenu(); // Initialize the toggleMenu function
 
 
 // Function to show flash alerts with custom messages
-export const showFlashAlert = (message) => {
+const showFlashAlert = (message) => {
     const flashAlert = document.getElementById('flashAlert');
     const flashMessage = document.getElementById('flashMessage');
     const close = document.querySelector(".close-btn")
@@ -78,7 +78,6 @@ commentForm.forEach((form) => {
         let data = new FormData();
         data.append("post_id", postId);
         data.append("content", content.value); // Append the comment content to the FormData object
-
 
 
         if (content.value.trim() == "") {

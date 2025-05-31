@@ -77,6 +77,7 @@ func LoginController(w http.ResponseWriter, r *http.Request) {
 		Value:    token.String(),
 		Expires:  time.Now().Add((24 * time.Hour)),
 		HttpOnly: true,
+		Secure: true,
 	})
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }

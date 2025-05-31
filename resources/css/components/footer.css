@@ -1,5 +1,7 @@
 footer {
     background-color: var(--second-bg-color);
+    animation: animatefooter  1s ease-in-out;
+
     padding: 8px 0;
     text-align: center;
     width: 100%;
@@ -12,3 +14,14 @@ footer {
     box-shadow: 0 -2px 4px var(--bg-color);
 }
 
+@keyframes animatefooter {  
+    
+    0%{ 
+      transform: translateX(-100px);
+      opacity: 0;
+  }
+  100%{ 
+      transform: translateX(0);
+      opacity: 1;
+  }
+}

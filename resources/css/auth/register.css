@@ -29,6 +29,7 @@ body {
 .register-container {
     width: 35%;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 40px;
@@ -87,13 +88,13 @@ body {
 .input-group i {
     position: absolute;
     right: 16px;
-    color: #ff0000;
+    color: #007BFF;
     font-size: 1.1rem;
 }
 
 button {
     width: 100%;
-    background-color: #ff0000;
+    background-color: #007BFF;
     color: white;
     padding: 14px;
     border-radius: 4px;
@@ -106,7 +107,7 @@ button {
 }
 
 button:hover {
-    background-color: #cc0000;
+    background-color: #007BFF;
     transition: 0.3s;
 }
 
@@ -118,7 +119,7 @@ button:hover {
 }
 
 .login-link {
-    color: #ff0000;
+    color: #007BFF;
     text-decoration: none;
 }
 
@@ -126,8 +127,9 @@ button:hover {
     text-decoration: underline;
 }
 
-
-
+.google{
+    width: 65%;
+}
 
 .register-form h1 {
     font-size: 3.5rem;  
@@ -151,10 +153,10 @@ button:hover {
 button {
     width: 100%;
     background-color: transparent;
-    color: #ff0000;
+    color: #007BFF;
     padding: 16px;
     border-radius: 8px;
-    border: 2px solid #ff0000;
+    border: 2px solid #007BFF;
     cursor: pointer;
     font-size: 1.1rem;
     font-weight: 500;
@@ -166,7 +168,7 @@ button {
 }
 
 button:hover {
-    background-color:#ff0000;
+    background-color:#007BFF;
     color: rgb(255, 255, 255) ;
     transition:  0.3s ease-in-out;
 }
@@ -184,9 +186,12 @@ button:hover {
 @media screen and (max-width: 768px) {
     .register-container {
         width: 100%;
-        height: 40vh;
+        height: 100%;
 
     }
+.image-section {
+    display: none;
+}
 .register-form {
     margin-top: 50%;
 }

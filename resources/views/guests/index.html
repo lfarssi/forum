@@ -43,7 +43,11 @@
         {{end}}
     </div>
     <p class="content">{{.Content}}</p>
- 
+    {{if .Image}}
+    <div class="post-image">
+        <img src="{{.Image}}" alt="Post image">
+    </div>
+    {{end}}
     <button type="button" class="btn likepost {{if .IsLiked}} isReacted{{end}}">
         <span class="numlikepost">{{.Likes}}</span> <i class="fa-regular fa-thumbs-up"></i>
     </button>
@@ -69,23 +73,67 @@
             </button>
         </div>
 
+          <button
+            type="button"
+            class="btn dislikepost {{if .IsDisliked}} isReacted {{end}}"
+          >
+            <span class="numdislikepost">{{.Dislikes}}</span>
+            <i class="fa-regular fa-thumbs-down"></i>
+          </button>
+
+          <button type="button" class="btn comments-btn">
+            {{.CommentsCount}}<i class="fa-regular fa-comment"></i>
+          </button>
+          <div class="comments">
+            {{range .Comments}}
+            <div class="comment" data-id="{{.ID}}">
+              <h2>
+                <img
+                  src="/resources/imgs/profile.png"
+                  alt="profile pictures"
+                /><span class="username">{{.Username}}</span>
+              </h2>
+              <p>{{.Content}}</p>
+              <button
+                class="btn likecomment {{if .IsLiked}}isReacted {{end}}"
+                type="button"
+              >
+                <span class="numlikecomment">{{.Likes}}</span>
+                <i class="fa-regular fa-thumbs-up"></i>
+              </button>
+              <button
+                class="btn dislikecomment {{if .IsDisliked}} isReacted {{end}}"
+                type="button"
+              >
+                <span class="numdislikecomment"> {{.Dislikes}}</span>
+                <i class="fa-regular fa-thumbs-down"></i>
+              </button>
+            </div>
+
+            {{end}}
+          </div>
+        </div>
+
+
         {{end}}
        
     </div>
 </div>
    
 
-{{end}}
        </section>
        <div id="flashAlert" class="flash-alert">
         <span id="flashMessage"></span><i class="fa-solid fa-triangle-exclamation warning-icon"></i>
+        {{end}} 
+      </section>
+      <div id="flashAlert" class="flash-alert">
+        <span id="flashMessage"></span
+        ><i class="fa-solid fa-triangle-exclamation warning-icon"></i>
         <div class="timer-bar"></div>
-    </div>  
+      </div>
     </main>
 
     {{template "footer" .}}
-       <script type="module" src="/resources/js/index.js"></script>
-
- 
-</body>
+    <script src="/resources/js/index.js"></script>
+  </body>
 </html>

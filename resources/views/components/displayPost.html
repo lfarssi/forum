@@ -39,7 +39,15 @@
         <span class="category">{{.}}</span>
         {{end}}
     </div>
+    
     <p class="content">{{.Content}}</p>
+
+    {{if .Image}}
+    <div class="post-image">
+        <img src="{{.Image}}" alt="Post image">
+    </div>
+    {{end}}
+
 
     <button type="button" class="btn likepost {{if .IsLiked}} isReacted{{end}}">
         <span class="numlikepost">{{.Likes}}</span> <i class="fa-regular fa-thumbs-up"></i>

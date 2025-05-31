@@ -105,3 +105,36 @@ func DeleteModRequest(userID int) error {
 	_, err := Database.Exec("DELETE FROM moderator_requests WHERE user_id = ?", userID)
 	return err
 }
+
+	func OAuthlogin(userName, email string) (int, error) {
+	query := "SELECT id FROM users WHERE username = ? AND email = ?"
+	statement, err := Database.Prepare(query)
+	if err != nil {
+		return 0, err
+	}
+	defer statement.Close()
+	var id int
+	err = statement.QueryRow(userName, email).Scan(&id)
+	if err != nil {
+		return 0, err
+	}
+	return id, nil
+}
+
+func OAuthRegistration(user User) (int, error) {
+	query := "INSERT INTO users (username, email,  password) VALUES (?,  ?, ?)"
+	stm, err := Database.Prepare(query)
+	if err != nil {
+		return 0, err
+	}
+	defer stm.Close()
+	res, err := stm.Exec(user.UserName, user.Email, user.Password)
+	if err != nil {
+		return 0, err
+	}
+	id, err := res.LastInsertId()
+	if err != nil {
+		return 0, err
+	}
+	return int(id), nil
+}

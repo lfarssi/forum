@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 
 	"forum/app/models"
@@ -148,12 +149,11 @@ func HomeController(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			datas := models.Data{
-				IsLoggedIn:     logedIn,
-				Category:       categories,
-				Posts:          posts,
-				Role:           user.Role,
-				StatusReq:      reqmod,
-				
+				IsLoggedIn: logedIn,
+				Category:   categories,
+				Posts:      posts,
+				Role:       user.Role,
+				StatusReq:  reqmod,
 			}
 			ParseFileController(w, r, "users/index", datas)
 
@@ -169,14 +169,13 @@ func HomeController(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 
-			
 			data := models.Data{
 				IsLoggedIn:     logedIn,
 				Category:       categories,
 				Posts:          posts,
 				Role:           user.Role,
 				CategoryReport: categorie_report,
-				ReportedPosts:reportedPosts,
+				ReportedPosts:  reportedPosts,
 			}
 
 			ParseFileController(w, r, "moderator/index", data)
@@ -205,8 +204,7 @@ func HomeController(w http.ResponseWriter, r *http.Request) {
 				Role:           user.Role,
 				ModRequests:    modRequests,
 				CategoryReport: categorie_report,
-				ReportedPosts: reportedposts,
-				
+				ReportedPosts:  reportedposts,
 			}
 
 			ParseFileController(w, r, "admin/index", data)
@@ -216,6 +214,7 @@ func HomeController(w http.ResponseWriter, r *http.Request) {
 				ErrorController(w, r, http.StatusInternalServerError, "Cannot Fetch the Categorie Report")
 				return
 			}
+			fmt.Println(posts)
 			data := models.Data{
 				IsLoggedIn:     logedIn,
 				Category:       categories,

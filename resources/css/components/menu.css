@@ -5,7 +5,7 @@
     color: var(--text-color);
     padding: 2rem;
     position: fixed;
-    top: 60vh ;
+    top:10vh ;
     left: 0;
     bottom: 0;
     z-index: 1000; /* Ensure it is above content */
@@ -13,6 +13,7 @@
     border-radius: 20px;
     margin: 20px 0 0 20px;
     height: fit-content;
+    margin-top: 100px;
 }
 
 
@@ -46,7 +47,7 @@
     margin-bottom: 1.5rem;
     text-align: center;
 }
-#categories, #modRequest ,#adminModRequests {
+#categories {
     background-color: var(--second-bg-color);
     border: none;
     margin:auto;
@@ -63,7 +64,7 @@
 }
 
 /* Styling for each category checkbox */
-.categorie,.requestdiv {
+.categorie {
     
     display: inline-flex;  /* Use inline-flex for horizontal arrangement of checkbox and label */
     align-items: center;   /* Vertically center the checkbox and label */
@@ -72,14 +73,14 @@
 }
 
 /* Styling for checkbox labels */
-.categorie-label,.reason-label {
+.categorie-label {
     color: var(--primary-color);        /* Red color for labels */
     font-size: 1rem;
     margin-left: 5px;      /* Space between checkbox and label */
 }
 
 /* Filter Button Style */
-.btn-filter,.btn-submitModReq {
+.btn-filter {
     background-color: var(--second-bg-color);
     color: var(--primary-color);
     border: 1px solid var(--primary-color);
@@ -88,21 +89,20 @@
     font-size: 1rem;
     border-radius: 15px;
     cursor: pointer;
-    word-break: break-all;
     transition: background-color 0.3s ease, transform 0.2s ease;
-    width: 55%;  /* Ensure it takes up full width */
+    width: 20%;  /* Ensure it takes up full width */
     text-align: center;
     display: block;  /* Make the button behave like a block-level element */
 }
 
 /* Filter Button Hover Effect */
-.btn-filter:hover,.btn-submitModReq:hover {
+.btn-filter:hover {
     background-color: var(--primary-color);  /* Darker red for hover */
     color: var(--text-color);
 }
 
 /* Focus state for accessibility */
-.btn-filter:focus,.btn-submitModReq:focus {
+.btn-filter:focus {
     outline: 2px solid var(--text-color);  /* var(--text-color) outline on focus */
     outline-offset: 4px;
 }
@@ -112,7 +112,7 @@
         color: var(--text-color);
         /* padding: 2rem; */
         position: fixed;
-        top: -50%;
+        top: -20%;
         /* left: 5%; */
         bottom: 0;
         margin: auto;
@@ -134,15 +134,16 @@
         background-color: var(--second-bg-color);
         color: var(--text-color);
         position: fixed;
-        top: -50%;
-        margin: auto;
+        /* top: -50%; */
+        /* margin: auto; */
         bottom: 0;
         z-index: 1000; /* Ensure it is above content */
         box-shadow: 4px 0 8px var(--bg-color);
         border-radius: 20px;
         /* margin: 20px 10px 10px 20px; */
-
         height: fit-content;
+        /* margin-top: 100px; */
+
     }
     .buttons{
         display: flex;
