@@ -169,46 +169,7 @@ if (!table ) {
     return;
   }
 
-    const style = document.createElement('style');
-    style.textContent = `
-      #reportedPostsPopover-admin {
-        padding: 20px;
-        background: white;
-        border-radius: 8px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-        max-width: 90%;
-        max-height: 80vh;
-        overflow-y: auto;
-      }
-      
-      #reportedPostsTable-admin {
-        width: 100%;
-        border-collapse: collapse;
-      }
-      
-      #reportedPostsTable-admin th, #reportedPostsTable-admin td {
-        padding: 8px;
-        border: 1px solid #ddd;
-        text-align: left;
-      }
-      
-      #reportedPostsTable-admin th {
-        background-color: #f2f2f2;
-      }
-      
-      .action-buttons {
-        display: flex;
-        gap: 5px;
-      }
-      
-      .action-buttons button {
-        padding: 5px 10px;
-        cursor: pointer;
-      }
-    `;
-    document.head.appendChild(style);
-
-
+   
     reportedPostsPopover.addEventListener('beforetoggle', function(event) {
       if (event.newState === "open") {
         fetchReportedPosts();

@@ -161,48 +161,171 @@
         display: block;
     }
 }
-   
+  
+#adminModRequests{
+    width: 50%;
+    margin: auto;
+    font-family: sans-serif;
 
-#reportedPostsTable {
+   
+}
+.admin-req-table{
+    width: 100%;
+    padding: 25px 25px;
+    border: 1px solid var(--primary-color);
+    border-collapse: collapse;
+    color: var(--primary-color);
+    background-color: var(--second-bg-color);
+}
+.admin-req-table th{
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    font-weight: bold;
+    text-align: left;
+}
+.admin-req-table td, .admin-req-table th{
+    padding: 8px 8px;
+    border: 1px solid var(--text-color);
+}
+.admin-req-table select{
+    color: var(--primary-color);
+    background-color: var(--bg-color);
+}
+.admin-req-table button{
+    color: var(--primary-color);
+    background-color: var(--bg-color);
+    border: 1px solid var(--primary-color);
+    padding: 0.5em 1em;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.admin-req-table button:hover{
+    color: var(--text-color);
+    background-color: var(--primary-color);
+   
+}
+
+.admin-reports-container , .reported-posts-container{
+    width: 100%;
+    padding: 20px;
+    color: var(--primary-color);
+    background-color: var(--second-bg-color);
+}
+#reportedPostsTable-admin, #reportedPostsPopover {
+    margin: auto;
   width: 100%;
   border-collapse: collapse;
   font-family: sans-serif;
 }
 
-#reportedPostsTable th, #reportedPostsTable td {
+ #reportedPostsPopover th,  #reportedPostsPopover td,
+#reportedPostsTable-admin th, #reportedPostsTable-admin td {
   padding: 0.75em 1em;
-  border: 1px solid #ddd;
+  border: 1px solid var(--text-color);
   text-align: left;
 }
-
-#reportedPostsTable th {
-  background-color: #f3f3f3;
+ #reportedPostsPopover th, 
+#reportedPostsTable-admin th {
+  color: var(--text-color);
+  background-color: var(--primary-color);
   font-weight: bold;
 }
-
-#reportedPostsTable tr:nth-child(even) {
-  background-color: #f9f9f9;
-}
-
-.report-action-form {
-  display: flex;
-  gap: 0.5em;
-  align-items: center;
-}
-
-.decision-select {
-  padding: 0.25em;
-}
-
-.submit-btn {
-  padding: 0.3em 0.6em;
-  background-color: #007bff;
-  border: none;
-  color: white;
-  cursor: pointer;
-  border-radius: 3px;
-}
-
-.submit-btn:hover {
+ #reportedPostsPopover tr:nth-child(even),
+#reportedPostsTable-admin tr:nth-child(even) {
   background-color: #0056b3;
+  color: var(--text-color);
+}
+ #reportedPostsPopover select,
+#reportedPostsTable-admin select {
+ background-color: var(--second-bg-color);
+ color: var(--primary-color);
+
+}
+ #reportedPostsPopover button,
+#reportedPostsTable-admin button {
+  background-color: var(--second-bg-color);
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+    padding: 0.5em 1em;
+    border-radius: 5px;
+    cursor: pointer;
+
+}
+ #reportedPostsPopover button:hover, 
+#reportedPostsTable-admin button:hover {
+  background-color: var(--primary-color);
+  color: var(--text-color);
+    transition: background-color 0.3s ease-in-out;
+}
+.action-buttons {
+  display: flex;
+
+  justify-content: space-between;
+  margin-top: 1em;
+}
+.action-buttons button {
+    padding: 0.3em 0.6em;
+    margin-right: 0.5em;
+}
+#categories-admin{
+    background-color: var(--second-bg-color);
+    border: 1px solid var(--primary-color);
+    margin:auto;
+    width: fit-content;
+    padding: 20px;
+    border-radius: 15px;
+    color: var(--primary-color);
+}
+#categories-admin input{
+    background-color: var(--second-bg-color);
+    color: var(--text-color);
+    border: none;
+    outline: none;
+    border-bottom: 1px solid var(--primary-color);
+}
+#categories-admin input:active,
+#categories-admin input:valid{
+    border: none;
+    border-bottom: 1px solid var(--primary-color);
+
+}
+#categories-admin input::placeholder{
+    color: var(--text-color);
+    opacity: 0.7;  
+
+}
+
+#categories-admin button{
+    background-color: var(--second-bg-color);
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+    cursor: pointer;
+    padding: 0.5em 1em;
+}
+#categories-admin button:hover{
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    border: 1px solid var(--text-color);
+    transition: background-color 0.3s ease-in-out;
+    
+}
+.report-form select{
+    background-color: var(--second-bg-color);
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+    padding: 0.5em 1em;
+
+}
+.report-form button{
+    background-color: var(--second-bg-color);
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+    padding: 0.5em 1em;
+
+}
+.report-form button:hover{
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    border: 1px solid var(--text-color);
+    transition: background-color 0.3s ease-in-out;
 }

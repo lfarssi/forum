@@ -7,6 +7,7 @@ import (
 
 type ModReq struct {
 	UserID       string `json:"user_id"`
+	UserName       string `json:"username"`
 	Request_date string `json:"request_date"`
 	Status       string `json:"status"`
 	Review_date  string `json:"review_date"`
@@ -49,8 +50,9 @@ func GetRequestInfo(userID int) (string, error) {
 
 func GetAllModRequests() ([]ModReq, error) {
 	query := `
-	SELECT user_id, reason, request_date, status
-	FROM moderator_requests
+	SELECT mr.user_id, u.username, mr.reason, mr.request_date, mr.status
+	FROM moderator_requests mr
+	INNER JOIN users u ON mr.user_id = u.id
 	ORDER BY request_date DESC
 	`
 	rows, err := Database.Query(query)
@@ -62,7 +64,7 @@ func GetAllModRequests() ([]ModReq, error) {
 	var requests []ModReq
 	for rows.Next() {
 		var req ModReq
-		err := rows.Scan(&req.UserID, &req.Reason, &req.Request_date, &req.Status)
+		err := rows.Scan(&req.UserID,&req.UserName, &req.Reason, &req.Request_date, &req.Status)
 		if err != nil {
 			return nil, err
 		}
